@@ -1,62 +1,56 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Button} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import 'react-native-gesture-handler';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+const Stack = createStackNavigator();
 
 class App extends React.Component {
   render() {
     return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Message" component={Message} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
+
+function Home({navigation}) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Nexto</Text>
+      <Button
+        title="Go to Message..."
+        onPress={() => navigation.navigate('Message')}
+      />
+    </View>
+  );
+}
+
+class Message extends React.Component {
+  render() {
+    return (
       <View>
-        <Text>Le taff le taff chez nexto</Text>
+        <Text>Message</Text>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  title: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 30,
+    marginVertical: 20,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  container: {
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    height: '100%',
   },
 });
 

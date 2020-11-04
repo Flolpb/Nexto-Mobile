@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, Button, TextInput, PermissionsAndroid} from 'react-native';
 import SendSMS from 'react-native-sms';
+import SmsAndroid from 'react-native-get-sms-android';
 import 'react-native-gesture-handler';
 
 class Message extends React.Component {
@@ -30,13 +31,15 @@ class Message extends React.Component {
 
 
     state = {
-        mobileNumber: '',
+        mobileNumber: [],
+        numberText: '',
         message: '',
     };
 
     setMobileNumber = (number) => {
         this.setState({
-            mobileNumber: number,
+            mobileNumber: [number],
+            numberText: number
         })
     };
 
@@ -47,44 +50,47 @@ class Message extends React.Component {
     };
 
     sendSms = () => {
-        if(this.state.mobileNumber.length !== 10) {
-            alert('Please insert correct contact number');
-            return;
-        }
+        SmsAndroid.autoSend(
+            this.state.numberText,
+            this.state.message,
+            (fail) => {
+                alert('failed with this error: '+ fail);
+            },
+            (success) => {
+                alert('SMS sent successfully');
+            },
+        );
 
-        SendSMS.send(
-{
-            body: this.state.message,
-            recipients: this.state.mobileNumber,
-            successTypes: ['sent', 'queued'],
-        },
-        (completed, cancelled, error) => {
-            if(completed){
-                alert('SMS Sent completed');
-            } else if (cancelled) {
-                alert('SMS Sent Cancelled');
-            } else if (error) {
-                alert('Some error occured');
-            }else{
-                alert('test');
-            }
-        },
-    );
     };
 
   render() {
     return (
       <View>
-        <Text>Test d'envoi de message</Text>
-          <Text>Rentrer un numéro de téléphone</Text>
-          <TextInput value={this.state.mobileNumber} onChangeText={(number) => this.setMobileNumber(number)} placeholder="Enter contact Number to send" keyboardType="numeric"/>
-          <Text>Rentrer un message</Text>
-          <TextInput value={this.state.message} onChangeText={(text) => this.setMessage(text)} placeholder="Enter Message to send"/>
+          <Text style={styles.label}>Rentrer un numéro de téléphone</Text>
+          <TextInput style={styles.input} value={this.state.numberText} onChangeText={(number) => this.setMobileNumber(number)} placeholder="Enter contact Number to send" keyboardType="numeric"/>
+          <Text style={styles.label}>Rentrer un message</Text>
+          <TextInput style={styles.input} value={this.state.message} onChangeText={(text) => this.setMessage(text)} placeholder="Enter Message to send"/>
           <Button title="Send SMS" onPress={this.sendSms}/>
           <Button title="Grant Permission" onPress={this.sendPermission}/>
       </View>
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+    label: {
+        textAlign: 'center',
+        margin: 10,
+    },
+    input: {
+        textAlign: 'center',
+        borderStyle: 'solid',
+        borderColor: 'black',
+        borderWidth: 1,
+    }
+});
+
+
 
 export default Message;

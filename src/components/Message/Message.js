@@ -6,7 +6,7 @@ import 'react-native-gesture-handler';
 
 import { AppRegistry } from 'react-native';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
-    require('./SendMessage')
+    require('../SendMessage/SendMessage')
 );
 
 class Message extends React.Component {

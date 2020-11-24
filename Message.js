@@ -18,7 +18,7 @@ class Message extends React.Component {
             PermissionsAndroid.PERMISSIONS.SEND_SMS,
             {
                 title: 'Nexto Send SMS Permission',
-                message: 'Nexto needs access to sens sms',
+                message: 'Nexto needs access to send sms',
             }
         );
 

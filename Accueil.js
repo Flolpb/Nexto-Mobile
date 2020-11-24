@@ -7,8 +7,8 @@ function Accueil({navigation}) {
         <View style={styles.container}>
             <Text style={styles.title}>Nexto</Text>
             <Button
-                title="Go to Message..."
-                onPress={() => navigation.navigate('Message')}
+                title="Voir la liste des messages..."
+                onPress={() => navigation.navigate('Liste des Messages')}
             />
         </View>
     );

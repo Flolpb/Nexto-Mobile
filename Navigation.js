@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import Message from './Message';
+import ListeMessage from './ListeMessage';
 import Accueil from './Accueil';
 
 const Stack = createStackNavigator();
@@ -14,6 +15,7 @@ class Navigation extends React.Component{
                 <NavigationContainer>
                     <Stack.Navigator>
                         <Stack.Screen name="Home" component={Accueil} />
+                        <Stack.Screen name="Liste des Messages" component={ListeMessage} />
                         <Stack.Screen name="Message" component={Message} />
                     </Stack.Navigator>
                 </NavigationContainer>

@@ -2,9 +2,9 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import 'react-native-gesture-handler';
-import Message from './Message';
-import ListeMessage from './ListeMessage';
-import Accueil from './Accueil';
+import Message from '../components/Message';
+import ListeMessage from '../components/ListeMessage';
+import Accueil from '../components/Accueil';
 
 const Stack = createStackNavigator();
 

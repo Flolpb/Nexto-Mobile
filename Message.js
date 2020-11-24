@@ -4,6 +4,11 @@ import SendSMS from 'react-native-sms';
 import SmsAndroid from 'react-native-get-sms-android';
 import 'react-native-gesture-handler';
 
+import { AppRegistry } from 'react-native';
+AppRegistry.registerHeadlessTask('SendMessage', () =>
+    require('./SendMessage')
+);
+
 class Message extends React.Component {
     constructor(props) {
         super(props);
@@ -25,7 +30,7 @@ class Message extends React.Component {
         if( granted === PermissionsAndroid.RESULTS.GRANTED){
             this.proceed();
         }else{
-            alert('You have denied Send SMS Permission')
+            alert('You have denied Send SMS Permission');
         }
     };
 
@@ -62,6 +67,7 @@ class Message extends React.Component {
         );
 
     };
+
 
   render() {
     return (

@@ -52,26 +52,26 @@ class ListeMessage extends React.Component {
         const {navigate} = this.props.navigation;
 
         for(let m in this.state.messages){
+            const date = this.state.messages[m].date.split('T');
+            date[1] = date[1].split('.');
             Messages.push(
-                <View style={styles.bloc}>
-                    <Text>{this.state.messages[m].message}</Text>
-                    <Text>{this.state.messages[m].contact}</Text>
-                    <Text>{this.state.messages[m].date}</Text>
-                </View>
+                <TouchableOpacity onPress={() => navigate('Message')}>
+                    <View style={styles.bloc}>
+                        <Text>{this.state.messages[m].message}</Text>
+                        <Text>{this.state.messages[m].contact}</Text>
+                        <View style={styles.date}>
+                            <Text>{date[1][0]}</Text>
+                            <Text>{date[0]}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
             );
         }
 
-
         return(
             <View>
-                <TouchableOpacity onPress={() => navigate('Message')}>
-                    <View style={styles.bloc}>
-                        <Text>Description du message</Text>
-                        <Text>Contact</Text>
-                        <Text>Date/Heure</Text>
-                    </View>
-                </TouchableOpacity>
                 {Messages}
+                <Button title="Programmer un nouveau message !" onPress={() => navigate('Message')}/>
             </View>
         )
     }
@@ -89,6 +89,12 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderStyle: 'solid',
         margin: 5
+    },
+    date: {
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
     }
 });
 

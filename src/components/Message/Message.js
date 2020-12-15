@@ -76,6 +76,7 @@ class Message extends React.Component {
           <TextInput style={styles.input} value={this.state.numberText} onChangeText={(number) => this.setMobileNumber(number)} placeholder="Enter contact Number to send" keyboardType="numeric"/>
           <Text style={styles.label}>Rentrer un message</Text>
           <TextInput style={styles.input} value={this.state.message} onChangeText={(text) => this.setMessage(text)} placeholder="Enter Message to send"/>
+          <Text style={styles.label}>Rentrer une date</Text>
           <Button title="Send SMS" onPress={this.sendSms}/>
           <Button title="Grant Permission" onPress={this.sendPermission}/>
       </View>

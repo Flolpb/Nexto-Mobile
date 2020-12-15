@@ -36,6 +36,21 @@ class ListeMessage extends React.Component {
         }
     };
 
+    //supprimer le message en question
+    deleteData = async(index) => {
+        try{
+            console.log(this.state.messages);
+            let joined = this.state.messages;
+            joined.splice(index, 1);
+            const jsonValue = JSON.stringify(joined);
+            await AsyncStorage.setItem('message', jsonValue);
+            this.readData();
+            console.log(this.state.messages);
+        }catch(e){
+            console.log('failed: ' + e);
+        }
+    };
+
     //lire les messages
     readData = async () => {
         try{
@@ -73,6 +88,7 @@ class ListeMessage extends React.Component {
                             <Text>{date[1][0]}</Text>
                             <Text>{date[0]}</Text>
                         </View>
+                        <Button title="supprimer" onPress={() => this.deleteData(m)}/>
                     </View>
                 </TouchableOpacity>
             );

@@ -1,7 +1,17 @@
 import React from 'react';
-import {FlatList, PermissionsAndroid, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  PermissionsAndroid,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Contacts from 'react-native-contacts';
 import colors from '../../config/colors';
+import { connect } from "react-redux";
 
 class ListeContact extends React.Component {
 
@@ -43,13 +53,37 @@ class ListeContact extends React.Component {
           this.setState({
             contacts: contacts
           });
-          console.log(this.state.contacts)
         });
     }
   }
 
-  modifyContact = (id) => {
-    console.log(id)
+  createSeparator = () => {
+    return (
+      <View
+        style={[
+          styles.separator,
+        ]}
+      />
+    )
+  }
+
+  createEmptyViewList = () => {
+    return (
+      <Text style={
+        styles.emptyList
+      }> Aucun contact en vue, pourquoi ne pas en ajouter ? </Text>
+    )
+  }
+
+  toggleFavorite = (id) => {
+    const action = { type: "TOGGLE_FAVORITE", id: id }
+    this.props.dispatch(action)
+  }
+
+  displayFavorite = (id) => {
+    return this.props.favoritesContact.findIndex(item => item === id) !== -1 ? (
+      <Text style={{ color: "red" }}> Test </Text>
+    ) : null
   }
 
   render() {
@@ -59,30 +93,17 @@ class ListeContact extends React.Component {
         <SafeAreaView
         style={ styles.container }>
           <FlatList
-            ItemSeparatorComponent={
-              (() => (
-                <View
-                  style={[
-                    styles.separator,
-                  ]}
-                />
-              ))
-            }
-            ListEmptyComponent={
-              (() => (
-                  <Text style={
-                    styles.emptyList
-                  }> Aucun contact en vue, pourquoi ne pas en ajouter ? </Text>
-              ))
-            }
+            ItemSeparatorComponent={this.createSeparator}
+            ListEmptyComponent={this.createEmptyViewList}
             data={ contacts }
             keyExtractor={(item, index) => item.rawContactId}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => { this.modifyContact(item.rawContactId) }}
+                onPress={() => { this.toggleFavorite(item.rawContactId) }}
                 style={ styles.subContainer }>
                   <Text style={[ styles.text, { fontWeight: "bold" } ]}> { item.displayName } </Text>
                   <Text style={ styles.text }> { item.phoneNumbers[0].number } </Text>
+                  { this.displayFavorite(item.rawContactId) }
               </TouchableOpacity>
             )} />
         </SafeAreaView>
@@ -117,4 +138,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ListeContact
+// Récupération des contacts favoris stockées dans le store
+const mapStateToProps = (state) => {
+  return {
+    favoritesContact: state.favoritesContact,
+  }
+}
+
+export default connect(mapStateToProps)(ListeContact)

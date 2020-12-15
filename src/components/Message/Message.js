@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import getDate from '../../utils/getDate';
 
 import { AppRegistry } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessage')
 );
@@ -14,6 +15,7 @@ AppRegistry.registerHeadlessTask('SendMessage', () =>
 class Message extends React.Component {
     constructor(props) {
         super(props);
+        this.readData();
     }
 
     proceed = () => {
@@ -44,7 +46,8 @@ class Message extends React.Component {
         message: '',
         date: new Date(),
         displayDate: false,
-        displayTimme: false,
+        displayTime: false,
+        messages: []
     };
 
     setDefaultDate = () => {
@@ -81,8 +84,39 @@ class Message extends React.Component {
 
     };
 
-    programSms = () => {
+    readData = async () => {
+        try{
+            const jsonValue = await AsyncStorage.getItem('message');
+            const value = JSON.parse(jsonValue);
+            if(jsonValue != null){
+                this.setState({
+                    messages: value
+                });
+            }else{
+                this.setState({
+                    messages: [],
+                });
+            }
+        }catch(e){
+            console.log(e);
+        }
+    };
 
+    programSms = async () => {
+        try{
+            let value = {};
+            value.date = this.state.date;
+            value.message = this.state.message;
+            value.contact = this.state.numberText;
+            let joined = this.state.messages;
+            joined.push(value);
+            const jsonValue = JSON.stringify(joined);
+            await AsyncStorage.setItem('message', jsonValue);
+            this.readData();
+            console.log('message enregistré');
+        }catch (e) {
+            console.log(e);
+        }
     };
 
     displayDate = () => {

@@ -26,6 +26,16 @@ class ListeMessage extends React.Component {
         }
     };
 
+    //supprimer tous les messages stockés dans le téléphone
+    clearMessages = async() => {
+        try{
+            await AsyncStorage.removeItem('message');
+            console.log('All messages cleared');
+        }catch(e){
+            console.log('failed: ' + e);
+        }
+    };
+
     //lire les messages
     readData = async () => {
         try{

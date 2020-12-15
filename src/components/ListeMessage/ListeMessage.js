@@ -7,6 +7,7 @@ class ListeMessage extends React.Component {
     constructor(props) {
         super(props);
         this.readData();
+        this.onStart();
     }
 
     state = {
@@ -25,6 +26,13 @@ class ListeMessage extends React.Component {
         }catch (e) {
             console.log(e);
         }
+    };
+
+    onStart = () => {
+        BackgroundTimer.runBackgroundTimer(() => {
+                console.log('test wesh')
+            },
+            3000);
     };
 
     //supprimer tous les messages stockés dans le téléphone

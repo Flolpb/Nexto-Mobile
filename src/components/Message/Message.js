@@ -4,7 +4,7 @@ import SendSMS from 'react-native-sms';
 import SmsAndroid from 'react-native-get-sms-android';
 import 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import getCurrentDate from '../../utils/getDate';
+import getDate from '../../utils/getDate';
 
 import { AppRegistry } from 'react-native';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
@@ -81,6 +81,10 @@ class Message extends React.Component {
 
     };
 
+    programSms = () => {
+
+    };
+
     displayDate = () => {
         this.setState({
             displayDate: true,
@@ -93,19 +97,29 @@ class Message extends React.Component {
     };
 
     setDate = (event, date) => {
-        this.setState({date: date, displayDate: false});
+        if(date != null){
+            this.setState({date: date});
+        }
+        this.setState({displayDate: false});
     };
 
     setTime = (event, date) => {
-        this.setState({date: date, displayTime: false});
+        if(date != null){
+            this.setState({date: date});
+        }
+        this.setState({displayTime: false});
     };
 
 
   render() {
       const {date} = this.state;
       let dateString;
-      dateString = date.toString();
-      console.log(date);
+      if(date != null){
+          dateString = getDate(':', date);
+      }else{
+          dateString = 'Aucune';
+      }
+
       return (
       <View>
           <Text style={styles.label}>Rentrer un numéro de téléphone</Text>
@@ -113,11 +127,11 @@ class Message extends React.Component {
           <Text style={styles.label}>Rentrer un message</Text>
           <TextInput style={styles.input} value={this.state.message} onChangeText={(text) => this.setMessage(text)} placeholder="Enter Message to send"/>
           <Text style={styles.label}>Date programmée : {dateString}</Text>
-          <Button title="Sélectionnez une date" onPress={this.displayDate}/>
-          <Button title="Sélectionnez une heure" onPress={this.displayTime}/>
+          <Button title="Changer la date" onPress={this.displayDate}/>
+          <Button title="Changer l'heure" onPress={this.displayTime}/>
           {this.state.displayDate &&
               <DateTimePicker style={styles.datePickerStyle} value={date} mode="date"
-                 confirmBtnText="Confirm" cancelBtnText="Cancel"
+                 confirmBtnText="Confirm"
                  customStyles={{
                      dateIcon: {
                          position: 'absolute',
@@ -141,7 +155,7 @@ class Message extends React.Component {
           }
 
 
-          <Button title="Send SMS" onPress={this.sendSms}/>
+          <Button title="Programmer le SMS" onPress={this.programSms}/>
           <Button title="Grant Permission" onPress={this.sendPermission}/>
       </View>
     );

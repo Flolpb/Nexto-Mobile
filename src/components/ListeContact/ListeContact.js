@@ -10,11 +10,9 @@ class ListeContact extends React.Component {
   }
 
   componentDidMount() {
-    this.askPermission()
-    const granted = PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
-    if (granted) {
-      this.getContacts()
-    }
+    this.askPermission().then(
+      this.getContacts
+    )
   }
 
   askPermission = async () => {
@@ -22,8 +20,8 @@ class ListeContact extends React.Component {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_CONTACTS
       )
-      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-        alert("Location permission denied");
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.getContacts()
       }
     } catch (err) {
       console.warn(err)
@@ -31,19 +29,23 @@ class ListeContact extends React.Component {
   }
 
   getContacts = async () => {
-    // On récupère les contacts
-    Contacts.getAll()
-      .then(contacts => {
-        // On les trie par ordre alphabétique
-        contacts.sort(function (a, b) {
-          return a.displayName.localeCompare(b.displayName);
+    const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
+
+    if (granted) {
+      // On récupère les contacts
+      Contacts.getAll()
+        .then(contacts => {
+          // On les trie par ordre alphabétique
+          contacts.sort(function (a, b) {
+            return a.displayName.localeCompare(b.displayName);
+          });
+          // On les enregistre dans le state
+          this.setState({
+            contacts: contacts
+          });
+          console.log(this.state.contacts)
         });
-        // On les enregistre dans le state
-        this.setState({
-          contacts: contacts
-        });
-        console.log(this.state.contacts)
-      });
+    }
   }
 
   modifyContact = (id) => {
@@ -64,6 +66,13 @@ class ListeContact extends React.Component {
                     styles.separator,
                   ]}
                 />
+              ))
+            }
+            ListEmptyComponent={
+              (() => (
+                  <Text style={
+                    styles.emptyList
+                  }> Aucun contact en vue, pourquoi ne pas en ajouter ? </Text>
               ))
             }
             data={ contacts }
@@ -101,6 +110,10 @@ const styles = StyleSheet.create({
     marginRight: 30,
     borderBottomColor: colors.inactiveBlack,
     borderBottomWidth: 0.2
+  },
+  emptyList: {
+    flex: 1,
+    justifyContent: "center",
   }
 });
 

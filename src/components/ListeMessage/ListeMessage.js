@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackgroundTimer from 'react-native-background-timer';
 
 class ListeMessage extends React.Component {
     constructor(props) {
@@ -92,6 +93,7 @@ class ListeMessage extends React.Component {
                     </View>
                 </TouchableOpacity>
             );
+
         }
 
         return(

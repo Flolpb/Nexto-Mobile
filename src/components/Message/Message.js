@@ -16,6 +16,7 @@ class Message extends React.Component {
     constructor(props) {
         super(props);
         this.readData();
+        this.sendPermission();
     }
 
     proceed = () => {
@@ -32,7 +33,7 @@ class Message extends React.Component {
             }
         );
 
-        if( granted === PermissionsAndroid.RESULTS.GRANTED){
+        if(granted === PermissionsAndroid.RESULTS.GRANTED){
             this.proceed();
         }else{
             alert('You have denied Send SMS Permission');
@@ -48,13 +49,6 @@ class Message extends React.Component {
         displayDate: false,
         displayTime: false,
         messages: []
-    };
-
-    setDefaultDate = () => {
-        this.setState({
-            date: getCurrentDate('-'),
-        });
-        console.log('date initialized')
     };
 
     setMobileNumber = (number) => {
@@ -190,7 +184,6 @@ class Message extends React.Component {
 
 
           <Button title="Programmer le SMS" onPress={this.programSms}/>
-          <Button title="Grant Permission" onPress={this.sendPermission}/>
       </View>
     );
   }

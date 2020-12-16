@@ -36,6 +36,8 @@ class LogInForm extends React.Component{
                     />
                     <TextInput
                         style={{height: 40}}
+                        textContentType='password'
+                        secureTextEntry={true}
                         placeholder="Password"
                         onChangeText={text =>this.handleChangePassword(text)}
                         defaultValue={this.state.password}

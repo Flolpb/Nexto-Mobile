@@ -16,7 +16,7 @@ class SwitchLogInForm extends React.Component
     }
 
     switchView = () => {
-        return (this.props.isLogged ? (
+        return (this.isLogged ? (
             <Navigation />
         ) : (
             <LogInForm onLogIn={this.handleLogIn} />
@@ -31,6 +31,7 @@ class SwitchLogInForm extends React.Component
 
 // Récupération du statut de connexion depuis le Store
 const mapStateToProps = (state) => {
+    console.log(state.toggleLogIn)
     return {
       isLogged: state.isLogged,
     }

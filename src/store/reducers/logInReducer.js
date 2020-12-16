@@ -7,22 +7,11 @@ const initialState = {
     let nextState;
     switch (action.type) {
       case 'TOGGLE_LOGIN':
-        if(state.isLogged)
-        {
-            nextState = {
-                ...state,
-                isLogged: false,
-                username: 'Anonyme'
-            }
-        }
-        else
-        {
-            nextState = {
-                ...state,
-                isLogged: true,
-                username: action.username
-            }
-        }
+          nextState = {
+            ...state,
+            isLogged: false,
+            username: state.isLogged ? 'Anonyme' : action.username
+          }
         return nextState || state
       default:
         return state

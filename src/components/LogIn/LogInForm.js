@@ -1,6 +1,5 @@
 import React, {Component, useState} from 'react'
-import {Button, StyleSheet, TextInput, View, Text} from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import {Button, StyleSheet, TextInput, View, Text, TouchableOpacity} from 'react-native'
 
 class LogInForm extends React.Component{
 
@@ -72,6 +71,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        elevation: 5,
     },
     main_container: {
         backgroundColor: 'rgba(0,0,0,0.8)',
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     form_button: {
+        elevation: 8,
         backgroundColor: 'black',
         borderRadius: 40,
         width: 150,

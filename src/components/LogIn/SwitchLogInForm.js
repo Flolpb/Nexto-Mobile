@@ -14,7 +14,6 @@ class SwitchLogInForm extends React.Component
     handleLogIn = (username) => {
         const action = { type: "TOGGLE_LOGIN", username: username }
         this.props.dispatch(action)
-        console.log('click')
     }
 
     render(){

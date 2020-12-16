@@ -4,12 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-<<<<<<< HEAD
 import com.ocetnik.timer.BackgroundTimerPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
-=======
 import com.oblador.vectoricons.VectorIconsPackage;
->>>>>>> 423a56441aea64517494da333a41c89451375398
 import com.react.SmsPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;

@@ -10,7 +10,11 @@ target 'AndroidProject' do
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
+<<<<<<< HEAD
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+=======
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+>>>>>>> 423a56441aea64517494da333a41c89451375398
 
   target 'AndroidProjectTests' do
     inherit! :complete

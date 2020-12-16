@@ -1,22 +1,17 @@
 import React from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import Navigation from './navigations/Navigation';
-
-const Stack = createStackNavigator();
+import { Provider } from 'react-redux'
+import Store from './store/configureStore'
 
 class App extends React.Component {
   render() {
     return (
-      <Navigation />
+      <Provider store={ Store }>
+        <Navigation />
+      </Provider>
     );
   }
 }
-
-
-
-
 
 export default App;

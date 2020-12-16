@@ -30,9 +30,9 @@ class ListeMessage extends React.Component {
 
     onStart = () => {
         BackgroundTimer.runBackgroundTimer(() => {
-                console.log('test wesh')
+                console.log('test wesh');
             },
-            3000);
+            10000);
     };
 
     //supprimer tous les messages stockés dans le téléphone

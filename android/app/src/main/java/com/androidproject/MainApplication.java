@@ -6,6 +6,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.react.SmsPackage;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -31,10 +32,16 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
 
           // Dépendance react-native-vector-icons
+<<<<<<< HEAD
           // packages.add(new VectorIconsPackage());
+=======
+          // packages.add(new VectorIconsPackage())
+>>>>>>> 423a56441aea64517494da333a41c89451375398
 
           // Dépendance react-native-get-sms-android
           // packages.add(new SmsPackage());
+
+          // packages.add(new ReactNativeContacts());
 
           return packages;
         }

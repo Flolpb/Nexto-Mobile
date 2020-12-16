@@ -1,16 +1,17 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import 'react-native-gesture-handler';
+import {Icon} from 'react-native-elements';
 import Message from '../components/Message/Message';
 import ListeMessage from '../components/ListeMessage/ListeMessage';
 import Accueil from '../components/Accueil/Accueil';
-import {Icon} from 'react-native-elements';
+import ListeContact from '../components/ListeContact/ListeContact';
+
 
 import colors from '../config/colors';
-import {color} from 'react-native-reanimated';
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -32,6 +33,15 @@ class Navigation extends React.Component{
                         borderBottomWidth: 2,
                       },
                     }} >
+                        <Tab.Screen
+                          name="Liste des contacts"
+                          component={ListeContact}
+                          options={{
+                            tabBarColor: colors.white,
+                            tabBarIcon: ({color, size}) => (
+                              <Icon name="contacts" color={color} size={size} />
+                            )
+                        }} />
                         <Tab.Screen
                           name="Home"
                           component={Accueil}

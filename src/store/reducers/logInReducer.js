@@ -2,31 +2,19 @@ const initialState = {
     isLogged: false,
     username: 'Anonyme'
   }
-  
-  function toggleLogIn(state = initialState, action) {
-    let nextState;
+function toggleLogIn(state = initialState, action) {
+  let nextState;
     switch (action.type) {
       case 'TOGGLE_LOGIN':
-        if(state.isLogged)
-        {
-            nextState = {
-                ...state,
-                isLogged: false,
-                username: 'Anonyme'
-            }
-        }
-        else
-        {
-            nextState = {
-                ...state,
-                isLogged: true,
-                username: action.username
-            }
+        nextState = {
+          ...state,
+          isLogged: !state.isLogged,
+          username: state.isLogged ? 'Anonyme' : action.username
         }
         return nextState || state
       default:
         return state
     }
-  }
-  
-  export default toggleLogIn
+}
+
+export default toggleLogIn

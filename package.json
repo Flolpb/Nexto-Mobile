@@ -19,13 +19,10 @@
     "@react-navigation/stack": "^5.12.1",
     "react": "16.13.1",
     "react-native": "0.63.3",
-<<<<<<< HEAD
     "react-native-background-timer": "^2.4.1",
     "react-native-datepicker": "^1.7.2",
-=======
     "react-native-contacts": "^6.0.3",
     "react-native-elements": "^3.0.0-alpha.1",
->>>>>>> 423a56441aea64517494da333a41c89451375398
     "react-native-gesture-handler": "^1.8.0",
     "react-native-get-sms-android": "^2.1.0",
     "react-native-paper": "^4.4.1",
@@ -33,14 +30,11 @@
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.12.0",
     "react-native-sms": "^1.11.0",
-<<<<<<< HEAD
-    "react-native-sync-adapter": "^3.0.0"
-=======
+    "react-native-sync-adapter": "^3.0.0",
     "react-native-tab-view": "^2.15.2",
     "react-native-vector-icons": "^7.1.0",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5"
->>>>>>> 423a56441aea64517494da333a41c89451375398
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

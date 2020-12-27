@@ -87,9 +87,18 @@ class ListeContact extends React.Component {
   searchFilter = (text) => {
     if (text) {
       const contacts = this.state.contacts;
-      let filteredContacts = contacts.filter(item => {
-        return item.displayName.toUpperCase().indexOf(text.toUpperCase()) > -1;
-      })
+      let filteredContacts;
+      // Par numéro
+      if (!isNaN(parseInt(text[0]))) {
+        filteredContacts = contacts.filter(item => {
+          return item.phoneNumbers[0].number.toUpperCase().indexOf(text.toUpperCase()) > -1;
+        });
+        // Par lettre
+      } else {
+        filteredContacts = contacts.filter(item => {
+          return item.displayName.toUpperCase().indexOf(text.toUpperCase()) > -1;
+        });
+      }
       this.setState({
         search: text,
         filteredContacts: filteredContacts

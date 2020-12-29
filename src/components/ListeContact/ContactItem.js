@@ -1,20 +1,21 @@
-import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, View, Button} from 'react-native';
 import React from 'react';
 import colors from '../../config/colors';
 import {connect} from 'react-redux';
-import { Avatar } from 'react-native-elements';
+import {Avatar, Icon} from 'react-native-elements';
 
 class ContactItem extends React.Component {
 
-  toggleFavorite = (id) => {
-    const action = { type: "TOGGLE_FAVORITE", id: id }
-    this.props.dispatch(action)
+  state = {
+    menu: false,
   }
 
-  displayFavorite = (id) => {
-    return this.props.favoritesContact.findIndex(item => item === id) !== -1 ? (
-      <Text style={{ color: "red" }}> Test </Text>
-    ) : null
+  toggleFavorite = (id) => {
+    const action = { type: "TOGGLE_FAVORITE", id: id }
+    this.props.dispatch(action);
+    this.setState({
+      menu: !this.state.menu
+    })
   }
 
   generateAvatarLabel = (contact) => {
@@ -24,12 +25,46 @@ class ContactItem extends React.Component {
     return label;
   }
 
+  displayFavorite = (id) => {
+    return this.props.favoritesContact.findIndex(item => item === id) !== -1
+  }
+
+  displayContactInfo = (contact) => {
+    return(
+      <View style={ styles.infosContainer }>
+        <Text style={[styles.text, {fontWeight: "bold"}]}> {contact.displayName} </Text>
+        <Text style={styles.text}> {contact.phoneNumbers[0].number} </Text>
+        { this.displayFavorite(contact.rawContactId) }
+      </View>
+    )
+  }
+
+  displayMenu = (contact) => {
+    return(
+      <View style={ styles.menuContainer }>
+        <Icon
+          type="font-awesome-5"
+          name="heart"
+          solid={ !this.displayFavorite(contact.rawContactId) }
+          style={ styles.button }
+          color="#e62552"
+          size={30}
+          onPress={() => {
+            this.toggleFavorite(contact.rawContactId)
+        }} />
+      </View>
+    )
+  }
+
   render() {
     const contactItem = this.props.contactItem
+    let infosContainer = this.state.menu ? this.displayMenu(contactItem) : this.displayContactInfo(contactItem)
     return(
       <TouchableOpacity
-        onPress={() => {
-          this.toggleFavorite(contactItem.rawContactId)
+        onLongPress={() => {
+          this.setState({
+            menu: !this.state.menu
+          })
         }}
         style={styles.subContainer}>
         <Avatar
@@ -40,11 +75,7 @@ class ContactItem extends React.Component {
           overlayContainerStyle={ styles.avatarBackground }
           activeOpacity={0.7}
         />
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={[styles.text, {fontWeight: "bold"}]}> {contactItem.displayName} </Text>
-          <Text style={styles.text}> {contactItem.phoneNumbers[0].number} </Text>
-          { this.displayFavorite(contactItem.rawContactId) }
-        </View>
+        { infosContainer }
       </TouchableOpacity>
     )
   }
@@ -58,6 +89,17 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingLeft: 20,
   },
+  infosContainer: {
+    flex: 1,
+    marginRight: 30,
+    flexDirection: 'column',
+  },
+  menuContainer: {
+    flex: 1,
+    marginRight: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   avatar : {
     marginRight: 15,
   },
@@ -68,6 +110,9 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontSize: 16,
   },
+  button: {
+    justifyContent: 'space-evenly',
+  }
 })
 
 // Récupération des contacts favoris stockées dans le store

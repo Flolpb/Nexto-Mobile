@@ -4,6 +4,7 @@ import {Icon, SearchBar} from 'react-native-elements';
 import Contacts from 'react-native-contacts';
 import colors from '../../config/colors';
 import ContactItem from "./ContactItem"
+import {connect} from 'react-redux';
 
 class ListeContact extends React.Component {
 
@@ -50,6 +51,18 @@ class ListeContact extends React.Component {
     }
   }
 
+  getContact = async (id) => {
+    const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
+
+    if (granted) {
+      // On récupère les contacts
+      Contacts.getContactById(id)
+        .then(contact => {
+          return contact
+        });
+    }
+  }
+
   createSeparator = () => {
     return (
       <View
@@ -69,6 +82,15 @@ class ListeContact extends React.Component {
     )
   }
 
+  createListHeader = () => {
+    return(
+      <>
+        { this.createSearchBar() }
+        { this.createFavoriteTab() }
+      </>
+    )
+  }
+
   createSearchBar = () => {
     return (
       <SearchBar
@@ -82,6 +104,10 @@ class ListeContact extends React.Component {
         onChangeText={(text) => { this.searchFilter(text) }}
       />
     )
+  }
+
+  createFavoriteTab = () => {
+    // A FAIRE
   }
 
   searchFilter = (text) => {
@@ -119,7 +145,7 @@ class ListeContact extends React.Component {
           style={styles.container}>
           <FlatList
             contentContainerStyle={{minHeight: '100%'}}
-            ListHeaderComponent={this.createSearchBar}
+            ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={contacts}
@@ -166,4 +192,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListeContact
+// Récupération des contacts favoris stockées dans le store
+const mapStateToProps = (state) => {
+  return {
+    favoritesContact: state.favoritesContact,
+  }
+}
+
+export default connect(mapStateToProps)(ListeContact);

@@ -21,55 +21,55 @@ class Navigation extends React.Component{
             <>
                 <NavigationContainer>
                     <Tab.Navigator
-                    initialRouteName="Home"
-                    tabBarPosition="bottom"
-                    tabBarOptions={{
-                      showIcon: true,
-                      showLabel: false,
-                      activeTintColor: colors.black,
-                      inactiveTintColor: colors.inactiveBlack,
-                      indicatorStyle: {
-                        borderBottomColor: colors.black,
-                        borderBottomWidth: 2,
-                      },
+                      initialRouteName="Home"
+                      tabBarPosition="bottom"
+                      tabBarOptions={{
+                        showIcon: true,
+                        showLabel: false,
+                        activeTintColor: colors.black,
+                        inactiveTintColor: colors.inactiveBlack,
+                        indicatorStyle: {
+                          borderBottomColor: colors.black,
+                          borderBottomWidth: 2,
+                        },
                     }} >
-                        <Tab.Screen
-                          name="Liste des contacts"
-                          component={ListeContact}
-                          options={{
+                      <Tab.Screen
+                        name="Liste des contacts"
+                        component={ListeContact}
+                        options={{
+                          tabBarColor: colors.white,
+                          tabBarIcon: ({color, size}) => (
+                            <Icon name="contacts" color={color} size={size} />
+                          )
+                      }} />
+                      <Tab.Screen
+                        name="Home"
+                        component={Accueil}
+                        options={{
                             tabBarColor: colors.white,
                             tabBarIcon: ({color, size}) => (
-                              <Icon name="contacts" color={color} size={size} />
+                              <Icon name="home" color={color} size={size} />
                             )
                         }} />
-                        <Tab.Screen
-                          name="Home"
-                          component={Accueil}
-                          options={{
-                              tabBarColor: colors.white,
-                              tabBarIcon: ({color, size}) => (
-                                <Icon name="home" color={color} size={size} />
-                              )
-                          }} />
-                        <Tab.Screen
-                          name="Liste des Messages"
-                          component={ListeMessage}
-                          options={{
-                            tabBarColor: colors.white,
-                            tabBarIcon: ({color, size}) => (
-                              <Icon name="list" color={color} size={size} />
-                            )
-                          }} />
-                        <Tab.Screen
-                          name="Message"
-                          component={Message}
-                          options={{
-                            tabBarColor: colors.white,
-                            tabBarIcon: ({color, size}) => (
-                              <Icon name="message" color={color} size={size} />
-                            )
-                          }}
-                        />
+                      <Tab.Screen
+                        name="Liste des Messages"
+                        component={ListeMessage}
+                        options={{
+                          tabBarColor: colors.white,
+                          tabBarIcon: ({color, size}) => (
+                            <Icon name="list" color={color} size={size} />
+                          )
+                        }} />
+                      <Tab.Screen
+                        name="Message"
+                        component={Message}
+                        options={{
+                          tabBarColor: colors.white,
+                          tabBarIcon: ({color, size}) => (
+                            <Icon name="message" color={color} size={size} />
+                          )
+                        }}
+                      />
                     </Tab.Navigator>
                 </NavigationContainer>
             </>

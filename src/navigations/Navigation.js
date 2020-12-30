@@ -1,15 +1,12 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import 'react-native-gesture-handler';
 import {Icon} from 'react-native-elements';
-import Message from '../components/Message/Message';
 import ListeMessage from '../components/ListeMessage/ListeMessage';
 import Accueil from '../components/Accueil/Accueil';
 import ListeContact from '../components/ListeContact/ListeContact';
-
-
+import MessageContainer from '../components/MessageContainer/MessageContainer';
 import colors from '../config/colors';
 
 
@@ -62,7 +59,7 @@ class Navigation extends React.Component{
                         }} />
                       <Tab.Screen
                         name="Message"
-                        component={Message}
+                        component={MessageContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -76,11 +73,5 @@ class Navigation extends React.Component{
         )
     }
 }
-
-const styles = StyleSheet.create({
-  bottomBar: {
-    backgroundColor: colors.white,
-  },
-});
 
 export default Navigation;

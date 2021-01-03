@@ -51,18 +51,6 @@ class ListeContact extends React.Component {
     }
   }
 
-  getContact = async (id) => {
-    const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
-
-    if (granted) {
-      // On récupère les contacts
-      Contacts.getContactById(id)
-        .then(contact => {
-          return contact
-        });
-    }
-  }
-
   createSeparator = () => {
     return (
       <View
@@ -138,6 +126,7 @@ class ListeContact extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props
     const contacts = this.state.filteredContacts ? this.state.filteredContacts : this.state.contacts;
     return (
       <>
@@ -149,9 +138,9 @@ class ListeContact extends React.Component {
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={contacts}
-            keyExtractor={(item, index) => item.rawContactId}
+            keyExtractor={(item, index) => item.recordID}
             renderItem={({item}) => (
-              <ContactItem contactItem={ item } />
+              <ContactItem contactItem={ item } navigation={navigation} />
             )}/>
         </SafeAreaView>
       </>
@@ -195,7 +184,7 @@ const styles = StyleSheet.create({
 // Récupération des contacts favoris stockées dans le store
 const mapStateToProps = (state) => {
   return {
-    favoritesContact: state.favoritesContact,
+    favoritesContact: state.toggleContactFavorite.favoritesContact,
   }
 }
 

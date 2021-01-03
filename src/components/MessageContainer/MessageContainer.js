@@ -29,12 +29,15 @@ class MessageContainer extends React.Component {
   };
 
   render() {
+    const { route } = this.props
     const Tab = createMaterialTopTabNavigator();
     return(
       <Tab.Navigator
         swipeEnabled={false}>
-        <Tab.Screen name="Instantané" component={DirectMessage} />
-        <Tab.Screen name="Différé" component={DelayedMessage} />
+        <Tab.Screen name="Instantané">
+          {props => <DirectMessage contactID={route.params} />}
+        </Tab.Screen>
+        <Tab.Screen {...this.props} name="Différé" component={DelayedMessage} />
       </Tab.Navigator>
     )
   }

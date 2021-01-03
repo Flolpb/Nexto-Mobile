@@ -1,8 +1,15 @@
 import React from 'react';
-import {StyleSheet, TextInput, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, TextInput, Text, View, TouchableOpacity, PermissionsAndroid} from 'react-native';
 import SmsAndroid from 'react-native-get-sms-android';
+import colors from '../../../config/colors';
+import {Icon} from 'react-native-elements';
+import Contacts from 'react-native-contacts';
 
 class DirectMessage extends React.Component {
+  constructor(props) {
+    super(props);
+    if (props.contactID) this.getContact()
+  }
 
   state = {
     phoneNumber: null
@@ -31,6 +38,19 @@ class DirectMessage extends React.Component {
     }
   };
 
+  getContact = async () => {
+    const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
+
+    if (granted) {
+      Contacts.getContactById(this.props.contactID.contactID).then(contact => {
+        this.setState({
+          phoneNumber: contact.phoneNumbers[0].number,
+          contact: contact
+        })
+      })
+    }
+  }
+
   render() {
     return(
       <View
@@ -55,8 +75,8 @@ class DirectMessage extends React.Component {
             placeholder="Message ..." />
           <TouchableOpacity
             style={ styles.sendButton }
-            onPress = { ()=>{ this.sendSms() }}>
-            <Text> SEND </Text>
+            onPress={ ()=>{ this.sendSms() }}>
+            <Icon name="send" color={colors.black} size={20} />
           </TouchableOpacity>
         </View>
       </View>

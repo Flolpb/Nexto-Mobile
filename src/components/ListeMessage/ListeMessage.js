@@ -30,7 +30,7 @@ class ListeMessage extends React.Component {
 
     onStart = () => {
         BackgroundTimer.runBackgroundTimer(() => {
-                console.log('test wesh');
+                // console.log('test wesh');
             },
             10000);
     };

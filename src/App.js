@@ -1,22 +1,19 @@
 import React from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import Navigation from './navigations/Navigation';
+import { Provider } from 'react-redux'
+import Store from './store/configureStore'
+import SwitchLogInForm from './components/LogIn/SwitchLogInForm'
 
-const Stack = createStackNavigator();
 
 class App extends React.Component {
   render() {
     return (
-      <Navigation />
+      <Provider store={ Store }>
+        <SwitchLogInForm />
+      </Provider>
     );
   }
 }
-
-
-
-
 
 export default App;

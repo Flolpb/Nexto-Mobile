@@ -4,7 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.react.SmsPackage;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -12,7 +16,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import com.androidproject.SendMessage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -29,6 +32,15 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+
+          // Dépendance react-native-vector-icons
+          // packages.add(new VectorIconsPackage());
+
+          // Dépendance react-native-get-sms-android
+          // packages.add(new SmsPackage());
+
+          // packages.add(new ReactNativeContacts());
+
           return packages;
         }
 

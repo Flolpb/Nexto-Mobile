@@ -11,6 +11,12 @@ class ListeMessage extends React.Component {
         this.onStart();
     }
 
+    componentDidMount() {
+        setTimeout(() => {
+            this.readData();
+        }, 1000)
+    }
+
     state = {
         messages: [],
     };
@@ -41,8 +47,8 @@ class ListeMessage extends React.Component {
         }
     };
 
-
-    onStart = () => {
+    //Messages Programmés
+    onStart = async () => {
         BackgroundTimer.runBackgroundTimer(() => {
             for (let i  = 0; i < this.state.messages.length; i++){
                 if(this.state.messages[i].status !== "send"){
@@ -79,11 +85,10 @@ class ListeMessage extends React.Component {
                                 this.changeStatus(i);
                             },
                         );
-                    }else{
-                        console.log(dateM + ' < ' + dateNow);
                     }
                 }
             }
+            this.readData();
         },
         60000);
     };
@@ -107,7 +112,6 @@ class ListeMessage extends React.Component {
             const jsonValue = JSON.stringify(joined);
             await AsyncStorage.setItem('message', jsonValue);
             this.readData();
-            console.log(this.state.messages);
         }catch(e){
             console.log('failed: ' + e);
         }
@@ -146,7 +150,7 @@ class ListeMessage extends React.Component {
             date[1] = date[1].split('.');
             if(this.state.messages[m].status !== 'send'){
                 Messages.push(
-                    <TouchableOpacity onPress={() => navigate('Message')}>
+                    <View onPress={() => navigate('Message')}>
                         <View style={styles.bloc}>
                             <Text>{this.state.messages[m].message}</Text>
                             <Text>{this.state.messages[m].contact}</Text>
@@ -156,11 +160,11 @@ class ListeMessage extends React.Component {
                             </View>
                             <Button title="supprimer" onPress={() => this.deleteData(m)}/>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 );
             }else{
                 MessagesSend.push(
-                    <TouchableOpacity onPress={() => navigate('Message')}>
+                    <View onPress={() => navigate('Message')}>
                         <View style={styles.bloc}>
                             <Text>{this.state.messages[m].message}</Text>
                             <Text>{this.state.messages[m].contact}</Text>
@@ -170,7 +174,7 @@ class ListeMessage extends React.Component {
                             </View>
                             <Button title="supprimer" onPress={() => this.deleteData(m)}/>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 );
             }
         }
@@ -183,6 +187,7 @@ class ListeMessage extends React.Component {
                 {MessagesSend[0] && <View><View style={styles.center}><View style={styles.border}/></View><Text style={styles.titre}>Historique des messages envoyés</Text></View>}
                 {MessagesSend}
                 <Button title="Programmer un nouveau message !" onPress={() => navigate('Message')}/>
+                <Button title="Actualiser" onPress={() => this.readData()}/>
             </View>
         )
     }

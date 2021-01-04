@@ -1,22 +1,16 @@
 import React from 'react';
-import {
-  FlatList,
-  Image,
-  PermissionsAndroid,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, PermissionsAndroid, SafeAreaView, StyleSheet, Text, View,} from 'react-native';
+import {Icon, SearchBar} from 'react-native-elements';
 import Contacts from 'react-native-contacts';
 import colors from '../../config/colors';
-import { connect } from "react-redux";
+import ContactItem from "./ContactItem"
+import {connect} from 'react-redux';
 
 class ListeContact extends React.Component {
 
   state = {
-    contacts: []
+    contacts: [],
+    search: '',
   }
 
   componentDidMount() {
@@ -57,6 +51,18 @@ class ListeContact extends React.Component {
     }
   }
 
+  getContact = async (id) => {
+    const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
+
+    if (granted) {
+      // On récupère les contacts
+      Contacts.getContactById(id)
+        .then(contact => {
+          return contact
+        });
+    }
+  }
+
   createSeparator = () => {
     return (
       <View
@@ -69,43 +75,84 @@ class ListeContact extends React.Component {
 
   createEmptyViewList = () => {
     return (
-      <Text style={
-        styles.emptyList
-      }> Aucun contact en vue, pourquoi ne pas en ajouter ? </Text>
+      <View style={ styles.emptyView }>
+        <Icon name="search" size={75}/>
+        <Text style={ styles.emptyTag }> Aucun contact trouvé </Text>
+      </View>
     )
   }
 
-  toggleFavorite = (id) => {
-    const action = { type: "TOGGLE_FAVORITE", id: id }
-    this.props.dispatch(action)
+  createListHeader = () => {
+    return(
+      <>
+        { this.createSearchBar() }
+        { this.createFavoriteTab() }
+      </>
+    )
   }
 
-  displayFavorite = (id) => {
-    return this.props.favoritesContact.findIndex(item => item === id) !== -1 ? (
-      <Text style={{ color: "red" }}> Test </Text>
-    ) : null
+  createSearchBar = () => {
+    return (
+      <SearchBar
+        inputStyle={ styles.searchBar }
+        inputContainerStyle={ styles.searchBar }
+        containerStyle={ styles.searchBar }
+        placeholderTextColor={ colors.inactiveBlack }
+        selectionColor={ colors.black }
+        value = { this.state.search }
+        placeholder="Rechercher ..."
+        onChangeText={(text) => { this.searchFilter(text) }}
+      />
+    )
+  }
+
+  createFavoriteTab = () => {
+    // A FAIRE
+  }
+
+  searchFilter = (text) => {
+    if (text) {
+      const contacts = this.state.contacts;
+      let filteredContacts;
+      // Par numéro
+      if (!isNaN(parseInt(text[0]))) {
+        filteredContacts = contacts.filter(item => {
+          return item.phoneNumbers[0].number.toUpperCase().indexOf(text.toUpperCase()) > -1;
+        });
+        // Par lettre
+      } else {
+        filteredContacts = contacts.filter(item => {
+          return item.displayName.toUpperCase().indexOf(text.toUpperCase()) > -1;
+        });
+      }
+      this.setState({
+        search: text,
+        filteredContacts: filteredContacts
+      });
+    } else {
+      this.setState({
+        search: text,
+        filteredContacts: undefined
+      });
+    }
   }
 
   render() {
-    const contacts = this.state.contacts
+    const contacts = this.state.filteredContacts ? this.state.filteredContacts : this.state.contacts;
     return (
       <>
         <SafeAreaView
-        style={ styles.container }>
+          style={styles.container}>
           <FlatList
+            contentContainerStyle={{minHeight: '100%'}}
+            ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
-            data={ contacts }
+            data={contacts}
             keyExtractor={(item, index) => item.rawContactId}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => { this.toggleFavorite(item.rawContactId) }}
-                style={ styles.subContainer }>
-                  <Text style={[ styles.text, { fontWeight: "bold" } ]}> { item.displayName } </Text>
-                  <Text style={ styles.text }> { item.phoneNumbers[0].number } </Text>
-                  { this.displayFavorite(item.rawContactId) }
-              </TouchableOpacity>
-            )} />
+            renderItem={({item}) => (
+              <ContactItem contactItem={ item } />
+            )}/>
         </SafeAreaView>
       </>
     );
@@ -115,34 +162,41 @@ class ListeContact extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 20,
-    backgroundColor: "white"
-  },
-  subContainer: {
-    flex: 1,
-    paddingVertical: 16,
-  },
-  text: {
-    color: colors.black,
-    fontSize: 16,
+    backgroundColor: "white",
+    flexGrow: 1
   },
   separator: {
     flex: 1,
     marginRight: 30,
+    marginLeft: 20,
     borderBottomColor: colors.inactiveBlack,
     borderBottomWidth: 0.2
   },
-  emptyList: {
+  emptyView: {
     flex: 1,
-    justifyContent: "center",
-  }
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyTag: {
+    fontSize: 30,
+    color: colors.black,
+    marginTop: 20,
+  },
+  searchBar: {
+    backgroundColor: colors.transparent,
+    borderBottomWidth: 0,
+    borderWidth: 0,
+    borderColor: colors.transparent,
+    paddingHorizontal: 10,
+    color: colors.black
+  },
 });
 
 // Récupération des contacts favoris stockées dans le store
 const mapStateToProps = (state) => {
   return {
-    favoritesContact: state.favoritesContact,
+    favoritesContact: state.toggleFavorite.favoritesContact,
   }
 }
 
-export default connect(mapStateToProps)(ListeContact)
+export default connect(mapStateToProps)(ListeContact);

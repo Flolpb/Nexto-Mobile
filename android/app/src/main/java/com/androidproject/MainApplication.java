@@ -5,7 +5,7 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.ocetnik.timer.BackgroundTimerPackage;
-import com.ocetnik.timer.BackgroundTimerPackage;
+import com.thebylito.navigationbarcolor.NavigationBarColorPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.react.SmsPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;

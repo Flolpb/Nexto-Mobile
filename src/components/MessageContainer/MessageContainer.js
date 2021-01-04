@@ -36,13 +36,13 @@ class MessageContainer extends React.Component {
     return(
       <Tab.Navigator
         tabBarOptions={{
-          tabStyle: {
+          style: {
             backgroundColor: colors.purple
           },
           activeTintColor: colors.white,
           inactiveTintColor: colors.inactiveBlack,
           indicatorStyle: {
-            borderBottomColor: colors.orange,
+            borderBottomColor: colors.white,
             borderBottomWidth: 2,
           },
         }}

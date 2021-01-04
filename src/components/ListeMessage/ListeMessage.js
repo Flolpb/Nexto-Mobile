@@ -137,15 +137,10 @@ class ListeMessage extends React.Component {
         }
     };
 
-
-
     render(){
-
         const Messages = [];
         const MessagesSend = [];
-
-        const {navigate} = this.props.navigation;
-
+        const { navigate } = this.props.navigation;
         for(let m in this.state.messages){
             const date = this.state.messages[m].date.split('T');
             date[1] = date[1].split('.');
@@ -187,7 +182,7 @@ class ListeMessage extends React.Component {
                 {Messages}
                 {MessagesSend[0] && <View><View style={styles.center}><View style={styles.border}/></View><Text style={styles.titre}>Historique des messages envoyés</Text></View>}
                 {MessagesSend}
-                <Button title="Programmer un nouveau message !" onPress={() => navigate('Message')}/>
+                <Button title="Programmer un nouveau message !" onPress={() => navigate('MessageContainer')}/>
                 <Button title="Actualiser" onPress={() => this.readData()}/>
             </View>
         )

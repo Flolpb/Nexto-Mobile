@@ -1,4 +1,10 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import toggleFavorite from './reducers/favoriteReducer'
+import toggleLogIn from './reducers/logInReducer'
 
-export default createStore(toggleFavorite)
+const combinedStore = combineReducers({
+    toggleFavorite,
+    toggleLogIn
+})
+
+export default createStore(combinedStore)

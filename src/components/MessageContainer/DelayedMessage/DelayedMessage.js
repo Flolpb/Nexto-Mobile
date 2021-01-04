@@ -83,8 +83,17 @@ class DelayedMessage extends React.Component {
             joined.push(value);
             const jsonValue = JSON.stringify(joined);
             await AsyncStorage.setItem('message', jsonValue);
+            this.setState({
+                mobileNumber: [],
+                numberText: '',
+                message: '',
+                date: new Date(),
+                displayDate: false,
+                displayTime: false,
+                messages: []
+            });
             this.readData();
-            console.log('message enregistré');
+            alert('Message envoyé !');
         }catch (e) {
             console.log(e);
         }

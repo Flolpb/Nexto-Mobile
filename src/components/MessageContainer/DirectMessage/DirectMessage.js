@@ -6,13 +6,13 @@ class DirectMessage extends React.Component {
 
   state = {
     phoneNumber: null
-  }
+  };
 
   setKeyValue = (key, value) => {
     this.setState({
       [key]: value
     })
-  }
+  };
 
   sendSms = () => {
     if (this.state.phoneNumber && this.state.message) {

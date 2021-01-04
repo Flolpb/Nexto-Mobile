@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
+import SmsAndroid from 'react-native-get-sms-android';
 
 class ListeMessage extends React.Component {
     constructor(props) {
@@ -12,6 +13,18 @@ class ListeMessage extends React.Component {
 
     state = {
         messages: [],
+    };
+
+    changeStatus = async (index) => {
+        try{
+            let joined = this.state.messages;
+            joined[index].status = "send";
+            const jsonValue = JSON.stringify(joined);
+            await AsyncStorage.setItem('message', jsonValue);
+            this.readData();
+        }catch(e){
+            console.log(e);
+        }
     };
 
     //Storer un message en JSON
@@ -27,6 +40,7 @@ class ListeMessage extends React.Component {
             console.log(e);
         }
     };
+
 
     onStart = () => {
         BackgroundTimer.runBackgroundTimer(() => {
@@ -54,7 +68,17 @@ class ListeMessage extends React.Component {
                     dateNow.setMonth(monthNow);
                     if(dateM.valueOf() < dateNow.valueOf()){
                         console.log('envoi du message: ' + this.state.messages[i].message);
-                        console.log(dateNow);
+                        SmsAndroid.autoSend(
+                            this.state.messages[i].contact,
+                            this.state.messages[i].message,
+                            (fail) => {
+                                alert('failed with this error: '+ fail);
+                            },
+                            (success) => {
+                                console.log('SMS sent successfully');
+                                this.changeStatus(i);
+                            },
+                        );
                     }else{
                         console.log(dateM + ' < ' + dateNow);
                     }
@@ -108,34 +132,56 @@ class ListeMessage extends React.Component {
         }
     };
 
+
+
     render(){
 
         const Messages = [];
+        const MessagesSend = [];
 
         const {navigate} = this.props.navigation;
 
         for(let m in this.state.messages){
             const date = this.state.messages[m].date.split('T');
             date[1] = date[1].split('.');
-            Messages.push(
-                <TouchableOpacity onPress={() => navigate('Message')}>
-                    <View style={styles.bloc}>
-                        <Text>{this.state.messages[m].message}</Text>
-                        <Text>{this.state.messages[m].contact}</Text>
-                        <View style={styles.date}>
-                            <Text>{date[1][0]}</Text>
-                            <Text>{date[0]}</Text>
+            if(this.state.messages[m].status !== 'send'){
+                Messages.push(
+                    <TouchableOpacity onPress={() => navigate('Message')}>
+                        <View style={styles.bloc}>
+                            <Text>{this.state.messages[m].message}</Text>
+                            <Text>{this.state.messages[m].contact}</Text>
+                            <View style={styles.date}>
+                                <Text>{date[1][0]}</Text>
+                                <Text>{date[0]}</Text>
+                            </View>
+                            <Button title="supprimer" onPress={() => this.deleteData(m)}/>
                         </View>
-                        <Button title="supprimer" onPress={() => this.deleteData(m)}/>
-                    </View>
-                </TouchableOpacity>
-            );
-
+                    </TouchableOpacity>
+                );
+            }else{
+                MessagesSend.push(
+                    <TouchableOpacity onPress={() => navigate('Message')}>
+                        <View style={styles.bloc}>
+                            <Text>{this.state.messages[m].message}</Text>
+                            <Text>{this.state.messages[m].contact}</Text>
+                            <View style={styles.date}>
+                                <Text>{date[1][0]}</Text>
+                                <Text>{date[0]}</Text>
+                            </View>
+                            <Button title="supprimer" onPress={() => this.deleteData(m)}/>
+                        </View>
+                    </TouchableOpacity>
+                );
+            }
         }
 
         return(
             <View>
+                {Messages[0] &&
+                <View><Text style={styles.titre}>Liste des messages programmés</Text></View>}
                 {Messages}
+                {MessagesSend[0] && <View><View style={styles.center}><View style={styles.border}/></View><Text style={styles.titre}>Historique des messages envoyés</Text></View>}
+                {MessagesSend}
                 <Button title="Programmer un nouveau message !" onPress={() => navigate('Message')}/>
             </View>
         )
@@ -159,6 +205,21 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         flexWrap: 'wrap',
+        justifyContent: 'center',
+    },
+    titre: {
+        textAlign: 'center',
+        fontSize: 20,
+        padding: 5
+    },
+    border: {
+        backgroundColor: 'black',
+        width: '90%',
+        height: 2,
+    },
+    center: {
+        alignItems: 'center',
+        flex: 1,
         justifyContent: 'center',
     }
 });

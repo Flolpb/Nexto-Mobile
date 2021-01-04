@@ -1,8 +1,10 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import DelayedMessage from './DelayedMessage/DelayedMessage';
 import DirectMessage from './DirectMessage/DirectMessage';
 import { PermissionsAndroid } from 'react-native';
+import colors from '../../config/colors';
 
 
 class MessageContainer extends React.Component {
@@ -33,8 +35,21 @@ class MessageContainer extends React.Component {
     const Tab = createMaterialTopTabNavigator();
     return(
       <Tab.Navigator
-        swipeEnabled={false}>
-        <Tab.Screen name="Instantané">
+        tabBarOptions={{
+          tabStyle: {
+            backgroundColor: colors.purple
+          },
+          activeTintColor: colors.white,
+          inactiveTintColor: colors.inactiveBlack,
+          indicatorStyle: {
+            borderBottomColor: colors.orange,
+            borderBottomWidth: 2,
+          },
+        }}
+        swipeEnabled={false}
+        sceneContainerStyle={styles.screen}>
+        <Tab.Screen
+          name="Instantané">
           {props => <DirectMessage {...props} contactID={route.params} />}
         </Tab.Screen>
         <Tab.Screen {...this.props} name="Différé" component={DelayedMessage} />
@@ -43,5 +58,11 @@ class MessageContainer extends React.Component {
   }
 
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: colors.backGrey,
+  }
+})
 
 export default MessageContainer;

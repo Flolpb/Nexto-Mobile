@@ -4,7 +4,7 @@ import SendSMS from 'react-native-sms';
 import SmsAndroid from 'react-native-get-sms-android';
 import 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import getDate from '../../utils/getDate';
+import getDate from '../../../utils/getDate';
 
 import { AppRegistry } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,34 +12,11 @@ AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessage')
 );
 
-class Message extends React.Component {
+class DelayedMessage extends React.Component {
     constructor(props) {
         super(props);
         this.readData();
-        this.sendPermission();
     }
-
-    proceed = () => {
-        alert('You can now send sms')
-    };
-
-
-    sendPermission = async () => {
-        const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.SEND_SMS,
-            {
-                title: 'Nexto Send SMS Permission',
-                message: 'Nexto needs access to send sms',
-            }
-        );
-
-        if(granted === PermissionsAndroid.RESULTS.GRANTED){
-            this.proceed();
-        }else{
-            alert('You have denied Send SMS Permission');
-        }
-    };
-
 
     state = {
         mobileNumber: [],
@@ -209,4 +186,4 @@ const styles = StyleSheet.create({
 
 
 
-export default Message;
+export default DelayedMessage;

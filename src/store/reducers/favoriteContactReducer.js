@@ -2,7 +2,7 @@ const initialState = {
   favoritesContact: []
 }
 
-function toggleFavorite(state = initialState, action) {
+function toggleContactFavorite(state = initialState, action) {
   let nextState;
   switch (action.type) {
     case 'TOGGLE_FAVORITE':
@@ -25,4 +25,4 @@ function toggleFavorite(state = initialState, action) {
   }
 }
 
-export default toggleFavorite
+export default toggleContactFavorite

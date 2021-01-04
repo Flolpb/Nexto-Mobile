@@ -57,10 +57,17 @@ class ContactItem extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props
     const contactItem = this.props.contactItem
     let infosContainer = this.state.menu ? this.displayMenu(contactItem) : this.displayContactInfo(contactItem)
     return(
       <TouchableOpacity
+        onPress={() => {
+          // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
+          navigation.navigate("ListeContactMessageScreen", {
+            contactID: contactItem.recordID,
+          })
+        }}
         onLongPress={() => {
           this.setState({
             menu: !this.state.menu
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
 // Récupération des contacts favoris stockées dans le store
 const mapStateToProps = (state) => {
   return {
-    favoritesContact: state.toggleFavorite.favoritesContact,
+    favoritesContact: state.toggleContactFavorite.favoritesContact,
   }
 }
 

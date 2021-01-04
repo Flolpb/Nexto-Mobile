@@ -30,9 +30,38 @@ class ListeMessage extends React.Component {
 
     onStart = () => {
         BackgroundTimer.runBackgroundTimer(() => {
-                console.log('test wesh');
-            },
-            10000);
+            for (let i  = 0; i < this.state.messages.length; i++){
+                if(this.state.messages[i].status !== "send"){
+                    let separate = this.state.messages[i].date.split('T');
+                    separate[1] = separate[1].split('.');
+                    separate[1] = separate[1][0].split(':');
+                    separate[0] = separate[0].split('-');
+                    let year = parseInt(separate[0][0]);
+                    let month = parseInt(separate[0][1]) - 1;
+                    let day = parseInt(separate[0][2]);
+                    let hours = parseInt(separate[1][0]);
+                    let minutes = parseInt(separate[1][1]);
+                    let dateM = new Date();
+                    dateM.setFullYear(year);
+                    dateM.setMonth(month);
+                    dateM.setDate(day);
+                    dateM.setHours(hours);
+                    dateM.setMinutes(minutes);
+                    dateM.setSeconds(0);
+                    dateM.setMilliseconds(0);
+                    let dateNow = new Date();
+                    let monthNow = dateNow.getMonth();
+                    dateNow.setMonth(monthNow);
+                    if(dateM.valueOf() < dateNow.valueOf()){
+                        console.log('envoi du message: ' + this.state.messages[i].message);
+                        console.log(dateNow);
+                    }else{
+                        console.log(dateM + ' < ' + dateNow);
+                    }
+                }
+            }
+        },
+        60000);
     };
 
     //supprimer tous les messages stockés dans le téléphone

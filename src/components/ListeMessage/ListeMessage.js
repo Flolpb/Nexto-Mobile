@@ -112,6 +112,7 @@ class ListeMessage extends React.Component {
             const jsonValue = JSON.stringify(joined);
             await AsyncStorage.setItem('message', jsonValue);
             this.readData();
+            console.log(this.state.messages);
         }catch(e){
             console.log('failed: ' + e);
         }

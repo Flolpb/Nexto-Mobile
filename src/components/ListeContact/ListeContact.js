@@ -44,21 +44,8 @@ class ListeContact extends React.Component {
             return a.displayName.localeCompare(b.displayName);
           });
           // On les enregistre dans le state
-          this.setState({
-            contacts: contacts
-          });
-        });
-    }
-  }
-
-  getContact = async (id) => {
-    const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
-
-    if (granted) {
-      // On récupère les contacts
-      Contacts.getContactById(id)
-        .then(contact => {
-          return contact
+          const action = { type: "STORE_CONTACTS", contacts: contacts }
+          this.props.dispatch(action);
         });
     }
   }
@@ -112,7 +99,7 @@ class ListeContact extends React.Component {
 
   searchFilter = (text) => {
     if (text) {
-      const contacts = this.state.contacts;
+      const contacts = this.props.contacts;
       let filteredContacts;
       // Par numéro
       if (!isNaN(parseInt(text[0]))) {
@@ -138,7 +125,8 @@ class ListeContact extends React.Component {
   }
 
   render() {
-    const contacts = this.state.filteredContacts ? this.state.filteredContacts : this.state.contacts;
+    const { navigation } = this.props
+    const contacts = this.state.filteredContacts ? this.state.filteredContacts : this.props.contacts;
     return (
       <>
         <SafeAreaView
@@ -149,9 +137,9 @@ class ListeContact extends React.Component {
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={contacts}
-            keyExtractor={(item, index) => item.rawContactId}
+            keyExtractor={(item, index) => item.recordID}
             renderItem={({item}) => (
-              <ContactItem contactItem={ item } />
+              <ContactItem contactItem={ item } navigation={navigation} />
             )}/>
         </SafeAreaView>
       </>
@@ -195,7 +183,8 @@ const styles = StyleSheet.create({
 // Récupération des contacts favoris stockées dans le store
 const mapStateToProps = (state) => {
   return {
-    favoritesContact: state.toggleFavorite.favoritesContact,
+    contacts: state.manageContacts.contacts,
+    favoritesContact: state.toggleContactFavorite.favoritesContact,
   }
 }
 

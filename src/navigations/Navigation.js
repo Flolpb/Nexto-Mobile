@@ -5,10 +5,9 @@ import 'react-native-gesture-handler';
 import {Icon} from 'react-native-elements';
 import ListeMessage from '../components/ListeMessage/ListeMessage';
 import Accueil from '../components/Accueil/Accueil';
-import ListeContact from '../components/ListeContact/ListeContact';
 import MessageContainer from '../components/MessageContainer/MessageContainer';
+import ListeContactNavigator from '../components/ListeContact/ListeContactNavigator';
 import colors from '../config/colors';
-
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -18,7 +17,7 @@ class Navigation extends React.Component{
             <>
                 <NavigationContainer>
                     <Tab.Navigator
-                      initialRouteName="Home"
+                      initialRouteName="Accueil"
                       tabBarPosition="bottom"
                       tabBarOptions={{
                         showIcon: true,
@@ -31,8 +30,8 @@ class Navigation extends React.Component{
                         },
                     }} >
                       <Tab.Screen
-                        name="Liste des contacts"
-                        component={ListeContact}
+                        name="ListeContact"
+                        component={ListeContactNavigator}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -40,7 +39,7 @@ class Navigation extends React.Component{
                           )
                       }} />
                       <Tab.Screen
-                        name="Home"
+                        name="Accueil"
                         component={Accueil}
                         options={{
                             tabBarColor: colors.white,
@@ -49,7 +48,7 @@ class Navigation extends React.Component{
                             )
                         }} />
                       <Tab.Screen
-                        name="Liste des Messages"
+                        name="ListeMessage"
                         component={ListeMessage}
                         options={{
                           tabBarColor: colors.white,
@@ -58,7 +57,7 @@ class Navigation extends React.Component{
                           )
                         }} />
                       <Tab.Screen
-                        name="Message"
+                        name="MessageContainer"
                         component={MessageContainer}
                         options={{
                           tabBarColor: colors.white,

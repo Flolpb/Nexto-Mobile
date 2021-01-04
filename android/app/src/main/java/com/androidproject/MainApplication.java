@@ -34,11 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
 
           // Dépendance react-native-vector-icons
-<<<<<<< HEAD
           // packages.add(new VectorIconsPackage());
-=======
-          // packages.add(new VectorIconsPackage())
->>>>>>> 423a56441aea64517494da333a41c89451375398
 
           // Dépendance react-native-get-sms-android
           // packages.add(new SmsPackage());

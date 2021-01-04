@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
 // Récupération des contacts favoris stockées dans le store
 const mapStateToProps = (state) => {
   return {
-    favoritesContact: state.favoritesContact,
+    favoritesContact: state.toggleFavorite.favoritesContact,
   }
 }
 

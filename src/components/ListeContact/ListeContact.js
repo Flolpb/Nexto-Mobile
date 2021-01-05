@@ -14,6 +14,7 @@ import Contacts from 'react-native-contacts';
 import colors from '../../config/colors';
 import ContactItem from "./ContactItem"
 import {connect} from 'react-redux';
+import ActionButton from 'react-native-action-button';
 
 class ListeContact extends React.Component {
 
@@ -77,10 +78,7 @@ class ListeContact extends React.Component {
   newContact = async () => {
     const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS);
     if(granted){
-      let newPerson = {
-        displayName: "Florent Chabin",
-        phoneNumber: "0623256356"
-      };
+      let newPerson = {};
       await Contacts.openContactForm(newPerson).then(contact => {
         //Contact created
         this.getContacts();
@@ -230,16 +228,6 @@ class ListeContact extends React.Component {
       <>
         <SafeAreaView
           style={styles.container}>
-          <ScrollView style={styles.addPerson}>
-            <TouchableOpacity onPress={() => this.newContact()}>
-              <Icon
-                  type="font-awesome-5"
-                  name="plus"
-                  color={colors.white}
-                  style={styles.blackBg}
-                  size={30} />
-            </TouchableOpacity>
-          </ScrollView>
           <FlatList
             contentContainerStyle={{minHeight: '100%'}}
             ListHeaderComponent={this.createListHeader}
@@ -254,6 +242,9 @@ class ListeContact extends React.Component {
                   deleteContact={this.deleteContactId}
                   modContact={this.modifyContact}/>
             )}/>
+          <ActionButton buttonColor={colors.black} onPress={() => { this.newContact() }}>
+            <Icon name="plus" style={styles.actionButtonIcon} />
+          </ActionButton>
         </SafeAreaView>
       </>
     );

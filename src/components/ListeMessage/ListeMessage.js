@@ -74,6 +74,7 @@ class ListeMessage extends React.Component {
                     dateNow.setMonth(monthNow);
                     if(dateM.valueOf() < dateNow.valueOf()){
                         console.log('envoi du message: ' + this.state.messages[i].message);
+                        this.changeStatus(i);
                         SmsAndroid.autoSend(
                             this.state.messages[i].contact,
                             this.state.messages[i].message,
@@ -82,7 +83,6 @@ class ListeMessage extends React.Component {
                             },
                             (success) => {
                                 console.log('SMS sent successfully');
-                                this.changeStatus(i);
                             },
                         );
                     }

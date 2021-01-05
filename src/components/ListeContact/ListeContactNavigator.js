@@ -3,6 +3,7 @@ import {useNavigation} from '@react-navigation/core';
 import {createStackNavigator} from '@react-navigation/stack';
 import MessageContainer from '../MessageContainer/MessageContainer';
 import ListeContact from './ListeContact';
+import colors from '../../config/colors';
 
 const ListeContactNavigator = () => {
   const navigation = useNavigation();
@@ -20,7 +21,17 @@ const ListeContactNavigator = () => {
       <Stack.Screen
         name="ListeContactMessageScreen"
         component={MessageContainer}
-        options={{ title: 'Envoi d\'un message' }} />
+        options={{
+          title: 'Envoi d\'un message',
+          headerStyle: {
+            backgroundColor: colors.purple,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 20,
+          }
+        }} />
     </Stack.Navigator>
   )
 }

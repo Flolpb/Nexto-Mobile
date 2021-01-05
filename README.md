@@ -67,7 +67,7 @@ Cochez le bouton **Show Packages details** en bas à droite, puis sélectionnez 
     Intel x86 Atom_64 System Image or Google APIs Intel x86 Atom System Image
 
 Maintenant sélectionnez l'onglet **SDK Tools**, puis de la même façon cochez le bouton **Show Packages details** en bas à droite. 
-Cliquez maintenant sur **Android SDK Build-Tools**, afin de vérifier que le 29.0.2 au minimum est sélectionné.
+Cliquez sur **Android SDK Build-Tools**, afin de vérifier que le 29.0.2 au minimum est sélectionné.
 
 Vous pouvez maintenant sélectionner **Apply** pour lancer le téléchargment des outils, puis passer à l'étape suivante.
 
@@ -80,7 +80,7 @@ La manipulation que nous allons faire est assez similaire à la partie sur JAVA_
 - Une fenêtre s'ouvre. Dans la catégorie des Variables Systèmes, séléctionnez "Nouvelle".
 - Nommez la 'ANDROID_HOME' (exactement de cette manière) et renseignez son chemin, là où le SDK a été installé précédemment. Généralement, le chemin est de type : *C:\Users\My_username\AppData\Local\Android\Sdk*.
 
-**Afin de vérifier que l'ajout à bien fonctionné**, ouvrez un invité de commande **Powershell** puis tapez la commande suivante :
+**Afin de vérifier que l'ajout a bien fonctionné**, ouvrez un invité de commande **Powershell** puis tapez la commande suivante :
 
 `Get-ChildItem -Path Env:\`
 

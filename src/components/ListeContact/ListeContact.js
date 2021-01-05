@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {Icon, SearchBar} from 'react-native-elements';
+import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Contacts from 'react-native-contacts';
 import colors from '../../config/colors';
@@ -53,12 +53,13 @@ class ListeContact extends React.Component {
   //delete contact
   deleteContactId = async (recordID) => {
     const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS);
-    if(granted === PermissionsAndroid.RESULTS.GRANTED){
+    if(granted){
       Contacts.deleteContact({recordID: recordID}).then(recordID => {
         //contact deleted
         this.setState({
           contacts: this.state.contacts.filter(item => item.recordID !== recordID)
         });
+        this.getContacts();
       });
     }
   };
@@ -99,7 +100,7 @@ class ListeContact extends React.Component {
             return a.displayName.localeCompare(b.displayName);
           });
           // On les enregistre dans le state
-          const action = { type: "STORE_CONTACTS", contacts: contacts }
+          const action = { type: "STORE_CONTACTS", contacts: contacts };
           this.props.dispatch(action);
         });
     }
@@ -148,8 +149,49 @@ class ListeContact extends React.Component {
     )
   };
 
+
+  generateAvatarLabel = (contact) => {
+    let label = '';
+    if (contact.givenName !== '') label += contact.givenName[0].toUpperCase();
+    if (contact.familyName !== '') label += contact.familyName[0].toUpperCase();
+    return label;
+  };
+
   createFavoriteTab = () => {
-    // A FAIRE
+    const contacts = this.props.contacts;
+    const favContactsID = this.props.favoritesContact;
+    let favoritesContacts = [];
+    let content = [];
+    if(favContactsID != null){
+      favContactsID.forEach((favID) => {
+        let fav = contacts.filter(item => item.recordID === favID);
+        favoritesContacts.push(fav);
+      });
+      if(favoritesContacts[0] !== undefined){
+        for(let i = 0; i < favoritesContacts.length; i++){
+          content.push(
+              <View style={styles.favContainer}>
+                <Avatar
+                    size="medium"
+                    rounded
+                    title={ this.generateAvatarLabel(favoritesContacts[i][0]) }
+                    containerStyle={ styles.avatar }
+                    overlayContainerStyle={ styles.avatarBackground }
+                    titleStyle={styles.avatarTitle}
+                    activeOpacity={0.7}
+                />
+                <Text style={styles.favContact}>{favoritesContacts[i][0].displayName.length > 10 ? favoritesContacts[i][0].displayName.slice(0, 8)+ '...' : favoritesContacts[i][0].displayName}</Text>
+              </View>
+          )
+        }
+      }
+    }
+
+    return (
+      <View style={styles.favorites}>
+        {content}
+      </View>
+    )
   };
 
   searchFilter = (text) => {
@@ -186,16 +228,16 @@ class ListeContact extends React.Component {
       <>
         <SafeAreaView
           style={styles.container}>
-            <ScrollView style={styles.addPerson}>
-              <TouchableOpacity onPress={() => this.newContact()}>
-                <Icon
-                    type="font-awesome-5"
-                    name="plus"
-                    color={colors.white}
-                    style={styles.blackBg}
-                    size={30} />
-              </TouchableOpacity>
-            </ScrollView>
+          <ScrollView style={styles.addPerson}>
+            <TouchableOpacity onPress={() => this.newContact()}>
+              <Icon
+                  type="font-awesome-5"
+                  name="plus"
+                  color={colors.white}
+                  style={styles.blackBg}
+                  size={30} />
+            </TouchableOpacity>
+          </ScrollView>
           <FlatList
             contentContainerStyle={{minHeight: '100%'}}
             ListHeaderComponent={this.createListHeader}
@@ -256,7 +298,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.black,
     padding: 20,
     borderRadius: 40
-  }
+  },
+  favorites: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap'
+  },
+  favContainer: {
+    marginHorizontal: 10
+  },
+  favContact:{
+    textAlign: 'left',
+    fontSize: 12,
+  },
+  avatar : {
+    marginRight: 15,
+  },
+  avatarTitle: {
+    color: colors.white
+  },
+  avatarBackground: {
+    backgroundColor: colors.favorites,
+  },
 });
 
 // Récupération des contacts favoris stockées dans le store

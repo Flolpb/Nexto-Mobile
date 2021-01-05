@@ -7,15 +7,10 @@ import SmsAndroid from 'react-native-get-sms-android';
 class ListeMessage extends React.Component {
     constructor(props) {
         super(props);
-        this.readData();
-        this.onStart();
+        this.readData().then();
+        this.onStart().then();
     }
 
-    componentDidMount() {
-        setTimeout(() => {
-            this.readData();
-        }, 1000)
-    }
 
     state = {
         messages: [],

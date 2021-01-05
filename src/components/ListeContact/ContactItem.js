@@ -4,6 +4,7 @@ import colors from '../../config/colors';
 import {connect} from 'react-redux';
 import {Avatar, Icon} from 'react-native-elements';
 import * as Contacts from 'react-native-contacts';
+import Swipeable from 'react-native-gesture-handler';
 
 class ContactItem extends React.Component {
 
@@ -50,10 +51,10 @@ class ContactItem extends React.Component {
       <View style={ styles.menuContainer }>
         <Icon
           type="font-awesome-5"
-          name="heart"
-          solid={ !this.displayFavorite(contact.recordID) }
+          name="star"
+          solid={ this.displayFavorite(contact.recordID) }
           style={ styles.button }
-          color="#e62552"
+          color={colors.favorites}
           size={30}
           onPress={() => {
             this.toggleFavorite(contact.recordID)
@@ -72,7 +73,7 @@ class ContactItem extends React.Component {
         <Icon
           type="font-awesome-5"
           name="trash-alt"
-          solid={ !this.displayFavorite(contact.recordID) }
+          solid={true}
           style={ styles.button }
           color={colors.grey}
           size={30}

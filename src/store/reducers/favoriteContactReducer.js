@@ -4,9 +4,10 @@ const initialState = {
   favoritesContact: []
 };
 
+
+//lire les données présentes dans le stockage local
 async function readData(){
   try{
-    console.log('test wesh');
     const jsonValue = await AsyncStorage.getItem('favorite');
     const value = JSON.parse(jsonValue);
     if(jsonValue != null){
@@ -17,7 +18,7 @@ async function readData(){
   }
 }
 
-
+//sauvegarder les données
 async function saveData(value){
   try{
     const jsonValue = JSON.stringify(value);

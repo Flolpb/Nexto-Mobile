@@ -1,6 +1,15 @@
 import React from 'react';
-import { FlatList, PermissionsAndroid, SafeAreaView, StyleSheet, Text, View,} from 'react-native';
+import {
+  FlatList,
+  PermissionsAndroid,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Icon, SearchBar} from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Contacts from 'react-native-contacts';
 import colors from '../../config/colors';
 import ContactItem from "./ContactItem"
@@ -11,7 +20,7 @@ class ListeContact extends React.Component {
   state = {
     contacts: [],
     search: '',
-  }
+  };
 
   componentDidMount() {
     this.askPermission().then(
@@ -23,14 +32,55 @@ class ListeContact extends React.Component {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_CONTACTS
-      )
+      );
+      const grantedWrite = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS
+      );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         this.getContacts()
       }
     } catch (err) {
       console.warn(err)
     }
-  }
+  };
+
+  //delete contact
+  deleteContactId = async (recordID) => {
+    const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS);
+    if(granted === PermissionsAndroid.RESULTS.GRANTED){
+      Contacts.deleteContact({recordID: recordID}).then(recordID => {
+        //contact deleted
+        this.setState({
+          contacts: this.state.contacts.filter(item => item.recordID !== recordID)
+        });
+      });
+    }
+  };
+
+  modifyContact = async (person) => {
+    const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS);
+    if(granted){
+      Contacts.editExistingContact(person).then(contact => {
+        //contact updated
+
+        this.getContacts();
+      })
+    }
+  };
+
+  newContact = async () => {
+    const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS);
+    if(granted){
+      let newPerson = {
+        displayName: "Florent Chabin",
+        phoneNumber: "0623256356"
+      };
+      await Contacts.openContactForm(newPerson).then(contact => {
+        //Contact created
+        this.getContacts();
+      });
+    }
+  };
 
   getContacts = async () => {
     const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
@@ -44,24 +94,11 @@ class ListeContact extends React.Component {
             return a.displayName.localeCompare(b.displayName);
           });
           // On les enregistre dans le state
-          this.setState({
-            contacts: contacts
-          });
+          const action = { type: "STORE_CONTACTS", contacts: contacts }
+          this.props.dispatch(action);
         });
     }
-  }
-
-  getContact = async (id) => {
-    const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
-
-    if (granted) {
-      // On récupère les contacts
-      Contacts.getContactById(id)
-        .then(contact => {
-          return contact
-        });
-    }
-  }
+  };
 
   createSeparator = () => {
     return (
@@ -71,7 +108,7 @@ class ListeContact extends React.Component {
         ]}
       />
     )
-  }
+  };
 
   createEmptyViewList = () => {
     return (
@@ -80,7 +117,7 @@ class ListeContact extends React.Component {
         <Text style={ styles.emptyTag }> Aucun contact trouvé </Text>
       </View>
     )
-  }
+  };
 
   createListHeader = () => {
     return(
@@ -89,7 +126,7 @@ class ListeContact extends React.Component {
         { this.createFavoriteTab() }
       </>
     )
-  }
+  };
 
   createSearchBar = () => {
     return (
@@ -104,15 +141,15 @@ class ListeContact extends React.Component {
         onChangeText={(text) => { this.searchFilter(text) }}
       />
     )
-  }
+  };
 
   createFavoriteTab = () => {
     // A FAIRE
-  }
+  };
 
   searchFilter = (text) => {
     if (text) {
-      const contacts = this.state.contacts;
+      const contacts = this.props.contacts;
       let filteredContacts;
       // Par numéro
       if (!isNaN(parseInt(text[0]))) {
@@ -135,23 +172,38 @@ class ListeContact extends React.Component {
         filteredContacts: undefined
       });
     }
-  }
+  };
 
   render() {
-    const contacts = this.state.filteredContacts ? this.state.filteredContacts : this.state.contacts;
+    const { navigation } = this.props;
+    const contacts = this.state.filteredContacts ? this.state.filteredContacts : this.props.contacts;
     return (
       <>
         <SafeAreaView
           style={styles.container}>
+            <ScrollView style={styles.addPerson}>
+              <TouchableOpacity onPress={() => this.newContact()}>
+                <Icon
+                    type="font-awesome-5"
+                    name="plus"
+                    color={colors.white}
+                    style={styles.blackBg}
+                    size={30} />
+              </TouchableOpacity>
+            </ScrollView>
           <FlatList
             contentContainerStyle={{minHeight: '100%'}}
             ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={contacts}
-            keyExtractor={(item, index) => item.rawContactId}
+            keyExtractor={(item, index) => item.recordID}
             renderItem={({item}) => (
-              <ContactItem contactItem={ item } />
+              <ContactItem
+                  contactItem={ item }
+                  navigation={navigation}
+                  deleteContact={this.deleteContactId}
+                  modContact={this.modifyContact}/>
             )}/>
         </SafeAreaView>
       </>
@@ -190,13 +242,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: colors.black
   },
+  addPerson: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  },
+  blackBg: {
+    backgroundColor: colors.black,
+    padding: 20,
+    borderRadius: 40
+  }
 });
 
 // Récupération des contacts favoris stockées dans le store
 const mapStateToProps = (state) => {
   return {
-    favoritesContact: state.toggleFavorite.favoritesContact,
+    contacts: state.manageContacts.contacts,
+    favoritesContact: state.toggleContactFavorite.favoritesContact,
   }
-}
+};
 
 export default connect(mapStateToProps)(ListeContact);

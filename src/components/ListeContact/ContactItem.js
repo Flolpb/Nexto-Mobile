@@ -4,7 +4,7 @@ import colors from '../../config/colors';
 import {connect} from 'react-redux';
 import {Avatar, Icon} from 'react-native-elements';
 import * as Contacts from 'react-native-contacts';
-import Swipeable from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 class ContactItem extends React.Component {
 
@@ -48,71 +48,76 @@ class ContactItem extends React.Component {
 
   displayMenu = (contact) => {
     return(
-      <View style={ styles.menuContainer }>
-        <Icon
-          type="font-awesome-5"
-          name="star"
-          solid={ this.displayFavorite(contact.recordID) }
-          style={ styles.button }
-          color={colors.favorites}
-          size={30}
-          onPress={() => {
-            this.toggleFavorite(contact.recordID)
-        }} />
-        <Icon
-            type="font-awesome-5"
-            name="broom"
-            solid={true}
-            style={ styles.button }
-            color={colors.black}
-            size={30}
-            onPress={() => {
-              this.props.modContact(contact);
-            }}
-        />
-        <Icon
-          type="font-awesome-5"
-          name="trash-alt"
-          solid={true}
-          style={ styles.button }
-          color={colors.grey}
-          size={30}
-          onPress={() => {
-            this.props.deleteContact(contact.recordID);
-        }} />
+        <View style={styles.menuSuperContainer}>
+          <View style={ styles.menuContainer }>
+            <Icon
+                type="font-awesome-5"
+                name="star"
+                solid={ this.displayFavorite(contact.recordID) }
+                style={ styles.button }
+                color={colors.favorites}
+                size={30}
+                onPress={() => {
+                  this.toggleFavorite(contact.recordID)
+                }} />
+            <Icon
+                type="font-awesome-5"
+                name="broom"
+                solid={true}
+                style={ styles.button }
+                color={colors.black}
+                size={30}
+                onPress={() => {
+                  this.props.modContact(contact);
+                }}
+            />
+            <Icon
+                type="font-awesome-5"
+                name="trash-alt"
+                solid={true}
+                style={ styles.button }
+                color={colors.grey}
+                size={30}
+                onPress={() => {
+                  this.props.deleteContact(contact.recordID);
+                }} />
 
-      </View>
+          </View>
+        </View>
     )
   };
 
   render() {
     const { navigation } = this.props;
     const contactItem = this.props.contactItem;
-    let infosContainer = this.state.menu ? this.displayMenu(contactItem) : this.displayContactInfo(contactItem);
+    let infosContainer = this.displayContactInfo(contactItem);
+    const infosMenu = () => {
+      return this.displayMenu(contactItem);
+    };
     return(
-      <TouchableOpacity
-        onPress={() => {
-          // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
-          navigation.navigate("ListeContactMessageScreen", {
-            contactID: contactItem.recordID,
-          })
-        }}
-        onLongPress={() => {
-          this.setState({
-            menu: !this.state.menu
-          })
-        }}
-        style={styles.subContainer}>
-        <Avatar
-          size="medium"
-          rounded
-          title={ this.generateAvatarLabel(contactItem) }
-          containerStyle={ styles.avatar }
-          overlayContainerStyle={ styles.avatarBackground }
-          activeOpacity={0.7}
-        />
-        { infosContainer }
-      </TouchableOpacity>
+        <Swipeable
+          renderRightActions={infosMenu}
+        >
+          <TouchableOpacity
+              onPress={() => {
+                // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
+                navigation.navigate("ListeContactMessageScreen", {
+                  contactID: contactItem.recordID,
+                })
+              }}
+              style={styles.subContainer}>
+            <Avatar
+                size="medium"
+                rounded
+                title={ this.generateAvatarLabel(contactItem) }
+                containerStyle={ styles.avatar }
+                overlayContainerStyle={ styles.avatarBackground }
+                activeOpacity={0.7}
+            />
+            { infosContainer }
+          </TouchableOpacity>
+        </Swipeable>
+
     )
   }
 }
@@ -124,15 +129,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     paddingLeft: 20,
+    backgroundColor: colors.white,
+    opacity: 1,
   },
   infosContainer: {
     flex: 1,
     marginRight: 30,
     flexDirection: 'column',
+    zIndex: 1,
+  },
+  menuSuperContainer:{
+    justifyContent: 'center',
+    backgroundColor: colors.inactiveBlack,
+    flex: 1,
+    zIndex: -1,
   },
   menuContainer: {
     flex: 1,
-    marginRight: 30,
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

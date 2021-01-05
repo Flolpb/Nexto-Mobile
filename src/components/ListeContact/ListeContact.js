@@ -158,6 +158,7 @@ class ListeContact extends React.Component {
   };
 
   createFavoriteTab = () => {
+    const { navigation } = this.props;
     const contacts = this.props.contacts;
     const favContactsID = this.props.favoritesContact;
     let favoritesContacts = [];
@@ -170,7 +171,14 @@ class ListeContact extends React.Component {
       if(favoritesContacts[0] !== undefined){
         for(let i = 0; i < favoritesContacts.length; i++){
           content.push(
-              <View style={styles.favContainer}>
+              <TouchableOpacity
+                  onPress={() => {
+                    // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
+                    navigation.navigate("ListeContactMessageScreen", {
+                      contactID: favoritesContacts[i][0].recordID,
+                    })
+                  }}
+                  style={styles.favContainer}>
                 <Avatar
                     size="medium"
                     rounded
@@ -181,7 +189,7 @@ class ListeContact extends React.Component {
                     activeOpacity={0.7}
                 />
                 <Text style={styles.favContact}>{favoritesContacts[i][0].displayName.length > 10 ? favoritesContacts[i][0].displayName.slice(0, 8)+ '...' : favoritesContacts[i][0].displayName}</Text>
-              </View>
+              </TouchableOpacity>
           )
         }
       }

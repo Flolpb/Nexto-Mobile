@@ -11,7 +11,6 @@ class ListeMessage extends React.Component {
         this.onStart().then();
     }
 
-
     state = {
         messages: [],
     };
@@ -219,6 +218,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     }
 });
-
 
 export default ListeMessage;

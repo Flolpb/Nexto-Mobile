@@ -1,5 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Button, TextInput, PermissionsAndroid} from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Button,
+    TextInput,
+    PermissionsAndroid,
+    TouchableOpacity,
+    Dimensions, Image,
+} from 'react-native';
 import SendSMS from 'react-native-sms';
 import SmsAndroid from 'react-native-get-sms-android';
 import 'react-native-gesture-handler';
@@ -8,6 +17,8 @@ import getDate from '../../../utils/getDate';
 
 import { AppRegistry } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Icon} from 'react-native-elements';
+import colors from '../../../config/colors';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessage')
 );
@@ -129,70 +140,141 @@ class DelayedMessage extends React.Component {
       const {date} = this.state;
       let dateString;
       if(date != null){
-          dateString = getDate(':', date);
+          dateString = getDate(date);
       }else{
           dateString = 'Aucune';
       }
 
       return (
-      <View>
-          <Text style={styles.label}>Rentrer un numéro de téléphone</Text>
-          <TextInput style={styles.input} value={this.state.numberText} onChangeText={(number) => this.setMobileNumber(number)} placeholder="Enter contact Number to send" keyboardType="numeric"/>
-          <Text style={styles.label}>Rentrer un message</Text>
-          <TextInput style={styles.input} value={this.state.message} onChangeText={(text) => this.setMessage(text)} placeholder="Enter Message to send"/>
-          <Text style={styles.label}>Date programmée : {dateString}</Text>
-          <Button title="Changer la date" onPress={this.displayDate}/>
-          <Button title="Changer l'heure" onPress={this.displayTime}/>
-          {this.state.displayDate &&
-              <DateTimePicker style={styles.datePickerStyle} value={date} mode="date"
-                 confirmBtnText="Confirm"
-                 customStyles={{
-                     dateIcon: {
-                         position: 'absolute',
-                         left: 0,
-                         top: 4,
-                         marginLeft: 0
-                     },
-                     dateInput: {
-                         marginLeft: 36,
-                     }
-                 }}
-                 onChange={this.setDate}
-              />
-         }
-          {this.state.displayTime &&
-            <DateTimePicker style={styles.datePickerStyle}
-                value={date}
-                mode="time"
-                onChange={this.setTime}
+        <View
+          style={styles.subContainer}>
+            <Image
+              source={require('../../../assets/images/Illustration_mobile.png')}
+              style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
+            <Text
+              style={styles.title}>
+                Envoi d'un message en différé
+            </Text>
+            <View style={[styles.field, styles.input]}>
+                <TextInput
+                  style={{flex: 4, fontSize: 15}}
+                  value={this.state.numberText}
+                  onChangeText={(number) => this.setMobileNumber(number)}
+                  placeholder="Saisissez un numéro de téléphone"
+                  keyboardType="numeric"/>
+            </View>
+
+            <View style={{ marginBottom: 10 }}>
+                <Text style={[ styles.title, { fontSize: 20 }]}> Date d'envoi : {dateString[0]} </Text>
+                <Text style={[ styles.title, { fontSize: 20 }]}> Heure d'envoi : {dateString[1]} </Text>
+            </View>
+
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity
+                  style={[styles.field, { flexDirection: 'column', width: '45%',}]}
+                  onPress={this.displayDate}>
+                    <Text style={[styles.input, { textAlign: 'center' }]}> Date </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.field, { flexDirection: 'column', width: '45%',}]}
+                  onPress={this.displayTime}>
+                    <Text style={[styles.input, { textAlign: 'center' }]}> Heure </Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={[styles.field, styles.input]}>
+                <TextInput
+                  style={{flex: 4, fontSize: 15}}
+                  multiline={true}
+                  value={this.state.message}
+                  onChangeText={(text) => this.setMessage(text)}
+                  placeholder="Message ..."/>
+                <TouchableOpacity
+                  style={styles.sendButton}
+                  onPress={() => { this.programSms() }}>
+                    <Icon name="send" color={colors.black} size={20}/>
+                </TouchableOpacity>
+            </View>
+
+            {this.state.displayDate &&
+            <DateTimePicker
+              style={styles.datePickerStyle}
+              value={date}
+              mode="date"
+              confirmBtnText="Confirm"
+              customStyles={{
+                  dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0,
+                  },
+                  dateInput: {
+                      marginLeft: 36,
+                  },
+              }}
+              onChange={this.setDate}
             />
-          }
-
-
-          <Button title="Programmer le SMS" onPress={this.programSms}/>
-      </View>
-    );
+            }
+            {this.state.displayTime &&
+                <DateTimePicker
+                  style={styles.datePickerStyle}
+                  value={date}
+                  mode="time"
+                  onChange={this.setTime}/>
+            }
+        </View>
+      );
   }
 }
 
 
 const styles = StyleSheet.create({
-    label: {
-        textAlign: 'center',
-        margin: 10,
+    subContainer: {
+        paddingHorizontal: 30,
+        marginVertical: 20,
+    },
+    image: {
+        flex: 1,
+        resizeMode: 'contain',
+        position: 'absolute',
+        right: 0,
+    },
+    field: {
+        flexDirection:'row',
+        borderWidth: 1,
+        borderColor: '#E6E4E2',
+        borderRadius: 30,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        backgroundColor: '#E6E4E2'
     },
     input: {
-        textAlign: 'center',
-        borderStyle: 'solid',
-        borderColor: 'black',
-        borderWidth: 1,
+        fontSize: 20,
+        marginVertical: 10,
+        paddingHorizontal: 20,
+    },
+    sendButton: {
+        flex: 1,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    title: {
+        fontSize: 25,
+        marginVertical: 10,
+        fontWeight: 'bold'
     },
     datePickerStyle: {
         width: 200,
         marginTop: 20,
     },
 });
-
-
 
 export default DelayedMessage;

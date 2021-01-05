@@ -138,9 +138,11 @@ class ListeContact extends React.Component {
     return (
       <SearchBar
         inputStyle={ styles.searchBar }
-        inputContainerStyle={ styles.searchBar }
+        searchIcon={{ name: 'search', color: colors.black }}
+        clearIcon={{ name: 'clear', color: colors.black }}
+        inputContainerStyle={ [styles.searchBar, styles.searchBarInput] }
         containerStyle={ styles.searchBar }
-        placeholderTextColor={ colors.inactiveBlack }
+        placeholderTextColor={ colors.black }
         selectionColor={ colors.black }
         value = { this.state.search }
         placeholder="Rechercher ..."
@@ -269,15 +271,15 @@ class ListeContact extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.backGrey,
     flexGrow: 1
   },
   separator: {
     flex: 1,
     marginRight: 30,
     marginLeft: 20,
-    borderBottomColor: colors.inactiveBlack,
-    borderBottomWidth: 0.2
+    borderBottomColor: colors.black,
+    borderBottomWidth: 0.35,
   },
   emptyView: {
     flex: 1,
@@ -296,6 +298,19 @@ const styles = StyleSheet.create({
     borderColor: colors.transparent,
     paddingHorizontal: 10,
     color: colors.black
+  },
+  searchBarInput: {
+    backgroundColor: '#E6E4E2',
+    borderRadius: 30,
+    margin: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   addPerson: {
     position: 'absolute',

@@ -22,12 +22,15 @@ class Navigation extends React.Component{
                       tabBarOptions={{
                         showIcon: true,
                         showLabel: false,
-                        activeTintColor: colors.black,
+                        activeTintColor: colors.white,
                         inactiveTintColor: colors.inactiveBlack,
                         indicatorStyle: {
-                          borderBottomColor: colors.black,
+                          borderBottomColor: colors.white,
                           borderBottomWidth: 2,
                         },
+                        style: {
+                          backgroundColor: colors.purple
+                        }
                     }} >
                       <Tab.Screen
                         name="ListeContact"

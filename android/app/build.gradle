@@ -197,7 +197,11 @@ dependencies {
     // Dépendance react-native-get-sms-android
     implementation project(':react-native-get-sms-android')
 
+    // Dépendance react-native-contacts
     implementation project(':react-native-contacts')
+
+    // Dépendance react-native-navigation-bar-color
+    implementation project(':react-native-navigation-bar-color')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

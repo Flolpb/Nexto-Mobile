@@ -175,7 +175,7 @@ class ListeContact extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props
+    const { navigation } = this.props;
     const contacts = this.state.filteredContacts ? this.state.filteredContacts : this.props.contacts;
     return (
       <>

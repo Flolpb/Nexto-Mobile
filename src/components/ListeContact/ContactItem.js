@@ -12,7 +12,7 @@ class ContactItem extends React.Component {
   };
 
   toggleFavorite = (id) => {
-    const action = { type: "TOGGLE_FAVORITE", id: id }
+    const action = { type: "TOGGLE_FAVORITE", id: id };
     this.props.dispatch(action);
     this.setState({
       menu: !this.state.menu

@@ -1,6 +1,6 @@
 const initialState = {
   contacts: []
-}
+};
 
 function manageContacts(state = initialState, action) {
   let nextState;
@@ -9,8 +9,8 @@ function manageContacts(state = initialState, action) {
       nextState = {
         ...state,
         contacts: action.contacts
-      }
-      return nextState || state
+      };
+      return nextState || state;
    default:
       return state
   }

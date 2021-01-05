@@ -1,8 +1,12 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Button, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
+import ContactItem from '../ListeContact/ContactItem';
+import ActionButton from 'react-native-action-button';
+import colors from '../../config/colors';
+import {Icon} from 'react-native-elements';
 
 class ListeMessage extends React.Component {
     constructor(props) {
@@ -133,53 +137,66 @@ class ListeMessage extends React.Component {
     };
 
     render(){
-        const Messages = [];
-        const MessagesSend = [];
+        const messages = [];
+        const messagesSend = [];
         const { navigate } = this.props.navigation;
-        for(let m in this.state.messages){
-            const date = this.state.messages[m].date.split('T');
-            date[1] = date[1].split('.');
-            if(this.state.messages[m].status !== 'send'){
-                Messages.push(
-                    <View onPress={() => navigate('Message')}>
-                        <View style={styles.bloc}>
-                            <Text>{this.state.messages[m].message}</Text>
-                            <Text>{this.state.messages[m].contact}</Text>
-                            <View style={styles.date}>
-                                <Text>{date[1][0]}</Text>
-                                <Text>{date[0]}</Text>
-                            </View>
-                            <Button title="supprimer" onPress={() => this.deleteData(m)}/>
-                        </View>
-                    </View>
-                );
-            }else{
-                MessagesSend.push(
-                    <View onPress={() => navigate('Message')}>
-                        <View style={styles.bloc}>
-                            <Text>{this.state.messages[m].message}</Text>
-                            <Text>{this.state.messages[m].contact}</Text>
-                            <View style={styles.date}>
-                                <Text>{date[1][0]}</Text>
-                                <Text>{date[0]}</Text>
-                            </View>
-                            <Button title="supprimer" onPress={() => this.deleteData(m)}/>
-                        </View>
-                    </View>
-                );
-            }
-        }
+        this.state.messages.map(message => {
+            message.status !== 'send' ? messages.push(message) : messagesSend.push(message);
+        })
 
         return(
-            <View>
-                {Messages[0] &&
-                <View><Text style={styles.titre}>Liste des messages programmés</Text></View>}
-                {Messages}
-                {MessagesSend[0] && <View><View style={styles.center}><View style={styles.border}/></View><Text style={styles.titre}>Historique des messages envoyés</Text></View>}
-                {MessagesSend}
-                <Button title="Programmer un nouveau message !" onPress={() => navigate('MessageContainer')}/>
-                <Button title="Actualiser" onPress={() => this.readData()}/>
-            </View>
+          <>
+              <SafeAreaView
+                style={styles.container}>
+                  <View>
+                      <Text style={styles.titre}>Liste des messages programmés</Text>
+                  </View>
+                  { messages.length ? (
+                    <FlatList
+                      data={messages}
+                      keyExtractor={(item, index) => index}
+                      renderItem={({item, index}) => (
+                        <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
+                            <Text>{ item.message }</Text>
+                            <Text>{ item.contact }</Text>
+                            <View style={styles.date}>
+                                <Text>{item.date.split('T')[1].slice(0,5)}</Text>
+                                <Text>{item.date.split('T')[0]}</Text>
+                            </View>
+                            <Button title="supprimer" onPress={() => this.deleteData(index)}/>
+                        </TouchableOpacity>
+                      )}/>
+                  ) : (
+                    <Text style={styles.emptyListText}> Aucun message prêt à envoyer </Text>
+                  )}
+
+                  <View>
+                      <Text style={styles.titre}>Historique des messages envoyés</Text>
+                  </View>
+
+                  { messagesSend.length ? (
+                    <FlatList
+                      data={messagesSend}
+                      keyExtractor={(item, index) => index}
+                      renderItem={({item, index}) => (
+                        <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
+                            <Text>{ item.message }</Text>
+                            <Text>{ item.contact }</Text>
+                            <View style={styles.date}>
+                                <Text>{item.date.split('T')[1].slice(0,5)}</Text>
+                                <Text>{item.date.split('T')[0]}</Text>
+                            </View>
+                            <Button title="supprimer" onPress={() => this.deleteData(index)}/>
+                        </TouchableOpacity>
+                      )}/>
+                  ) : (
+                    <Text style={styles.emptyListText}> Aucun message envoyé récemment </Text>
+                  )}
+
+                  <Button title="Programmer un nouveau message !" onPress={() => navigate('Différé')}/>
+                  <Button title="Actualiser" onPress={() => this.readData()}/>
+              </SafeAreaView>
+          </>
         )
     }
 
@@ -204,9 +221,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titre: {
-        textAlign: 'center',
         fontSize: 20,
-        padding: 5
+        marginVertical: 10,
+        textAlign: 'center',
+        fontWeight: 'bold'
     },
     border: {
         backgroundColor: 'black',
@@ -217,6 +235,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
+    },
+    emptyListText: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: '500'
     }
 });
 

@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     paddingLeft: 20,
-    backgroundColor: colors.white,
+    backgroundColor: colors.backGrey,
     opacity: 1,
   },
   infosContainer: {

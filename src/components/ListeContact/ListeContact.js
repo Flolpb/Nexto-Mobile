@@ -17,6 +17,12 @@ import {connect} from 'react-redux';
 
 class ListeContact extends React.Component {
 
+  constructor(props){
+    super(props);
+    const action = { type: "READ_FAVORITES", id: null};
+    this.props.dispatch(action);
+  }
+
   state = {
     contacts: [],
     search: '',
@@ -62,7 +68,6 @@ class ListeContact extends React.Component {
     if(granted){
       Contacts.editExistingContact(person).then(contact => {
         //contact updated
-
         this.getContacts();
       })
     }

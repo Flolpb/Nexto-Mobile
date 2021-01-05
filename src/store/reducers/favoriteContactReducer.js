@@ -6,23 +6,21 @@ const initialState = {
 
 async function readData(){
   try{
+    console.log('test wesh');
     const jsonValue = await AsyncStorage.getItem('favorite');
     const value = JSON.parse(jsonValue);
     if(jsonValue != null){
-      initialState.favoritesContact = value;
+      initialState.favoritesContact = value.favoritesContact;
     }
   }catch(e){
     console.log(e);
   }
 }
 
-//je sais pas comment provoquer le readData au lancement de l'application depuis ici.
-readData().then();
 
-async function saveData(){
+async function saveData(value){
   try{
-    let favorites = initialState.favoritesContact;
-    const jsonValue = JSON.stringify(favorites);
+    const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem('favorite', jsonValue);
   }catch(e){
     console.log(e);
@@ -38,20 +36,21 @@ function toggleContactFavorite(state = initialState, action) {
       if (favoriteContactIndex !== -1) {
         nextState = {
           ...state,
-          favoritesContact: state.favoritesContact.filter( (item, index) => index !== favoriteContactIndex)
+          favoritesContact: state.favoritesContact.filter((item, index) => index !== favoriteContactIndex)
         };
-        saveData().then();
-      }
-      else {
+      } else {
         nextState = {
           ...state,
           favoritesContact: [...state.favoritesContact, action.id]
         };
-        saveData().then();
       }
+      saveData(nextState).then();
       return nextState || state;
+    case 'READ_FAVORITES':
+      readData().then();
+      return state;
     default:
-      return state
+      return state;
   }
 }
 

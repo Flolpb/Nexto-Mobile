@@ -7,6 +7,10 @@ import * as Contacts from 'react-native-contacts';
 
 class ContactItem extends React.Component {
 
+  constructor(props){
+    super(props);
+  }
+
   state = {
     menu: false,
   };
@@ -21,13 +25,13 @@ class ContactItem extends React.Component {
 
   generateAvatarLabel = (contact) => {
     let label = '';
-    if (contact.givenName !== '') label += contact.givenName[0].toUpperCase()
-    if (contact.familyName !== '') label += contact.familyName[0].toUpperCase()
+    if (contact.givenName !== '') label += contact.givenName[0].toUpperCase();
+    if (contact.familyName !== '') label += contact.familyName[0].toUpperCase();
     return label;
   };
 
   displayFavorite = (id) => {
-    return this.props.favoritesContact.findIndex(item => item === id) !== -1
+    return this.props.favoritesContact.findIndex(item => item === id) !== -1;
   };
 
   displayContactInfo = (contact) => {

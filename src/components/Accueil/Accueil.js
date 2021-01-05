@@ -1,15 +1,16 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import colors from '../../config/colors';
 
 
 function Accueil({navigation}) {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Nexto</Text>
-            <Button
-                title="Voir la liste des messages..."
-                onPress={() => navigation.navigate('Liste des Messages')}
-            />
+            <View style={styles.imageContainer}>
+                <Image
+                  source={require('../../assets/images/logoNormal.png')}
+                  style={[styles.image, { width: Dimensions.get('window').width - 100 }]} />
+            </View>
         </View>
     );
 }
@@ -21,8 +22,17 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     container: {
-        backgroundColor: 'rgba(0,0,0,0.8)',
+        backgroundColor: colors.backGrey,
         height: '100%',
+    },
+    imageContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        flex: 1,
+        resizeMode: 'contain',
     },
 });
 

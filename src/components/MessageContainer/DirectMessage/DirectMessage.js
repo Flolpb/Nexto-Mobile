@@ -1,5 +1,14 @@
 import React from 'react';
-import {StyleSheet, TextInput, Text, View, TouchableOpacity, PermissionsAndroid, Button} from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  Text,
+  View,
+  TouchableOpacity,
+  PermissionsAndroid,
+  Image,
+  Dimensions,
+} from 'react-native';
 import SmsAndroid from 'react-native-get-sms-android';
 import colors from '../../../config/colors';
 import {Icon} from 'react-native-elements';
@@ -78,11 +87,13 @@ class DirectMessage extends React.Component {
     return(
       <View
         style={ styles.subContainer }>
+        <Image
+          source={require('../../../assets/images/Illustration_mobile.png')}
+          style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
         <Text
           style={ styles.title }>
           Envoi d'un message instantané
         </Text>
-
         <Tags
           initialText=""
           initialTags={ this.state.phoneNumbers }
@@ -91,7 +102,7 @@ class DirectMessage extends React.Component {
           }}
           onChangeTags={tags => this.setTags(tags)}
           inputContainerStyle={{ backgroundColor: 'rgba(0,0,0,0)', marginVertical: 10 }}
-          containerStyle={styles.tagContainer}
+          containerStyle={[styles.field, styles.tagContainer]}
           inputStyle={{ fontSize: 15 }}
           renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
             <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
@@ -99,7 +110,7 @@ class DirectMessage extends React.Component {
             </TouchableOpacity>
           )}/>
 
-        <View style={styles.input}>
+        <View style={[styles.field, styles.input]}>
           <TextInput
             style={{ flex: 4, fontSize: 15 }}
             multiline={true}
@@ -123,24 +134,35 @@ class DirectMessage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  input: {
+  image: {
+    flex: 1,
+    resizeMode: 'contain',
+    position: 'absolute',
+    right: 0,
+  },
+  field: {
     flexDirection:'row',
-    fontSize: 20,
     borderWidth: 1,
-    borderColor: 'rgba(20,20,20,0.2)',
+    borderColor: '#E6E4E2',
     borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: '#E6E4E2'
+  },
+  input: {
+    fontSize: 20,
     marginVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: 'rgba(20,20,20,0.05)'
   },
   tagContainer: {
-    flexDirection:'row',
-    borderWidth: 1,
-    borderColor: 'rgba(20,20,20,0.2)',
-    borderRadius: 30,
     marginVertical: 10,
     paddingHorizontal: 10,
-    backgroundColor: 'rgba(20,20,20,0.05)'
   },
   tag: {
     borderWidth: 1,
@@ -151,7 +173,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   subContainer: {
-    marginHorizontal: 30,
+    paddingHorizontal: 30,
     marginVertical: 20,
   },
   sendButton: {
@@ -160,9 +182,10 @@ const styles = StyleSheet.create({
     justifyContent:'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     marginVertical: 10,
     textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 export default DirectMessage;

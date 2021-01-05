@@ -61,7 +61,7 @@ Une fois ceci effectué, rendez-vous à la prochaine étape.
 
 Une fois sur Android Studio, ouvrez les Settings. Si possible, recherchez "Android SDK", sinon suivez le cheminement suivant : *Appearance & Behavior → System Settings → Android SDK*.
 
-Cochez le bouton **Show Packages details** en bas à droite, puis sélectionnez **Android 10 (Q)**. Vérifiez ensuite que sont bien cohées les cases suivantes :
+Cochez le bouton **Show Packages details** en bas à droite, puis sélectionnez **Android 10 (Q)**. Vérifiez ensuite que sont bien cochées les cases suivantes :
 
     Android SDK Platform 29
     Intel x86 Atom_64 System Image or Google APIs Intel x86 Atom System Image

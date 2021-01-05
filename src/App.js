@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import { Provider } from 'react-redux'
 import Store from './store/configureStore'
 import SwitchLogInForm from './components/LogIn/SwitchLogInForm'
-import {SafeAreaView, StatusBar} from 'react-native';
+import {Dimensions, ImageBackground, SafeAreaView, StatusBar} from 'react-native';
 import colors from './config/colors';
 import changeNavigationBarColor from 'react-native-navigation-bar-color'
 
@@ -18,7 +18,7 @@ class App extends React.Component {
   // Couleur de la barre du bas
   changeNavBarColor = async () => {
     try{
-      await changeNavigationBarColor('#431D60', true, true);
+      await changeNavigationBarColor(colors.purple, true, true);
     }catch(e){
       console.log(e)// {success: false}
     }

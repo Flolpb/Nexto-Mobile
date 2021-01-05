@@ -34,12 +34,12 @@ class LogInForm extends React.Component{
     render(){
 
         return(
+          <ImageBackground
+            style={{ width: Dimensions.get('window').width, }}
+            imageStyle={{ opacity: 0.80 }}
+            source={require('../../assets/images/fond.png')}>
             <View style={styles.main_container}>
                 <View style={styles.imageContainer}>
-                    <Image
-                      source={require('../../assets/images/bulle.png')}
-                      style={[styles.image, { width: Dimensions.get('window').width - 100 }]} />
-
                     <Text style={ styles.titleContainer }>
                         <Text style={[styles.title, { fontWeight: 'bold', fontSize: 80 }]}>N</Text>
                         <Text style={styles.title}>exto</Text>
@@ -48,14 +48,15 @@ class LogInForm extends React.Component{
 
                 <View style={styles.imageContainer}>
                     <Image
-                      source={require('../../assets/images/logoNormal.png')}
-                      style={[styles.image, { width: Dimensions.get('window').width - 220 }]} />
+                      source={require('../../assets/images/logo.png')}
+                      style={[styles.image, { width: Dimensions.get('window').width - 50 }]} />
                 </View>
 
                 <View style={styles.form_container}>
                     <TextInput
                         style={[styles.formShape, styles.formInput, {letterSpacing: 1}]}
                         placeholder="Identifiant"
+                        placeholderTextColor={ colors.black }
                         onChangeText={text => this.handleChangeUsername(text)}
                         defaultValue={this.state.username}/>
                     <TextInput
@@ -63,6 +64,7 @@ class LogInForm extends React.Component{
                         textContentType='password'
                         secureTextEntry={true}
                         placeholder="Mot de passe"
+                        placeholderTextColor={ colors.black }
                         onChangeText={text =>this.handleChangePassword(text)}
                         defaultValue={this.state.password}/>
                     <TouchableOpacity
@@ -72,6 +74,7 @@ class LogInForm extends React.Component{
                     </TouchableOpacity>
                 </View>
             </View>
+          </ImageBackground>
         )
     }
 }
@@ -128,7 +131,6 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     main_container: {
-        backgroundColor: colors.backGrey,
         height: '100%',
         display: 'flex',
         alignItems: 'center',

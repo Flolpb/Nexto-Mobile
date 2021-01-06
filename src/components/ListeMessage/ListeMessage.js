@@ -72,7 +72,6 @@ class ListeMessage extends React.Component {
                     let monthNow = dateNow.getMonth();
                     dateNow.setMonth(monthNow);
                     if(dateM.valueOf() < dateNow.valueOf()){
-                        console.log('envoi du message: ' + this.state.messages[i].message);
                         this.changeStatus(i);
                         SmsAndroid.autoSend(
                             this.state.messages[i].contact,
@@ -87,7 +86,6 @@ class ListeMessage extends React.Component {
                     }
                 }
             }
-            this.readData();
         },
         60000);
     };
@@ -105,13 +103,11 @@ class ListeMessage extends React.Component {
     //supprimer le message en question
     deleteData = async(index) => {
         try{
-            console.log(this.state.messages);
             let joined = this.state.messages;
             joined.splice(index, 1);
             const jsonValue = JSON.stringify(joined);
             await AsyncStorage.setItem('message', jsonValue);
             this.readData();
-            console.log(this.state.messages);
         }catch(e){
             console.log('failed: ' + e);
         }

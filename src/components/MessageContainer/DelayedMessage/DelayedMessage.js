@@ -1,24 +1,22 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
     StyleSheet,
     View,
     Text,
-    Button,
     TextInput,
     PermissionsAndroid,
     TouchableOpacity,
     Dimensions, Image,
 } from 'react-native';
-import SendSMS from 'react-native-sms';
-import SmsAndroid from 'react-native-get-sms-android';
 import 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import getDate from '../../../utils/getDate';
-
 import { AppRegistry } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Icon} from 'react-native-elements';
 import colors from '../../../config/colors';
+import Tags from 'react-native-tags';
+import Contacts from 'react-native-contacts';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessage')
 );
@@ -29,42 +27,38 @@ class DelayedMessage extends React.Component {
         this.readData();
     }
 
+    componentDidMount() {
+        if (this.props.contactID) {
+            this.getContact()
+        } else {
+            this.setState({
+                isLoaded: true,
+            })
+        }
+    }
+
     state = {
-        mobileNumber: [],
-        numberText: '',
+        phoneNumbers: [],
         message: '',
         date: new Date(),
         displayDate: false,
         displayTime: false,
-        messages: []
+        messages: [],
+        isLoaded: false,
     };
 
-    setMobileNumber = (number) => {
-        this.setState({
-            mobileNumber: [number],
-            numberText: number
-        })
-    };
-
-    setMessage = (text) => {
-        this.setState({
-            message: text,
-        })
-    };
-
-    sendSms = () => {
-        SmsAndroid.autoSend(
-            this.state.numberText,
-            this.state.message,
-            (fail) => {
-                alert('failed with this error: '+ fail);
-            },
-            (success) => {
-                alert('SMS sent successfully');
-            },
-        );
-
-    };
+    getContact = async () => {
+        const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
+        if (granted) {
+            Contacts.getContactById(this.props.contactID.contactID).then(contact => {
+                this.setState({
+                    phoneNumbers: [...this.state.phoneNumbers, contact.phoneNumbers[0].number],
+                    contact: contact,
+                    isLoaded: true,
+                });
+            });
+        }
+    }
 
     readData = async () => {
         try{
@@ -84,19 +78,31 @@ class DelayedMessage extends React.Component {
         }
     };
 
-    programSms = async () => {
+    verifyPhoneNumbers = () => {
+        console.log(this.state.phoneNumbers)
+        if (this.state.phoneNumbers.length && this.state.message) {
+            this.state.phoneNumbers.map(phoneNumber => {
+                // Test si le numéro de téléphone est bien composé seulement de numéros
+                let isnum = /^\d+$/.test(phoneNumber);
+                if (isnum) {
+                    this.programSms(phoneNumber)
+                }
+            })
+        }
+    }
+
+    programSms = async (phoneNumber) => {
         try{
             let value = {};
             value.date = this.state.date;
             value.message = this.state.message;
-            value.contact = this.state.numberText;
+            value.contact = phoneNumber;
             let joined = this.state.messages;
             joined.push(value);
             const jsonValue = JSON.stringify(joined);
             await AsyncStorage.setItem('message', jsonValue);
             this.setState({
-                mobileNumber: [],
-                numberText: '',
+                phoneNumbers: [],
                 message: '',
                 date: new Date(),
                 displayDate: false,
@@ -110,16 +116,11 @@ class DelayedMessage extends React.Component {
         }
     };
 
-    displayDate = () => {
+    setKeyValue = (key, value) => {
         this.setState({
-            displayDate: true,
+            [key]: value
         })
-    };
-    displayTime = () => {
-        this.setState({
-            displayTime: true,
-        })
-    };
+    }
 
     setDate = (event, date) => {
         if(date != null){
@@ -135,98 +136,110 @@ class DelayedMessage extends React.Component {
         this.setState({displayTime: false});
     };
 
+    setTags = (tags) => {
+        this.setState({
+            phoneNumbers: tags
+        })
+    }
 
-  render() {
-      const {date} = this.state;
-      let dateString;
-      if(date != null){
-          dateString = getDate(date);
-      }else{
-          dateString = 'Aucune';
-      }
+    renderComponent = () => {
+        const { date } = this.state;
+        let dateString = date ? getDate(date) : 'Aucune';
 
-      return (
-        <View
-          style={styles.subContainer}>
-            <Image
-              source={require('../../../assets/images/Illustration_mobile.png')}
-              style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
-            <Text
-              style={styles.title}>
-                Envoi d'un message en différé
-            </Text>
-            <View style={[styles.field, styles.input]}>
-                <TextInput
-                  style={{flex: 4, fontSize: 15}}
-                  value={this.state.numberText}
-                  onChangeText={(number) => this.setMobileNumber(number)}
-                  placeholder="Saisissez un numéro de téléphone"
-                  keyboardType="numeric"/>
-            </View>
+        return (
+          <View
+            style={styles.subContainer}>
+              <Image
+                source={require('../../../assets/images/Illustration_mobile.png')}
+                style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
+              <Text
+                style={styles.title}>
+                  Envoi d'un message en différé
+              </Text>
 
-            <View style={{ marginBottom: 10 }}>
-                <Text style={[ styles.title, { fontSize: 20 }]}> Date d'envoi : {dateString[0]} </Text>
-                <Text style={[ styles.title, { fontSize: 20 }]}> Heure d'envoi : {dateString[1]} </Text>
-            </View>
+              <Tags
+                initialText=""
+                initialTags={ this.state.phoneNumbers }
+                textInputProps={{
+                    placeholder: "Saisissez un numéro de téléphone ..."
+                }}
+                onChangeTags={tags => this.setTags(tags)}
+                inputContainerStyle={{ backgroundColor: 'rgba(0,0,0,0)', marginVertical: 10 }}
+                containerStyle={[styles.field, styles.tagContainer]}
+                inputStyle={{ fontSize: 15 }}
+                renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+                  <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
+                      <Text style={styles.tag}>{tag}</Text>
+                  </TouchableOpacity>
+                )}/>
 
+              <View style={{ marginBottom: 10 }}>
+                  <Text style={[ styles.title, { fontSize: 20 }]}> Date d'envoi : {dateString[0]} </Text>
+                  <Text style={[ styles.title, { fontSize: 20 }]}> Heure d'envoi : {dateString[1]} </Text>
+              </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity
-                  style={[styles.field, { flexDirection: 'column', width: '45%',}]}
-                  onPress={this.displayDate}>
-                    <Text style={[styles.input, { textAlign: 'center' }]}> Date </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.field, { flexDirection: 'column', width: '45%',}]}
-                  onPress={this.displayTime}>
-                    <Text style={[styles.input, { textAlign: 'center' }]}> Heure </Text>
-                </TouchableOpacity>
-            </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <TouchableOpacity
+                    style={[styles.field, { flexDirection: 'column', width: '45%',}]}
+                    onPress={() => { this.setKeyValue('displayDate', true) }}>
+                      <Text style={[styles.input, { textAlign: 'center' }]}> Date </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.field, { flexDirection: 'column', width: '45%',}]}
+                    onPress={() => { this.setKeyValue('displayTime', true) }}>
+                      <Text style={[styles.input, { textAlign: 'center' }]}> Heure </Text>
+                  </TouchableOpacity>
+              </View>
 
-            <View style={[styles.field, styles.input]}>
-                <TextInput
-                  style={{flex: 4, fontSize: 15}}
-                  multiline={true}
-                  value={this.state.message}
-                  onChangeText={(text) => this.setMessage(text)}
-                  placeholder="Message ..."/>
-                <TouchableOpacity
-                  style={styles.sendButton}
-                  onPress={() => { this.programSms() }}>
-                    <Icon name="send" color={colors.black} size={20}/>
-                </TouchableOpacity>
-            </View>
+              <View style={[styles.field, styles.input]}>
+                  <TextInput
+                    style={{flex: 4, fontSize: 15}}
+                    multiline={true}
+                    value={this.state.message}
+                    onChangeText={(text) => this.setKeyValue('message', text)}
+                    placeholder="Message ..."/>
+                  <TouchableOpacity
+                    style={styles.sendButton}
+                    onPress={() => { this.verifyPhoneNumbers() }}>
+                      <Icon name="send" color={colors.black} size={20}/>
+                  </TouchableOpacity>
+              </View>
 
-            {this.state.displayDate &&
-            <DateTimePicker
-              style={styles.datePickerStyle}
-              value={date}
-              mode="date"
-              confirmBtnText="Confirm"
-              customStyles={{
-                  dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0,
-                  },
-                  dateInput: {
-                      marginLeft: 36,
-                  },
-              }}
-              onChange={this.setDate}
-            />
-            }
-            {this.state.displayTime &&
-                <DateTimePicker
-                  style={styles.datePickerStyle}
-                  value={date}
-                  mode="time"
-                  onChange={this.setTime}/>
-            }
-        </View>
-      );
-  }
+              {this.state.displayDate &&
+                  <DateTimePicker
+                    style={styles.datePickerStyle}
+                    value={date}
+                    mode="date"
+                    confirmBtnText="Confirm"
+                    customStyles={{
+                        dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0,
+                        },
+                        dateInput: {
+                            marginLeft: 36,
+                        },
+                    }}
+                    onChange={this.setDate}
+                  />
+              }
+              {this.state.displayTime &&
+                  <DateTimePicker
+                    style={styles.datePickerStyle}
+                    value={date}
+                    mode="time"
+                    onChange={this.setTime}/>
+              }
+          </View>
+        );
+    }
+
+    render() {
+        // Si on charge depuis la liste des contacts, on diffère le rendu du composant (car problème avec la librarie Tags)
+        return this.state.isLoaded ? this.renderComponent() : null;
+    }
 }
 
 
@@ -260,6 +273,18 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginVertical: 10,
         paddingHorizontal: 20,
+    },
+    tagContainer: {
+        marginVertical: 10,
+        paddingHorizontal: 10,
+    },
+    tag: {
+        borderWidth: 1,
+        borderRadius: 30,
+        marginVertical: 5,
+        marginRight: 5,
+        paddingVertical: 5,
+        paddingHorizontal: 12,
     },
     sendButton: {
         flex: 1,

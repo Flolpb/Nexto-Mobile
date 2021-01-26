@@ -150,7 +150,7 @@ class ListeMessage extends React.Component {
                   { messages.length ? (
                     <FlatList
                       data={messages}
-                      keyExtractor={(item, index) => index}
+                      keyExtractor={(item, index) => index + 'SEND'}
                       renderItem={({item, index}) => (
                         <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
                             <Text>{ item.message }</Text>
@@ -173,7 +173,7 @@ class ListeMessage extends React.Component {
                   { messagesSend.length ? (
                     <FlatList
                       data={messagesSend}
-                      keyExtractor={(item, index) => index}
+                      keyExtractor={(item, index) => index + 'SENT'}
                       renderItem={({item, index}) => (
                         <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
                             <Text>{ item.message }</Text>

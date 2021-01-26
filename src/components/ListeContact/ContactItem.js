@@ -1,9 +1,8 @@
-import {Text, TouchableOpacity, StyleSheet, View, Button} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import colors from '../../config/colors';
 import {connect} from 'react-redux';
 import {Avatar, Icon} from 'react-native-elements';
-import * as Contacts from 'react-native-contacts';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 class ContactItem extends React.Component {
@@ -86,6 +85,15 @@ class ContactItem extends React.Component {
         </View>
     )
   };
+
+  shouldComponentUpdate(nextProps, nextState){
+    const { isSelected } = nextProps;
+    const { isSelected: prevIsSelected } = this.props;
+
+    const isSameSelectedState = isSelected === prevIsSelected;
+
+    return !isSameSelectedState;
+  }
 
   render() {
     const { navigation } = this.props;

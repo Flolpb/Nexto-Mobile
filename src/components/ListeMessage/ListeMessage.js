@@ -3,10 +3,6 @@ import {Button, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
-import ContactItem from '../ListeContact/ContactItem';
-import ActionButton from 'react-native-action-button';
-import colors from '../../config/colors';
-import {Icon} from 'react-native-elements';
 
 class ListeMessage extends React.Component {
     constructor(props) {

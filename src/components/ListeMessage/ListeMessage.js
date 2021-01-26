@@ -7,6 +7,7 @@ import ContactItem from '../ListeContact/ContactItem';
 import ActionButton from 'react-native-action-button';
 import colors from '../../config/colors';
 import {Icon} from 'react-native-elements';
+import PushNotification from 'react-native-p'
 
 class ListeMessage extends React.Component {
     constructor(props) {

@@ -2,14 +2,13 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text} from 'react-native';
 import colors from '../../config/colors';
 
-class ListeBibliotheque extends React.Component {
-
+class BibliothequeContainer extends React.Component {
   render() {
     return(
       <>
         <SafeAreaView
           style={styles.container}>
-          <Text> Liste Bibliothèques </Text>
+          <Text> Container </Text>
         </SafeAreaView>
       </>
     )
@@ -24,5 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListeBibliotheque;
-
+export default BibliothequeContainer;

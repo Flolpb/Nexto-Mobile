@@ -2,10 +2,10 @@ import React from 'react'
 import {useNavigation} from '@react-navigation/core';
 import {createStackNavigator} from '@react-navigation/stack';
 import MessageContainer from '../MessageContainer/MessageContainer';
-import ListeContact from './ListeContact';
+import ListeContact from './ListeContact/ListeContact';
 import colors from '../../config/colors';
 
-const ListeContactNavigator = () => {
+const ContactContainer = () => {
   const navigation = useNavigation();
   const Stack = createStackNavigator();
   return(
@@ -36,4 +36,4 @@ const ListeContactNavigator = () => {
   )
 }
 
-export default ListeContactNavigator;
+export default ContactContainer;

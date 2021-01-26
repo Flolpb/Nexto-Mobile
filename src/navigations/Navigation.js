@@ -6,9 +6,9 @@ import {Icon} from 'react-native-elements';
 import ListeMessage from '../components/ListeMessage/ListeMessage';
 import Accueil from '../components/Accueil/Accueil';
 import MessageContainer from '../components/MessageContainer/MessageContainer';
-import ListeContactNavigator from '../components/ListeContact/ListeContactNavigator';
 import colors from '../config/colors';
-import ListeBibliotheque from '../components/Bibliotheque/ListeBibliotheque';
+import BibliothequeContainer from '../components/BibliothequeContainer/BibliothequeContainer';
+import ListeContactContainer from '../components/ContactContainer/ContactContainer';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -34,8 +34,8 @@ class Navigation extends React.Component{
                         }
                     }} >
                       <Tab.Screen
-                        name="ListeBibliotheque"
-                        component={ListeBibliotheque}
+                        name="BibliothequeContainer"
+                        component={BibliothequeContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -44,7 +44,7 @@ class Navigation extends React.Component{
                         }} />
                       <Tab.Screen
                         name="ListeContact"
-                        component={ListeContactNavigator}
+                        component={ListeContactContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (

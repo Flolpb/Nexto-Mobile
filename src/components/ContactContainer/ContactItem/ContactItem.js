@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import colors from '../../config/colors';
+import colors from '../../../config/colors';
 import {connect} from 'react-redux';
 import {Avatar, Icon} from 'react-native-elements';
 import Swipeable from 'react-native-gesture-handler/Swipeable';

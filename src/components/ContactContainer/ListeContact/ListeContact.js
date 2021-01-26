@@ -10,8 +10,8 @@ import {
 import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Contacts from 'react-native-contacts';
-import colors from '../../config/colors';
-import ContactItem from "./ContactItem"
+import colors from '../../../config/colors';
+import ContactItem from "../ContactItem/ContactItem"
 import {connect} from 'react-redux';
 
 class ListeContact extends React.Component {
@@ -235,6 +235,8 @@ class ListeContact extends React.Component {
         <SafeAreaView
           style={styles.container}>
           <FlatList
+            initialNumToRender="10"
+            maxToRenderPerBatch="10"
             contentContainerStyle={{minHeight: '100%'}}
             ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}

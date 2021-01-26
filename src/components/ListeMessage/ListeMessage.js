@@ -138,7 +138,7 @@ class ListeMessage extends React.Component {
         const { navigate } = this.props.navigation;
         this.state.messages.map(message => {
             message.status !== 'send' ? messages.push(message) : messagesSend.push(message);
-        })
+        });
 
         return(
           <>

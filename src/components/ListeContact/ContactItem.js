@@ -26,8 +26,8 @@ class ContactItem extends React.Component {
 
   generateAvatarLabel = (contact) => {
     let label = '';
-    if (contact.givenName !== '') label += contact.givenName[0].toUpperCase();
-    if (contact.familyName !== '') label += contact.familyName[0].toUpperCase();
+    if (contact.givenName) label += contact.givenName[0].toUpperCase();
+    if (contact.familyName) label += contact.familyName[0].toUpperCase();
     return label;
   };
 

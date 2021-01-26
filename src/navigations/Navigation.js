@@ -8,6 +8,7 @@ import Accueil from '../components/Accueil/Accueil';
 import MessageContainer from '../components/MessageContainer/MessageContainer';
 import ListeContactNavigator from '../components/ListeContact/ListeContactNavigator';
 import colors from '../config/colors';
+import ListeBibliotheque from '../components/Bibliotheque/ListeBibliotheque';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -32,6 +33,15 @@ class Navigation extends React.Component{
                           backgroundColor: colors.purple
                         }
                     }} >
+                      <Tab.Screen
+                        name="ListeBibliotheque"
+                        component={ListeBibliotheque}
+                        options={{
+                          tabBarColor: colors.white,
+                          tabBarIcon: ({color, size}) => (
+                            <Icon type="material-community" name="bookshelf" color={color} size={size} />
+                          )
+                        }} />
                       <Tab.Screen
                         name="ListeContact"
                         component={ListeContactNavigator}

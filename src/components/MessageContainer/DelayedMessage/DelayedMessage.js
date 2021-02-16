@@ -87,12 +87,11 @@ class DelayedMessage extends React.Component {
                 const firstCaractere = phoneNumber.slice(0, 1);
                 if(firstCaractere === "+"){
                     let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
-
                     if(isNaN(lastCaractere)){
                         this.programSms(phoneNumber).then();
                     }
                     else{
-                        alert("Mauvais format pour le numéro de tel: " + lastCaractere)
+                        alert("Mauvais format pour le numéro de tel: " + lastCaractere);
                     }
 
                 }

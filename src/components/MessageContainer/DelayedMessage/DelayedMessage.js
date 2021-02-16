@@ -82,14 +82,34 @@ class DelayedMessage extends React.Component {
         console.log(this.state.phoneNumbers);
         console.log(this.state.message);
         if (this.state.phoneNumbers.length && this.state.message) {
-            console.log('test');
             this.state.phoneNumbers.map(phoneNumber => {
-                // Test si le numéro de téléphone est bien composé seulement de numéros
-                let isnum = /^\d+$/.test(phoneNumber);
-                if (isnum) {
-                    this.programSms(phoneNumber);
+                //test si le premier caractère est un "+"
+                const firstCaractere = phoneNumber.slice(0, 1);
+                if(firstCaractere === "+"){
+                    let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
+
+                    if(isNaN(lastCaractere)){
+                        this.programSms(phoneNumber).then();
+                    }
+                    else{
+                        alert("Mauvais format pour le numéro de tel: " + lastCaractere)
+                    }
+
                 }
+                // Test si le numéro de téléphone est bien composé seulement de numéros
+                else{
+                    let isNum = /^\d+$/.test(phoneNumber);
+                    if (isNum) {
+                    this.programSms(phoneNumber).then();
+                    }else{
+                        alert("Mauvais format pour le numéro de téléphone: " + phoneNumber)
+                    }
+                }
+
+
             })
+        }else{
+            console.log(this.state.phoneNumbers + "||" + this.state.message);
         }
     };
 

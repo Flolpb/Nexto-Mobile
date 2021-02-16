@@ -3,7 +3,6 @@ import {
   FlatList,
   PermissionsAndroid,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -14,34 +13,6 @@ import Contacts from 'react-native-contacts';
 import colors from '../../config/colors';
 import ContactItem from "./ContactItem"
 import {connect} from 'react-redux';
-import ActionButton from 'react-native-action-button';
-import RNActionButton from 'react-native-action-button'
-import { Animated } from 'react-native'
-
-// PATCH POUR LA LIBRAIRIE ACTION BUTTON
-RNActionButton.prototype.animateButton = function(animate = true) {
-  if (this.state.active) return this.reset();
-  if (animate) {
-    Animated.spring(this.anim, { toValue: 1, useNativeDriver: false }).start();
-  } else {
-    this.anim.setValue(1);
-  }
-  this.setState({ active: true, resetToken: this.state.resetToken });
-}
-
-RNActionButton.prototype.reset = function (animate = true) {
-  if (this.props.onReset) this.props.onReset();
-  if (animate) {
-    Animated.spring(this.anim, { toValue: 0, useNativeDriver: false }).start();
-  } else {
-    this.anim.setValue(0);
-  }
-  setTimeout(() => {
-    if (this.mounted) {
-      this.setState({ active: false, resetToken: this.state.resetToken });
-    }
-  }, 250);
-}
 
 class ListeContact extends React.Component {
 
@@ -277,9 +248,17 @@ class ListeContact extends React.Component {
                   deleteContact={this.deleteContactId}
                   modContact={this.modifyContact}/>
             )}/>
-          <ActionButton buttonColor={colors.black} onPress={() => { this.newContact() }}>
-            <Icon name="plus" style={styles.actionButtonIcon} />
-          </ActionButton>
+          <View style={ styles.createButton }>
+            <Avatar
+              size="medium"
+              rounded
+              onPress={() => { this.newContact() }}
+              icon={{ name: 'add', type: 'material' }}
+              containerStyle={ styles.avatar }
+              overlayContainerStyle={{ backgroundColor: colors.black }}
+              activeOpacity={0.7}
+            />
+          </View>
         </SafeAreaView>
       </>
     );
@@ -361,6 +340,11 @@ const styles = StyleSheet.create({
   },
   avatarBackground: {
     backgroundColor: colors.favorites,
+  },
+  createButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 20,
   },
 });
 

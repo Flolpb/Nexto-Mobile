@@ -14,6 +14,7 @@ import colors from '../../../config/colors';
 import {Icon} from 'react-native-elements';
 import Contacts from 'react-native-contacts';
 import Tags from 'react-native-tags';
+import ImagePicker from 'react-native-image-crop-picker';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -30,13 +31,49 @@ class DirectMessage extends React.Component {
     phoneNumbers: [],
     isLoaded: false,
     message: '',
-  }
+  };
+
+  askPermissions = async () => {
+    try{
+      const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA
+      );
+    }catch(e){
+      console.log(e);
+    }
+  };
+
+  openCameraPicker = async () => {
+    const granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
+    if(granted){
+      ImagePicker.openCamera({
+        width: 200,
+        height: 200,
+        cropping: true,
+      }).then(image => {
+        console.log(image);
+      });
+    }else{
+      const grant = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA
+      );
+      if(grant){
+        ImagePicker.openCamera({
+          width: 200,
+          height: 200,
+          cropping: true,
+        }).then(image => {
+          console.log(image);
+        });
+      }
+    }
+  };
 
   setKeyValue = (key, value) => {
     this.setState({
       [key]: value
     })
-  }
+  };
 
   setTags = (tags) => {
     this.setState({
@@ -123,6 +160,13 @@ class DirectMessage extends React.Component {
             <Icon name="send" color={colors.black} size={20} />
           </TouchableOpacity>
         </View>
+        <View>
+          <TouchableOpacity
+          onPress={() => { this.openCameraPicker() }}>
+            <Icon name="camera" color={colors.favorites} size={50}/>
+          </TouchableOpacity>
+        </View>
+
       </View>
     )
   }

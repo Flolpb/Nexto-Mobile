@@ -7,7 +7,8 @@ import ContactItem from '../ListeContact/ContactItem';
 import ActionButton from 'react-native-action-button';
 import colors from '../../config/colors';
 import {Icon} from 'react-native-elements';
-import PushNotification from 'react-native-p'
+import PushNotification from 'react-native-push-notification';
+import {showNotification, handleScheduleNotification, delayedMessageNotification} from '../../notification.android';
 
 class ListeMessage extends React.Component {
     constructor(props) {
@@ -33,6 +34,7 @@ class ListeMessage extends React.Component {
         }
     };
 
+
     //Storer un message en JSON
     storeData = async (value) => {
         console.log(value);
@@ -46,6 +48,9 @@ class ListeMessage extends React.Component {
             console.log(e);
         }
     };
+
+
+
 
     //Messages Programmés
     onStart = async () => {
@@ -81,7 +86,7 @@ class ListeMessage extends React.Component {
                                 alert('failed with this error: '+ fail);
                             },
                             (success) => {
-                                console.log('SMS sent successfully');
+                                delayedMessageNotification(this.state.messages[i].message, this.state.messages[i].contact);
                             },
                         );
                     }

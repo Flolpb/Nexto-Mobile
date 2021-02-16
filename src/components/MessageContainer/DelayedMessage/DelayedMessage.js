@@ -58,7 +58,7 @@ class DelayedMessage extends React.Component {
                 });
             });
         }
-    }
+    };
 
     readData = async () => {
         try{
@@ -79,17 +79,19 @@ class DelayedMessage extends React.Component {
     };
 
     verifyPhoneNumbers = () => {
-        console.log(this.state.phoneNumbers)
+        console.log(this.state.phoneNumbers);
+        console.log(this.state.message);
         if (this.state.phoneNumbers.length && this.state.message) {
+            console.log('test');
             this.state.phoneNumbers.map(phoneNumber => {
                 // Test si le numéro de téléphone est bien composé seulement de numéros
                 let isnum = /^\d+$/.test(phoneNumber);
                 if (isnum) {
-                    this.programSms(phoneNumber)
+                    this.programSms(phoneNumber);
                 }
             })
         }
-    }
+    };
 
     programSms = async (phoneNumber) => {
         try{
@@ -110,7 +112,7 @@ class DelayedMessage extends React.Component {
                 messages: []
             });
             this.readData();
-            alert('Message envoyé !');
+            alert('Message programmé !');
         }catch (e) {
             console.log(e);
         }
@@ -120,7 +122,7 @@ class DelayedMessage extends React.Component {
         this.setState({
             [key]: value
         })
-    }
+    };
 
     setDate = (event, date) => {
         if(date != null){
@@ -140,7 +142,7 @@ class DelayedMessage extends React.Component {
         this.setState({
             phoneNumbers: tags
         })
-    }
+    };
 
     renderComponent = () => {
         const { date } = this.state;

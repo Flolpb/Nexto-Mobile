@@ -15,8 +15,8 @@ import colors from '../../config/colors';
 import ContactItem from "./ContactItem"
 import {connect} from 'react-redux';
 import ActionButton from 'react-native-action-button';
-import RNActionButton from 'react-native-action-button'
-import { Animated } from 'react-native'
+import RNActionButton from 'react-native-action-button';
+import { Animated } from 'react-native';
 
 // PATCH POUR LA LIBRAIRIE ACTION BUTTON
 RNActionButton.prototype.animateButton = function(animate = true) {

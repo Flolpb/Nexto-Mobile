@@ -15,6 +15,8 @@ import {Icon} from 'react-native-elements';
 import Contacts from 'react-native-contacts';
 import Tags from 'react-native-tags';
 import ImagePicker from 'react-native-image-crop-picker';
+import Modal from 'react-native-modalbox';
+import { Keyboard } from 'react-native';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -85,21 +87,61 @@ class DirectMessage extends React.Component {
     if (this.state.phoneNumbers.length && this.state.message) {
       this.state.phoneNumbers.map(phoneNumber => {
         // Test si le numéro de téléphone est bien composé seulement de numéros
-        let isnum = /^\d+$/.test(phoneNumber);
-        if (isnum) {
-          SmsAndroid.autoSend(
-            phoneNumber,
-            this.state.message,
-            (fail) => {
-              alert('failed with this error: '+ fail);
-            },
-            (success) => {
-              alert('SMS sent successfully');
-              this.setState({
-                message: '',
-              })
-            },
-          );
+        if (this.state.phoneNumbers.length && this.state.message) {
+          this.state.phoneNumbers.map(phoneNumber => {
+            //test si le premier caractère est un "+"
+            const firstCaractere = phoneNumber.slice(0, 1);
+            if(firstCaractere === "+"){
+              let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
+              if(isNaN(lastCaractere)){
+                SmsAndroid.autoSend(
+                    phoneNumber,
+                    this.state.message,
+                    (fail) => {
+                      alert('failed with this error: '+ fail);
+                    },
+                    (success) => {
+                      //alert('SMS sent successfully');
+                      Keyboard.dismiss();
+                      this.setState({
+                        message: '',
+                      });
+
+                      this.refs.modal1.open();
+                    },
+                );
+              }
+              else{
+                alert("Mauvais format pour le numéro de tel: " + lastCaractere);
+              }
+
+            }
+            // Test si le numéro de téléphone est bien composé seulement de numéros
+            else{
+              let isNum = /^\d+$/.test(phoneNumber);
+              if (isNum) {
+                SmsAndroid.autoSend(
+                    phoneNumber,
+                    this.state.message,
+                    (fail) => {
+                      alert('failed with this error: '+ fail);
+                    },
+                    (success) => {
+
+                      Keyboard.dismiss();
+                      this.setState({
+                        message: '',
+                      });
+
+                      this.refs.modal1.open();
+                    },
+                );
+              }else{
+                alert("Mauvais format pour le numéro de téléphone: " + phoneNumber);
+              }
+            }
+
+          });
         }
       })
     } else {
@@ -167,6 +209,10 @@ class DirectMessage extends React.Component {
           </TouchableOpacity>
         </View>
 
+        <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
+          <Text style={styles.modalText}>Message envoyé !</Text>
+        </Modal>
+
       </View>
     )
   }
@@ -218,7 +264,8 @@ const styles = StyleSheet.create({
   },
   subContainer: {
     paddingHorizontal: 30,
-    marginVertical: 20,
+    marginVertical: 0,
+    height: '100%',
   },
   sendButton: {
     flex: 1,
@@ -230,6 +277,18 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     textAlign: 'center',
     fontWeight: 'bold'
-  }
+  },
+  modal1: {
+    backgroundColor: colors.purple,
+    height: 80,
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderStyle: 'solid',
+  },
+  modalText: {
+    color: colors.white,
+    fontSize: 32,
+    textAlign: 'center'
+  },
 });
 export default DirectMessage;

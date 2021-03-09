@@ -17,6 +17,8 @@ import {Icon} from 'react-native-elements';
 import colors from '../../../config/colors';
 import Tags from 'react-native-tags';
 import Contacts from 'react-native-contacts';
+import Modal from 'react-native-modalbox';
+import { Keyboard } from 'react-native';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessage')
 );
@@ -45,6 +47,7 @@ class DelayedMessage extends React.Component {
         displayTime: false,
         messages: [],
         isLoaded: false,
+        toggleSwipeToClose: true,
     };
 
     getContact = async () => {
@@ -101,14 +104,14 @@ class DelayedMessage extends React.Component {
                     if (isNum) {
                     this.programSms(phoneNumber).then();
                     }else{
-                        alert("Mauvais format pour le numéro de téléphone: " + phoneNumber)
+                        alert("Mauvais format pour le numéro de téléphone: " + phoneNumber);
                     }
                 }
 
 
             })
         }else{
-            console.log(this.state.phoneNumbers + "||" + this.state.message);
+            console.log(this.state.phoneNumbers + " || " + this.state.message);
         }
     };
 
@@ -132,7 +135,10 @@ class DelayedMessage extends React.Component {
                 messages: []
             });
             this.readData();
-            alert('Message programmé !');
+            Keyboard.dismiss();
+            //alert('Message programmé !');
+            this.refs.modal1.open();
+
         }catch (e) {
             console.log(e);
         }
@@ -162,6 +168,10 @@ class DelayedMessage extends React.Component {
         this.setState({
             phoneNumbers: tags
         })
+    };
+
+    openModal = () => {
+      this.refs.modal1.open();
     };
 
     renderComponent = () => {
@@ -254,13 +264,18 @@ class DelayedMessage extends React.Component {
                     mode="time"
                     onChange={this.setTime}/>
               }
+
+                <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
+                    <Text style={styles.modalText}>Message programmé !</Text>
+                </Modal>
           </View>
         );
-    }
+    };
 
     render() {
         // Si on charge depuis la liste des contacts, on diffère le rendu du composant (car problème avec la librarie Tags)
-        return this.state.isLoaded ? this.renderComponent() : null;
+        return this.state.isLoaded ? this.renderComponent() : null
+
     }
 }
 
@@ -268,7 +283,7 @@ class DelayedMessage extends React.Component {
 const styles = StyleSheet.create({
     subContainer: {
         paddingHorizontal: 30,
-        marginVertical: 20,
+        height: "100%"
     },
     image: {
         flex: 1,
@@ -321,6 +336,21 @@ const styles = StyleSheet.create({
     datePickerStyle: {
         width: 200,
         marginTop: 20,
+    },
+    closeN: {
+
+    },
+    modal1: {
+        backgroundColor: colors.purple,
+        height: 80,
+        justifyContent: 'center',
+        borderWidth: 2,
+        borderStyle: 'solid',
+    },
+    modalText: {
+        color: colors.white,
+        fontSize: 32,
+        textAlign: 'center'
     },
 });
 

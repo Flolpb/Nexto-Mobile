@@ -1,16 +1,22 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import { StyleSheet, Text, TextInput, View} from 'react-native';
 import CustomDropdownButton from '../CustomDropdownButton/CustomDropdownButton';
-import CustomIconButton from '../CustomIconButton/CustomIconButton';
 import VARS from '../../config/vars';
 import colors from '../../config/colors';
+import CustomDropdownModal from '../CustomDropdownModal/CustomDropdownModal';
 
 class NewMessageContainer extends React.Component {
 
   state = {
-    editing: false,
     message: this.props.item,
+    modalVisible: false,
+    onEdit: false,
   }
+
+  vars = [
+    { label: 'Ajouter une variable', value: 'ADD'},
+    { label: 'Supprimer', value: 'DELETE'},
+  ]
 
   setKeyValue = (key, value) => {
     this.setState({
@@ -18,75 +24,89 @@ class NewMessageContainer extends React.Component {
     });
   }
 
-  addVarInMessage = (varType) => {
-    if (VARS.filter(el => el.value === varType).length > 0) {
-      let message = this.state.message;
-      console.log(varType, message)
-      message += `<%${varType}%>`;
-      this.setKeyValue('message', message);
+  // Gestion des options du dropdown
+  manageOptionSelected = (index, value) => {
+    switch (value) {
+      case 'ADD':
+        this.setKeyValue('modalVisible', true);
+        break;
+      case 'DELETE':
+        this.props.deleteMessageFromLibrary(index);
+        break;
     }
   }
 
-  userFriendlyString = (string, jsxElements = []) => {
+  // Ajouter une variable au message sélectionné
+  addVarInMessage = (varType) => {
+    if (VARS.filter(el => el.value === varType).length > 0) {
+      let message = this.props.item;
+      message += `<%${varType}%>`;
+      this.props.modifyMessageFromLibrary(this.props.index, message);
+    }
+  }
+
+  // Convertit la chaîne du message avec les valeurs des variables personalisées en brutes
+  userFriendlyString = (string, jsxElements = [], count = 0) => {
     let str = string.toString();
     let array = [str.indexOf("<%"), str.indexOf("%>")];
     let selectedVar = VARS.find((v) => v.value === str.substring(array[0] + 2, array[1]))
     if (array.every((v) => v !== -1)) {
-      jsxElements.push(<Text>{str.substring(0, array[0])}</Text>);
+      count++;
+      jsxElements.push(<Text key={count}>{str.substring(0, array[0])}</Text>);
       if (selectedVar) {
-        jsxElements.push(<Text style={{color: colors.purple, fontStyle: 'italic', fontWeight: 'bold'}}>{selectedVar.label}</Text>);
+        count++;
+        jsxElements.push(<Text key={count} style={styles.textVar}>{selectedVar.label}</Text>);
       } else {
-        jsxElements.push(<Text>{str.substring(array[0], array[1] + 2)}</Text>);
+        count++;
+        jsxElements.push(<Text key={count}>{str.substring(array[0], array[1] + 2)}</Text>);
       }
-
-      return this.userFriendlyString(str.substring(array[1] + 2, string.length), jsxElements);
+      return this.userFriendlyString(str.substring(array[1] + 2, string.length), jsxElements, count);
     } else {
-      return [...jsxElements, <Text>{string}</Text>]
+      count++;
+      return [...jsxElements, <Text key={count}>{string}</Text>]
     }
   }
 
   render() {
-    const { index, modifyMessageFromLibrary, deleteMessageFromLibrary } = this.props;
-    const message = this.state.message;
+    const { modalVisible, onEdit } = this.state;
+    const { item, index, modifyMessageFromLibrary } = this.props;
     return(
       <>
         {
           <View style={[styles.field, styles.input]}>
+            {/* Modal d'ajout de variable */}
+            <CustomDropdownModal
+              visible={modalVisible}
+              setKeyValue={this.setKeyValue}
+              title="Ajouter une variable"
+              vars={VARS}
+              onSelectOption={this.addVarInMessage}
+            />
+
+            {/* Input de messages modifiables */}
             {
-              this.state.editing ? (
+              onEdit ? (
                   <TextInput
                     style={styles.textInput}
                     multiline={true}
-                    value={message}
-                    onChangeText={(text) => this.setKeyValue('message', text)}
+                    value={item}
+                    onBlur={() => this.setKeyValue('onEdit', false)}
+                    onChangeText={(text) => modifyMessageFromLibrary(index, text)}
                   />
               ) : (
                 <TextInput
-                  onFocus={() => this.setKeyValue('editing', true)}
+                  onFocus={() => this.setKeyValue('onEdit', true)}
                   style={styles.textInput}
                   multiline={true}
                 >
                   <Text>
-                    { this.userFriendlyString(this.state.message).map((itm) => itm) }
+                    { this.userFriendlyString(item).map((itm) => itm) }
                   </Text>
                 </TextInput>
               )
             }
-
-            {
-              this.state.editing ? (
-                <>
-                  <CustomDropdownButton index={index} onPressOption={this.addVarInMessage} />
-                  <CustomIconButton index={index} onPressButton={() => {
-                    modifyMessageFromLibrary(index, message);
-                    this.setKeyValue('editing', false);
-                  }} icon={{ type: 'material', name: 'check' }} />
-                </>
-              ) : (
-                <CustomIconButton index={index} onPressButton={deleteMessageFromLibrary} icon={{ type: 'material', name: 'close' }} />
-              )
-            }
-
+            {/* Dropdown d'options de gestion de messages */}
+            <CustomDropdownButton index={index} vars={this.vars} onPressOption={this.manageOptionSelected}/>
            </View>
         }
       </>
@@ -120,7 +140,9 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   textVar: {
-    color: 'red',
+    color: colors.purple,
+    fontStyle: 'italic',
+    fontWeight: 'bold',
   }
 });
 

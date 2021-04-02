@@ -55,15 +55,6 @@ class CreateBibliotheque extends React.Component {
     this.setKeyValue('messages', array);
   }
 
-  // addVarInMessage = (varType, id) => {
-  //   if (VARS.filter(el => el.value === varType).length > 0) {
-  //     let idInt = parseInt(id);
-  //     let messages = this.state.messages;
-  //     messages[idInt] += `<%${varType}%>`;
-  //     this.setKeyValue('messages', messages);
-  //   }
-  // }
-
   // generateVarsCode = () => {
   //   let string = '';
   //   for (let i = 0; i < 3; i++) {

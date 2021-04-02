@@ -104,11 +104,7 @@ class ListeContact extends React.Component {
 
   createSeparator = () => {
     return (
-      <View
-        style={[
-          styles.separator,
-        ]}
-      />
+      <View style={styles.separator} />
     )
   };
 

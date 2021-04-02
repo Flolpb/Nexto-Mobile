@@ -18,7 +18,7 @@ class CustomDropdownButton extends React.Component {
   }
 
   render() {
-    const { onPressOption } = this.props;
+    const { index, vars, onPressOption } = this.props;
     return(
       <View style={styles.insideButton}>
         <Menu style={styles.menu}
@@ -34,13 +34,13 @@ class CustomDropdownButton extends React.Component {
               }
         >
           {
-            VARS.map((item) => {
+            vars.map((item) => {
               return <Menu.Item
                 title={item.label}
                 key={item.value}
                 disabled={!item.value}
                 onPress={() => {
-                  onPressOption(item.value);
+                  onPressOption(index, item.value);
                   this.setKeyValue('menuVisible', false);
                 }}
               />

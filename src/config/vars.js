@@ -1,5 +1,4 @@
 let VARS = [
-  { label: 'Ajouter une variable ...', value: '' },
   { label: 'Nom', value: 'LASTNAME' },
   { label: 'Prénom', value: 'FIRSTNAME' },
   { label: 'Nom complet', value: 'FULLNAME' },

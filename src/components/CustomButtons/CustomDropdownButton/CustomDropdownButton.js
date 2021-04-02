@@ -1,8 +1,8 @@
 import React from 'react';
 import {Menu} from 'react-native-paper';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import colors from '../../config/colors';
-import VARS from '../../config/vars';
+import colors from '../../../config/colors';
+import VARS from '../../../config/vars';
 import {Icon} from 'react-native-elements';
 
 class CustomDropdownButton extends React.Component {

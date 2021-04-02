@@ -8,7 +8,8 @@ import {
 import colors from '../../../config/colors';
 import { Avatar } from 'react-native-elements';
 import NewMessageContainer from '../../NewMessageContainer/NewMessageContainer';
-import CustomTextButton from '../../CustomTextButton/CustomTextButton';
+import CustomTextButton from '../../CustomButtons/CustomTextButton/CustomTextButton';
+import CustomTextModal from '../../CustomModals/CustomTextModal/CustomTextModal';
 
 class CreateBibliotheque extends React.Component {
 
@@ -21,6 +22,8 @@ class CreateBibliotheque extends React.Component {
       '<%LINK%> Regardez ce super lien',
       '<%LINK%> <%LINK%>',
     ],
+    modalVisible: false,
+    modalTitle: '',
   }
 
   setKeyValue = (key, value) => {
@@ -30,9 +33,21 @@ class CreateBibliotheque extends React.Component {
   }
 
   addMessageToLibrary = () => {
-    this.setState({
-      messages: [...this.state.messages, '']
-    });
+    /*
+    *
+    TODO Set le nombre de messages MAX par bibliothèque dans une fichier de config
+    *
+    */
+    if (this.state.messages.length <= 9) {
+      this.setState({
+        messages: [...this.state.messages, '']
+      });
+    } else {
+      this.setState({
+        modalVisible: true,
+        modalTitle: 'Nombre maximal de messages par bibliothèque atteint.',
+      });
+    }
   }
 
   deleteMessageFromLibrary = (id) => {
@@ -62,60 +77,76 @@ class CreateBibliotheque extends React.Component {
   // }
 
   createLibrary = () => {
-    let voidMessage = false;
-    this.state.messages.forEach((message) => {
-      message === '' && (voidMessage = true);
-    });
-    voidMessage && (alert("La liste de messages contient des messages vides."));
+    // Vérification du nom de la librairie
+    if (this.state.libraryName === '') {
+      this.setState({
+        modalVisible: true,
+        modalTitle: 'Le nom de la bibliothèque n\'est pas renseignée.',
+      });
+      return false;
+    }
+
+    // Vérification des messages vides
+    if (this.state.messages.some((message) => message === '')) {
+      this.setState({
+        modalVisible: true,
+        modalTitle: 'La liste de messages contient des messages vides.',
+      });
+      return false;
+    }
     console.log(this.state.messages);
   }
 
   render() {
+    const { modalVisible, modalTitle } = this.state;
     return(
-      <FlatList
-        style={styles.container}
-        removeClippedSubviews={false}
-        ListHeaderComponent={
-          <>
-            <View style={styles.subContainer}>
-              <View style={styles.field}>
-                <TextInput
-                  style={styles.textInput}
-                  multiline={true}
-                  value={this.state.libraryName}
-                  onChangeText={(text) => this.setKeyValue('libraryName', text)}
-                  placeholder="Nom de la bibliothèque"/>
+      <>
+        <CustomTextModal visible={modalVisible} setKeyValue={this.setKeyValue} title={modalTitle} icon={'error-outline'} />
+        <FlatList
+          style={styles.container}
+          removeClippedSubviews={false}
+          ListHeaderComponent={
+            <>
+              <View style={styles.subContainer}>
+                <View style={styles.field}>
+                  <TextInput
+                    style={styles.textInput}
+                    multiline={true}
+                    value={this.state.libraryName}
+                    onChangeText={(text) => this.setKeyValue('libraryName', text)}
+                    placeholder="Nom de la bibliothèque"/>
+                </View>
+                <CustomTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
               </View>
-              <CustomTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
-            </View>
-          </>
-        }
-        data={this.state.messages}
-        keyExtractor={(item, index) => index.toString() }
-        renderItem={({item, index}) => (
-          <View style={styles.item}>
-            <NewMessageContainer
-              item={item} index={index}
-              deleteMessageFromLibrary={this.deleteMessageFromLibrary}
-              modifyMessageFromLibrary={this.modifyMessageFromLibrary}
-            />
-          </View>
-        )}
-        ListFooterComponent={
-          <View style={styles.subContainer}>
-            <View style={styles.button}>
-              <Avatar
-                size="medium"
-                rounded
-                onPress={() => { this.addMessageToLibrary() }}
-                icon={{ name: 'add', type: 'material' }}
-                overlayContainerStyle={styles.avatar}
-                activeOpacity={0.7}
+            </>
+          }
+          data={this.state.messages}
+          keyExtractor={(item, index) => index.toString() }
+          renderItem={({item, index}) => (
+            <View style={styles.item}>
+              <NewMessageContainer
+                item={item} index={index}
+                deleteMessageFromLibrary={this.deleteMessageFromLibrary}
+                modifyMessageFromLibrary={this.modifyMessageFromLibrary}
               />
             </View>
-          </View>
-        }
-      />
+          )}
+          ListFooterComponent={
+            <View style={styles.subContainer}>
+              <View style={styles.button}>
+                <Avatar
+                  size="medium"
+                  rounded
+                  onPress={() => { this.addMessageToLibrary() }}
+                  icon={{ name: 'add', type: 'material' }}
+                  overlayContainerStyle={styles.avatar}
+                  activeOpacity={0.7}
+                />
+              </View>
+            </View>
+          }
+        />
+      </>
     )
   }
 }

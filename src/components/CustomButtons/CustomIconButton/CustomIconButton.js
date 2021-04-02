@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {Icon} from 'react-native-elements';
-import colors from '../../config/colors';
+import colors from '../../../config/colors';
 
 class CustomIconButton extends React.Component {
 

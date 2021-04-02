@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View} from 'react-native';
-import CustomDropdownButton from '../CustomDropdownButton/CustomDropdownButton';
+import CustomDropdownButton from '../CustomButtons/CustomDropdownButton/CustomDropdownButton';
+import CustomDropdownModal from '../CustomModals/CustomDropdownModal/CustomDropdownModal';
 import VARS from '../../config/vars';
 import colors from '../../config/colors';
-import CustomDropdownModal from '../CustomDropdownModal/CustomDropdownModal';
 
 class NewMessageContainer extends React.Component {
 

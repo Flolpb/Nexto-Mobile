@@ -1,13 +1,11 @@
 import React from 'react';
 import {
   FlatList,
-  KeyboardAvoidingView,
   StyleSheet,
   TextInput,
   View,
 } from 'react-native';
 import colors from '../../../config/colors';
-import VARS from '../../../config/vars';
 import { Avatar } from 'react-native-elements';
 import NewMessageContainer from '../../NewMessageContainer/NewMessageContainer';
 import CustomTextButton from '../../CustomTextButton/CustomTextButton';
@@ -74,47 +72,50 @@ class CreateBibliotheque extends React.Component {
 
   render() {
     return(
-        <FlatList
-          style={styles.container}
-          removeClippedSubviews={false}
-          ListHeaderComponent={
-            <>
-              <View style={styles.subContainer}>
-                <View style={styles.field}>
-                  <TextInput
-                    style={styles.textInput}
-                    multiline={true}
-                    value={this.state.libraryName}
-                    onChangeText={(text) => this.setKeyValue('libraryName', text)}
-                    placeholder="Nom de la bibliothèque"/>
-                </View>
-
-                <CustomTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
-
-                <View style={styles.button}>
-                  <Avatar
-                    size="medium"
-                    rounded
-                    onPress={() => { this.addMessageToLibrary() }}
-                    icon={{ name: 'add', type: 'material' }}
-                    overlayContainerStyle={styles.avatar}
-                    activeOpacity={0.7}
-                  />
-                </View>
+      <FlatList
+        style={styles.container}
+        removeClippedSubviews={false}
+        ListHeaderComponent={
+          <>
+            <View style={styles.subContainer}>
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textInput}
+                  multiline={true}
+                  value={this.state.libraryName}
+                  onChangeText={(text) => this.setKeyValue('libraryName', text)}
+                  placeholder="Nom de la bibliothèque"/>
               </View>
-            </>
-          }
-          data={this.state.messages}
-          keyExtractor={(item, index) => index.toString() }
-          renderItem={({item, index}) => (
-            <View style={styles.item}>
-              <NewMessageContainer
-                item={item} index={index}
-                deleteMessageFromLibrary={this.deleteMessageFromLibrary}
-                modifyMessageFromLibrary={this.modifyMessageFromLibrary}
+              <CustomTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
+            </View>
+          </>
+        }
+        data={this.state.messages}
+        keyExtractor={(item, index) => index.toString() }
+        renderItem={({item, index}) => (
+          <View style={styles.item}>
+            <NewMessageContainer
+              item={item} index={index}
+              deleteMessageFromLibrary={this.deleteMessageFromLibrary}
+              modifyMessageFromLibrary={this.modifyMessageFromLibrary}
+            />
+          </View>
+        )}
+        ListFooterComponent={
+          <View style={styles.subContainer}>
+            <View style={styles.button}>
+              <Avatar
+                size="medium"
+                rounded
+                onPress={() => { this.addMessageToLibrary() }}
+                icon={{ name: 'add', type: 'material' }}
+                overlayContainerStyle={styles.avatar}
+                activeOpacity={0.7}
               />
             </View>
-        )}/>
+          </View>
+        }
+      />
     )
   }
 }
@@ -147,16 +148,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 20,
   },
-  flexOne: {
-    flex: 1,
-  },
-  insideButton: {
-    alignItems:'center',
-    justifyContent:'center',
-  },
   button: {
     alignItems: 'center',
-    paddingVertical: 15,
+    justifyContent:'center',
   },
   avatar: {
     backgroundColor: colors.purple,

@@ -1,6 +1,7 @@
 import React from 'react';
 import 'react-native-gesture-handler';
 import { Provider } from 'react-redux'
+import { Provider as PaperProvider } from 'react-native-paper';
 import Store from './store/configureStore'
 import SwitchLogInForm from './components/LogIn/SwitchLogInForm'
 import {Dimensions, ImageBackground, SafeAreaView, StatusBar} from 'react-native';
@@ -30,7 +31,9 @@ class App extends React.Component {
         {/*Couleur de la barre du haut*/}
         <StatusBar backgroundColor={ colors.purple } />
         <Provider store={ Store }>
-          <SwitchLogInForm />
+          <PaperProvider>
+            <SwitchLogInForm />
+          </PaperProvider>
         </Provider>
       </SafeAreaView>
     );

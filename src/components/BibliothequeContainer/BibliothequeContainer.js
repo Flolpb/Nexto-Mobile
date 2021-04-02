@@ -1,18 +1,35 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import { StyleSheet } from 'react-native';
 import colors from '../../config/colors';
+import {createStackNavigator} from '@react-navigation/stack';
+import ListeBibliotheque from './ListeBibliotheque/ListeBibliotheque';
+import CreateBibliotheque from './CreateBibliotheque/CreateBibliotheque';
 
-class BibliothequeContainer extends React.Component {
-  render() {
-    return(
-      <>
-        <SafeAreaView
-          style={styles.container}>
-          <Text> Container </Text>
-        </SafeAreaView>
-      </>
-    )
-  }
+const BibliothequeContainer = () => {
+  const Stack = createStackNavigator();
+  return(
+    <Stack.Navigator
+      initialRouteName="ListeBibliotheque">
+      <Stack.Screen
+        name="ListeBibliotheque"
+        component={ListeBibliotheque}
+        options={{ headerShown: false }} />
+      <Stack.Screen
+        name="CreateBibliotheque"
+        component={CreateBibliotheque}
+        options={{
+          title: 'Nouvelle bibliothèque',
+          headerStyle: {
+            backgroundColor: colors.purple,
+          },
+          headerTintColor: colors.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 20,
+          },
+        }} />
+    </Stack.Navigator>
+  )
 }
 
 const styles = StyleSheet.create({

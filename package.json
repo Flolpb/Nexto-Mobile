@@ -10,9 +10,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-async-storage/async-storage": "1.13.2",
     "@react-native-community/datetimepicker": "^3.0.8",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-picker/picker": "^1.12.0",
     "@react-navigation/material-bottom-tabs": "^5.3.10",
     "@react-navigation/material-top-tabs": "^5.3.10",
     "@react-navigation/native": "^5.8.4",
@@ -27,6 +29,7 @@
     "react-native-get-sms-android": "^2.1.0",
     "react-native-navigation-bar-color": "^2.0.1",
     "react-native-paper": "^4.4.1",
+    "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "^1.13.1",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.12.0",

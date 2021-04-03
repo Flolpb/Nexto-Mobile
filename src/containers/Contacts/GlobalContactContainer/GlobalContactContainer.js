@@ -1,11 +1,11 @@
 import React from 'react'
 import {useNavigation} from '@react-navigation/core';
 import {createStackNavigator} from '@react-navigation/stack';
-import MessageContainer from '../MessageContainer/MessageContainer';
-import ListeContact from './ListeContact';
-import colors from '../../config/colors';
+import GlobalMessageContainer from '../../Messages/GlobalMessageContainer/GlobalMessageContainer';
+import ListeContact from '../ListContactContainer/ListContactContainer';
+import colors from '../../../config/colors';
 
-const ListeContactNavigator = () => {
+const GlobalContactContainer = () => {
   const navigation = useNavigation();
   const Stack = createStackNavigator();
   return(
@@ -20,7 +20,7 @@ const ListeContactNavigator = () => {
       {/*Écran de création de message depuis la liste des contacts*/}
       <Stack.Screen
         name="ListeContactMessageScreen"
-        component={MessageContainer}
+        component={GlobalMessageContainer}
         options={{
           title: 'Envoi d\'un message',
           headerStyle: {
@@ -36,4 +36,4 @@ const ListeContactNavigator = () => {
   )
 }
 
-export default ListeContactNavigator;
+export default GlobalContactContainer;

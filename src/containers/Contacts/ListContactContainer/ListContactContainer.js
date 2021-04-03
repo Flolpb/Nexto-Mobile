@@ -10,39 +10,12 @@ import {
 import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Contacts from 'react-native-contacts';
-import colors from '../../config/colors';
-import ContactItem from "./ContactItem"
+import colors from '../../../config/colors';
+import ContactItem from "../../../components/ContactItem/ContactItem"
 import {connect} from 'react-redux';
-import ActionButton from 'react-native-action-button';
-import RNActionButton from 'react-native-action-button';
-import { Animated } from 'react-native';
+import CustomMediumAvatar from '../../../components/CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
 
-// PATCH POUR LA LIBRAIRIE ACTION BUTTON
-RNActionButton.prototype.animateButton = function(animate = true) {
-  if (this.state.active) return this.reset();
-  if (animate) {
-    Animated.spring(this.anim, { toValue: 1, useNativeDriver: false }).start();
-  } else {
-    this.anim.setValue(1);
-  }
-  this.setState({ active: true, resetToken: this.state.resetToken });
-}
-
-RNActionButton.prototype.reset = function (animate = true) {
-  if (this.props.onReset) this.props.onReset();
-  if (animate) {
-    Animated.spring(this.anim, { toValue: 0, useNativeDriver: false }).start();
-  } else {
-    this.anim.setValue(0);
-  }
-  setTimeout(() => {
-    if (this.mounted) {
-      this.setState({ active: false, resetToken: this.state.resetToken });
-    }
-  }, 250);
-}
-
-class ListeContact extends React.Component {
+class ListContactContainer extends React.Component {
 
   constructor(props){
     super(props);
@@ -132,11 +105,7 @@ class ListeContact extends React.Component {
 
   createSeparator = () => {
     return (
-      <View
-        style={[
-          styles.separator,
-        ]}
-      />
+      <View style={styles.separator} />
     )
   };
 
@@ -184,8 +153,7 @@ class ListeContact extends React.Component {
   };
 
   createFavoriteTab = () => {
-    const { navigation } = this.props;
-    const contacts = this.props.contacts;
+    const { navigation, contacts } = this.props;
     const favContactsID = this.props.favoritesContact;
     let favoritesContacts = [];
     let content = [];
@@ -194,31 +162,25 @@ class ListeContact extends React.Component {
         let fav = contacts.filter(item => item.recordID === favID);
         favoritesContacts.push(fav);
       });
-      if(favoritesContacts[0] !== undefined){
-        for(let i = 0; i < favoritesContacts.length; i++){
-          content.push(
-              <TouchableOpacity
-                  onPress={() => {
-                    // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
-                    navigation.navigate("ListeContactMessageScreen", {
-                      contactID: favoritesContacts[i][0].recordID,
-                    })
-                  }}
-                  style={styles.favContainer}>
-                <Avatar
-                    size="medium"
-                    rounded
-                    title={ this.generateAvatarLabel(favoritesContacts[i][0]) }
-                    containerStyle={ styles.avatar }
-                    overlayContainerStyle={ styles.avatarBackground }
-                    titleStyle={styles.avatarTitle}
-                    activeOpacity={0.7}
-                />
-                <Text style={styles.favContact}>{favoritesContacts[i][0].displayName.length > 10 ? favoritesContacts[i][0].displayName.slice(0, 8)+ '...' : favoritesContacts[i][0].displayName}</Text>
-              </TouchableOpacity>
-          )
-        }
-      }
+      favoritesContacts.map((fav) => {
+        content.push(
+          <TouchableOpacity
+            key={fav[0].recordID}
+            onPress={() => {
+              // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
+              navigation.navigate("ListeContactMessageScreen", {
+                contactID: fav[0].recordID,
+              })
+            }}
+            style={styles.favContainer}>
+            <CustomMediumAvatar
+              titleOrIcon={{type: 'string', value: this.generateAvatarLabel(fav[0])}}
+              background={styles.avatarBackgroundFav}
+            />
+            <Text style={styles.favContact}>{fav[0].displayName.length > 10 ? fav[0].displayName.slice(0, 8)+ '...' : fav[0].displayName}</Text>
+          </TouchableOpacity>
+        )
+      });
     }
 
     return (
@@ -263,7 +225,10 @@ class ListeContact extends React.Component {
         <SafeAreaView
           style={styles.container}>
           <FlatList
-            contentContainerStyle={{minHeight: '100%'}}
+            initialNumToRender="10"
+            maxToRenderPerBatch="10"
+            removeClippedSubviews={true}
+            contentContainerStyle={styles.flatList}
             ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
@@ -277,15 +242,7 @@ class ListeContact extends React.Component {
                   modContact={this.modifyContact}/>
             )}/>
           <View style={ styles.createButton }>
-            <Avatar
-              size="medium"
-              rounded
-              onPress={() => { this.newContact() }}
-              icon={{ name: 'add', type: 'material' }}
-              containerStyle={ styles.avatar }
-              overlayContainerStyle={{ backgroundColor: colors.black }}
-              activeOpacity={0.7}
-            />
+            <CustomMediumAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={this.newContact} />
           </View>
         </SafeAreaView>
       </>
@@ -298,6 +255,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backGrey,
     flexGrow: 1
+  },
+  flatList: {
+    minHeight: '100%',
   },
   separator: {
     flex: 1,
@@ -360,13 +320,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 12,
   },
-  avatar : {
-    marginRight: 15,
-  },
-  avatarTitle: {
-    color: colors.white
-  },
-  avatarBackground: {
+  avatarBackgroundFav: {
     backgroundColor: colors.favorites,
   },
   createButton: {
@@ -384,4 +338,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps)(ListeContact);
+export default connect(mapStateToProps)(ListContactContainer);

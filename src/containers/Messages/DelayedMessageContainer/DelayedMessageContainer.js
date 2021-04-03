@@ -20,10 +20,10 @@ import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
-    require('../SendMessage/SendMessage')
+    require('../SendMessage/SendMessageContainer')
 );
 
-class DelayedMessage extends React.Component {
+class DelayedMessageContainer extends React.Component {
     constructor(props) {
         super(props);
         this.readData();
@@ -354,4 +354,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DelayedMessage;
+export default DelayedMessageContainer;

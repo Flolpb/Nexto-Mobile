@@ -4,14 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
 
-import ContactItem from '../ListeContact/ContactItem';
-import ActionButton from 'react-native-action-button';
-import colors from '../../config/colors';
+import ContactItem from '../../../components/ContactItem/ContactItem';
+import colors from '../../../config/colors';
 import {Icon} from 'react-native-elements';
 import PushNotification from 'react-native-push-notification';
-import {showNotification, handleScheduleNotification, delayedMessageNotification} from '../../notification.android';
+import {showNotification, handleScheduleNotification, delayedMessageNotification} from '../../../notification.android';
 
-class ListeMessage extends React.Component {
+class ListeMessageContainer extends React.Component {
     constructor(props) {
         super(props);
         this.readData().then();
@@ -247,4 +246,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ListeMessage;
+export default ListeMessageContainer;

@@ -1,12 +1,12 @@
 import React from 'react';
-import 'react-native-gesture-handler';
-import { Provider } from 'react-redux'
 import { Provider as PaperProvider } from 'react-native-paper';
-import Store from './store/configureStore'
-import SwitchLogInForm from './components/LogIn/SwitchLogInForm'
-import {Dimensions, ImageBackground, SafeAreaView, StatusBar} from 'react-native';
+import { Provider } from 'react-redux';
+import 'react-native-gesture-handler';
+import Store from './store/configureStore';
+import SwitchLogInForm from './components/LogIn/SwitchLogInForm';
+import {SafeAreaView, StatusBar} from 'react-native';
 import colors from './config/colors';
-import changeNavigationBarColor from 'react-native-navigation-bar-color'
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 
 class App extends React.Component {

@@ -18,6 +18,7 @@ class Navigation extends React.Component{
             <>
                 <NavigationContainer>
                     <Tab.Navigator
+                      swipeEnabled={false}
                       initialRouteName="Accueil"
                       tabBarPosition="bottom"
                       tabBarOptions={{

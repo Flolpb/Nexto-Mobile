@@ -191,6 +191,9 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    // Dépendance react-native-interactable
+    implementation project(path: ":react-native-interactable")
+
     // Dépendance react-native-vector-icons
     implementation project(':react-native-vector-icons')
 

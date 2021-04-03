@@ -1,26 +1,27 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 import React from 'react';
 import colors from '../../../config/colors';
 import {connect} from 'react-redux';
-import {Avatar, Icon} from 'react-native-elements';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {Icon} from 'react-native-elements';
+import Interactable from 'react-native-interactable';
+import CustomMediumAvatar from '../../CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
+import favoriteContactReducer from '../../../store/reducers/favoriteContactReducer';
 
 class ContactItem extends React.Component {
 
   constructor(props){
     super(props);
+    this._deltaX = new Animated.Value(0);
+    this._deltaY = new Animated.Value(0);
   }
 
   state = {
-    menu: false,
+    swiped: false,
   };
 
   toggleFavorite = (id) => {
     const action = { type: "TOGGLE_FAVORITE", id: id };
     this.props.dispatch(action);
-    this.setState({
-      menu: !this.state.menu
-    })
   };
 
   generateAvatarLabel = (contact) => {
@@ -44,93 +45,126 @@ class ContactItem extends React.Component {
     )
   };
 
-
   displayMenu = (contact) => {
     return(
-        <View style={styles.menuSuperContainer}>
-          <View style={ styles.menuContainer }>
-            <Icon
-                type="font-awesome-5"
-                name="star"
-                solid={ this.displayFavorite(contact.recordID) }
-                style={ styles.button }
-                color={colors.favorites}
-                size={30}
-                onPress={() => {
-                  this.toggleFavorite(contact.recordID)
-                }} />
-            <Icon
-                type="font-awesome-5"
-                name="broom"
-                solid={true}
-                style={ styles.button }
-                color={colors.black}
-                size={30}
-                onPress={() => {
-                  this.props.modContact(contact);
-                }}
-            />
-            <Icon
-                type="font-awesome-5"
-                name="trash-alt"
-                solid={true}
-                style={ styles.button }
-                color={colors.grey}
-                size={30}
-                onPress={() => {
-                  this.props.deleteContact(contact.recordID);
-                }} />
-
-          </View>
-        </View>
+      <View style={styles.swipedContainer}>
+        <Animated.View style={
+          [styles.button, {
+            opacity: this._deltaX.interpolate({
+              inputRange: [-230, -230, -180, -180],
+              outputRange: [1, 1, 0, 0]
+            }),
+            transform: [{
+              scale: this._deltaX.interpolate({
+                inputRange: [-230, -230, -180, -180],
+                outputRange: [1, 1, 0.8, 0.8]
+              })
+            }]
+          }
+          ]}>
+          <Icon
+            type="font-awesome-5"
+            name="star"
+            solid={this.displayFavorite(contact.recordID)}
+            style={styles.button}
+            color={colors.favorites}
+            size={30}
+            onPress={() => {this.toggleFavorite(contact.recordID)}} />
+        </Animated.View>
+        <Animated.View style={
+          [styles.button, {
+            opacity: this._deltaX.interpolate({
+              inputRange: [-165, -165, -115, -115],
+              outputRange: [1, 1, 0, 0]
+            }),
+            transform: [{
+              scale: this._deltaX.interpolate({
+                inputRange: [-165, -165, -115, -115],
+                outputRange: [1, 1, 0.8, 0.8]
+              })
+            }]
+          }
+          ]}>
+          <Icon
+            type="font-awesome-5"
+            name="broom"
+            solid={true}
+            style={ styles.button }
+            color={colors.black}
+            size={30}
+            onPress={() => {this.props.modContact(contact)}}/>
+        </Animated.View>
+        <Animated.View style={
+          [styles.button, {
+            opacity: this._deltaX.interpolate({
+              inputRange: [-100, -100, -50, -50],
+              outputRange: [1, 1, 0, 0]
+            }),
+            transform: [{
+              scale: this._deltaX.interpolate({
+                inputRange: [-100, -100, -50, -50],
+                outputRange: [1, 1, 0.8, 0.8]
+              })
+            }]
+          }
+          ]}>
+          <Icon
+            type="font-awesome-5"
+            name="trash-alt"
+            solid={true}
+            style={ styles.button }
+            color={colors.grey}
+            size={30}
+            onPress={() => {this.props.deleteContact(contact.recordID)}} />
+        </Animated.View>
+      </View>
     )
   };
 
   shouldComponentUpdate(nextProps, nextState){
     const { isSelected } = nextProps;
     const { isSelected: prevIsSelected } = this.props;
-
     const isSameSelectedState = isSelected === prevIsSelected;
-
     return !isSameSelectedState;
   }
 
   render() {
-    const { navigation } = this.props;
-    const contactItem = this.props.contactItem;
+    const { navigation, contactItem } = this.props;
     let infosContainer = this.displayContactInfo(contactItem);
-    const infosMenu = () => {
-      return this.displayMenu(contactItem);
-    };
+    let infosMenu = this.displayMenu(contactItem)
     return(
-        <Swipeable
-          renderRightActions={infosMenu}
-        >
+      <View style={styles.container}>
+        { infosMenu }
+        <Interactable.View
+          horizontalOnly={true}
+          snapPoints={[{x: 0}, {x: -225}]}
+          animatedValueX={this._deltaX}
+          animatedValueY={this._deltaY}>
           <TouchableOpacity
-              onPress={() => {
-                // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
-                navigation.navigate("ListeContactMessageScreen", {
-                  contactID: contactItem.recordID,
-                })
-              }}
-              style={styles.subContainer}>
-            <Avatar
-                size="medium"
-                rounded
-                title={ this.generateAvatarLabel(contactItem) }
-                containerStyle={ styles.avatar }
-                overlayContainerStyle={ styles.avatarBackground }
-                activeOpacity={0.7}
-            />
+            onPress={() => {
+              // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
+              navigation.navigate("ListeContactMessageScreen", {
+                contactID: contactItem.recordID,
+              })
+            }}
+            style={styles.subContainer}>
+            <View style={styles.avatar}>
+              <CustomMediumAvatar titleOrIcon={{type: 'string', value: this.generateAvatarLabel(contactItem)}} />
+            </View>
             { infosContainer }
           </TouchableOpacity>
-        </Swipeable>
-
+        </Interactable.View>
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: colors.backGrey,
+  },
   subContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -139,6 +173,9 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     backgroundColor: colors.backGrey,
     opacity: 1,
+    width: '100%',
+    borderRightColor: colors.black,
+    borderRightWidth: 0.35,
   },
   infosContainer: {
     flex: 1,
@@ -146,31 +183,31 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     zIndex: 1,
   },
-  menuSuperContainer:{
-    justifyContent: 'center',
-    backgroundColor: colors.inactiveBlack,
-    flex: 1,
-    zIndex: -1,
-  },
   menuContainer: {
     flex: 1,
     marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  avatar : {
-    marginRight: 15,
+  swipedContainer: {
+    position: 'absolute',
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  avatarBackground: {
-    backgroundColor: colors.black,
+  avatar: {
+    marginRight: 15,
   },
   text: {
     color: colors.black,
     fontSize: 16,
   },
   button: {
-    justifyContent: 'space-evenly',
-  },
+    width: 40,
+    height: 40,
+    marginRight: 25,
+    justifyContent: 'center',
+  }
 });
 
 // Récupération des contacts favoris stockées dans le store

@@ -58,7 +58,6 @@ class CreateBibliotheque extends React.Component {
 
   modifyMessageFromLibrary = (id, text) => {
     let array = [...this.state.messages];
-    console.log(array, id, text)
     if (text === '') {
       array.splice(id, 1);
       !array && (array = []);

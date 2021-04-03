@@ -3,7 +3,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import 'react-native-gesture-handler';
 import Store from './store/configureStore';
-import SwitchLogInForm from './components/LogIn/SwitchLogInForm';
+import SwitchLogInForm from './containers/LogIn/SwitchLogInForm';
 import {SafeAreaView, StatusBar} from 'react-native';
 import colors from './config/colors';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';

@@ -7,11 +7,11 @@ import {
 } from 'react-native';
 import colors from '../../../config/colors';
 import { Avatar } from 'react-native-elements';
-import NewMessageContainer from '../../NewMessageContainer/NewMessageContainer';
-import CustomTextButton from '../../CustomButtons/CustomTextButton/CustomTextButton';
-import CustomTextModal from '../../CustomModals/CustomTextModal/CustomTextModal';
+import NewMessageContainer from '../NewMessageContainer/NewMessageContainer';
+import CustomTextButton from '../../../components/CustomButtons/CustomTextButton/CustomTextButton';
+import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
 
-class CreateBibliotheque extends React.Component {
+class CreateLibraryContainer extends React.Component {
 
   state = {
     libraryName: '',
@@ -196,4 +196,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateBibliotheque;
+export default CreateLibraryContainer;

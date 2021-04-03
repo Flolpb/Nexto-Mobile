@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import DelayedMessage from './DelayedMessage/DelayedMessage';
-import DirectMessage from './DirectMessage/DirectMessage';
+import DelayedMessageContainer from '../DelayedMessageContainer/DelayedMessageContainer';
+import DirectMessage from '../DirectMessageContainer/DirectMessage';
 import { PermissionsAndroid } from 'react-native';
-import colors from '../../config/colors';
+import colors from '../../../config/colors';
 
 
-class MessageContainer extends React.Component {
+class GlobalMessageContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -54,7 +54,7 @@ class MessageContainer extends React.Component {
         </Tab.Screen>
         <Tab.Screen
           name="Différé">
-          {props => <DelayedMessage {...props} contactID={route.params} />}
+          {props => <DelayedMessageContainer {...props} contactID={route.params} />}
         </Tab.Screen>
       </Tab.Navigator>
     )
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MessageContainer;
+export default GlobalMessageContainer;

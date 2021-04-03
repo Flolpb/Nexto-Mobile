@@ -18,10 +18,10 @@ import colors from '../../../config/colors';
 import Tags from 'react-native-tags';
 import Contacts from 'react-native-contacts';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
-    require('../SendMessage/SendMessage')
+    require('../SendMessage/SendMessageContainer')
 );
 
-class DelayedMessage extends React.Component {
+class DelayedMessageContainer extends React.Component {
     constructor(props) {
         super(props);
         this.readData();
@@ -302,4 +302,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DelayedMessage;
+export default DelayedMessageContainer;

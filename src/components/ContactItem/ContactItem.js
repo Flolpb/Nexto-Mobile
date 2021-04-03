@@ -1,11 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 import React from 'react';
-import colors from '../../../config/colors';
+import colors from '../../config/colors';
 import {connect} from 'react-redux';
 import {Icon} from 'react-native-elements';
 import Interactable from 'react-native-interactable';
-import CustomMediumAvatar from '../../CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
-import favoriteContactReducer from '../../../store/reducers/favoriteContactReducer';
+import CustomMediumAvatar from '../CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
+import favoriteContactReducer from '../../store/reducers/favoriteContactReducer';
 
 class ContactItem extends React.Component {
 

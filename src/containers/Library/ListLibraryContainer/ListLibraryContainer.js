@@ -3,7 +3,7 @@ import {View, StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
 import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import colors from '../../../config/colors';
 
-class ListeBibliotheque extends React.Component {
+class ListLibraryContainer extends React.Component {
 
   createSeparator = () => {
     return (
@@ -135,5 +135,5 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ListeBibliotheque;
+export default ListLibraryContainer;
 

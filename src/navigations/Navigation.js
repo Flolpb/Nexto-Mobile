@@ -2,13 +2,13 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import 'react-native-gesture-handler';
-import {Icon} from 'react-native-elements';
-import ListeMessage from '../components/ListeMessage/ListeMessage';
-import Accueil from '../components/Accueil/Accueil';
-import MessageContainer from '../components/MessageContainer/MessageContainer';
 import colors from '../config/colors';
-import BibliothequeContainer from '../components/BibliothequeContainer/BibliothequeContainer';
-import ListeContactContainer from '../components/ContactContainer/ContactContainer';
+import {Icon} from 'react-native-elements';
+import ListMessageContainer from '../containers/Messages/ListMessageContainer/ListMessageContainer';
+import MainPage from '../containers/MainPage/MainPage';
+import GlobalMessageContainer from '../containers/Messages/GlobalMessageContainer/GlobalMessageContainer';
+import GlobalLibraryContainer from '../containers/Library/GlobalLibraryContainer/GlobalLibraryContainer';
+import GlobalContactContainer from '../containers/Contacts/GlobalContactContainer/GlobalContactContainer';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,7 +19,7 @@ class Navigation extends React.Component{
                 <NavigationContainer>
                     <Tab.Navigator
                       swipeEnabled={false}
-                      initialRouteName="Accueil"
+                      initialRouteName="MainPage"
                       tabBarPosition="bottom"
                       tabBarOptions={{
                         showIcon: true,
@@ -35,8 +35,8 @@ class Navigation extends React.Component{
                         }
                     }} >
                       <Tab.Screen
-                        name="BibliothequeContainer"
-                        component={BibliothequeContainer}
+                        name="GlobalLibraryContainer"
+                        component={GlobalLibraryContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -44,8 +44,8 @@ class Navigation extends React.Component{
                           )
                         }} />
                       <Tab.Screen
-                        name="ListeContact"
-                        component={ListeContactContainer}
+                        name="GlobalContactContainer"
+                        component={GlobalContactContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -53,8 +53,8 @@ class Navigation extends React.Component{
                           )
                       }} />
                       <Tab.Screen
-                        name="Accueil"
-                        component={Accueil}
+                        name="MainPage"
+                        component={MainPage}
                         options={{
                             tabBarColor: colors.white,
                             tabBarIcon: ({color, size}) => (
@@ -62,8 +62,8 @@ class Navigation extends React.Component{
                             )
                         }} />
                       <Tab.Screen
-                        name="ListeMessage"
-                        component={ListeMessage}
+                        name="ListMessageContainer"
+                        component={ListMessageContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -71,8 +71,8 @@ class Navigation extends React.Component{
                           )
                         }} />
                       <Tab.Screen
-                        name="MessageContainer"
-                        component={MessageContainer}
+                        name="GlobalMessageContainer"
+                        component={GlobalMessageContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (

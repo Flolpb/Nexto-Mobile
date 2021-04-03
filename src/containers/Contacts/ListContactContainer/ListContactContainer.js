@@ -11,11 +11,11 @@ import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Contacts from 'react-native-contacts';
 import colors from '../../../config/colors';
-import ContactItem from "../ContactItem/ContactItem"
+import ContactItem from "../../../components/ContactItem/ContactItem"
 import {connect} from 'react-redux';
-import CustomMediumAvatar from '../../CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
+import CustomMediumAvatar from '../../../components/CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
 
-class ListeContact extends React.Component {
+class ListContactContainer extends React.Component {
 
   constructor(props){
     super(props);
@@ -338,4 +338,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps)(ListeContact);
+export default connect(mapStateToProps)(ListContactContainer);

@@ -1,22 +1,22 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import colors from '../../config/colors';
+import colors from '../../../config/colors';
 import {createStackNavigator} from '@react-navigation/stack';
-import ListeBibliotheque from './ListeBibliotheque/ListeBibliotheque';
-import CreateBibliotheque from './CreateBibliotheque/CreateBibliotheque';
+import ListLibraryContainer from '../ListLibraryContainer/ListLibraryContainer';
+import CreateLibraryContainer from '../CreateLibraryContainer/CreateLibraryContainer';
 
-const BibliothequeContainer = () => {
+const GlobalLibraryContainer = () => {
   const Stack = createStackNavigator();
   return(
     <Stack.Navigator
-      initialRouteName="ListeBibliotheque">
+      initialRouteName="ListLibraryContainer">
       <Stack.Screen
         name="ListeBibliotheque"
-        component={ListeBibliotheque}
+        component={ListLibraryContainer}
         options={{ headerShown: false }} />
       <Stack.Screen
         name="CreateBibliotheque"
-        component={CreateBibliotheque}
+        component={CreateLibraryContainer}
         options={{
           title: 'Nouvelle bibliothèque',
           headerStyle: {
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BibliothequeContainer;
+export default GlobalLibraryContainer;

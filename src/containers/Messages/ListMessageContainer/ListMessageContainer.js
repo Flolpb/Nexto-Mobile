@@ -4,13 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
 
-class ListeMessage extends React.Component {
+class ListMessageContainer extends React.Component {
     constructor(props) {
         super(props);
         this.readData().then();
         this.onStart().then();
     }
-
 
     state = {
         messages: [],
@@ -236,4 +235,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ListeMessage;
+export default ListMessageContainer;

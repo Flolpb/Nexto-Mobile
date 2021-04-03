@@ -3,7 +3,7 @@ import {Button, Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import colors from '../../config/colors';
 
 
-function Accueil({navigation}) {
+function MainPage({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Accueil;
+export default MainPage;

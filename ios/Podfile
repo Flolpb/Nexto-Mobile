@@ -18,6 +18,8 @@ target 'AndroidProject' do
 
   pod 'Interactable', :path => '../node_modules/react-native-interactable'
 
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'AndroidProjectTests' do
     inherit! :complete
     # Pods for testing

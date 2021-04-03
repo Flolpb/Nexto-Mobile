@@ -17,6 +17,8 @@ import {Icon} from 'react-native-elements';
 import colors from '../../../config/colors';
 import Tags from 'react-native-tags';
 import Contacts from 'react-native-contacts';
+import Modal from 'react-native-modalbox';
+import { Keyboard } from 'react-native';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessageContainer')
 );
@@ -45,6 +47,7 @@ class DelayedMessageContainer extends React.Component {
         displayTime: false,
         messages: [],
         isLoaded: false,
+        toggleSwipeToClose: true,
     };
 
     getContact = async () => {
@@ -58,7 +61,7 @@ class DelayedMessageContainer extends React.Component {
                 });
             });
         }
-    }
+    };
 
     readData = async () => {
         try{
@@ -79,25 +82,47 @@ class DelayedMessageContainer extends React.Component {
     };
 
     verifyPhoneNumbers = () => {
-        console.log(this.state.phoneNumbers)
+        console.log(this.state.phoneNumbers);
+        console.log(this.state.message);
         if (this.state.phoneNumbers.length && this.state.message) {
             this.state.phoneNumbers.map(phoneNumber => {
-                // Test si le numéro de téléphone est bien composé seulement de numéros
-                let isnum = /^\d+$/.test(phoneNumber);
-                if (isnum) {
-                    this.programSms(phoneNumber)
+                //test si le premier caractère est un "+"
+                const firstCaractere = phoneNumber.slice(0, 1);
+                if(firstCaractere === "+"){
+                    let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
+                    if(isNaN(lastCaractere)){
+                        this.programSms(phoneNumber).then();
+                    }
+                    else{
+                        alert("Mauvais format pour le numéro de tel: " + lastCaractere);
+                    }
+
                 }
+                // Test si le numéro de téléphone est bien composé seulement de numéros
+                else{
+                    let isNum = /^\d+$/.test(phoneNumber);
+                    if (isNum) {
+                    this.programSms(phoneNumber).then();
+                    }else{
+                        alert("Mauvais format pour le numéro de téléphone: " + phoneNumber);
+                    }
+                }
+
+
             })
+        }else{
+            console.log(this.state.phoneNumbers + " || " + this.state.message);
         }
-    }
+    };
 
     programSms = async (phoneNumber) => {
         try{
             let value = {};
             value.date = this.state.date;
             value.message = this.state.message;
+            const theNowValue = await AsyncStorage.getItem('message');
+            const joined = JSON.parse(theNowValue);
             value.contact = phoneNumber;
-            let joined = this.state.messages;
             joined.push(value);
             const jsonValue = JSON.stringify(joined);
             await AsyncStorage.setItem('message', jsonValue);
@@ -110,7 +135,10 @@ class DelayedMessageContainer extends React.Component {
                 messages: []
             });
             this.readData();
-            alert('Message envoyé !');
+            Keyboard.dismiss();
+            //alert('Message programmé !');
+            this.refs.modal1.open();
+
         }catch (e) {
             console.log(e);
         }
@@ -120,7 +148,7 @@ class DelayedMessageContainer extends React.Component {
         this.setState({
             [key]: value
         })
-    }
+    };
 
     setDate = (event, date) => {
         if(date != null){
@@ -140,7 +168,11 @@ class DelayedMessageContainer extends React.Component {
         this.setState({
             phoneNumbers: tags
         })
-    }
+    };
+
+    openModal = () => {
+      this.refs.modal1.open();
+    };
 
     renderComponent = () => {
         const { date } = this.state;
@@ -232,13 +264,18 @@ class DelayedMessageContainer extends React.Component {
                     mode="time"
                     onChange={this.setTime}/>
               }
+
+                <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
+                    <Text style={styles.modalText}>Message programmé !</Text>
+                </Modal>
           </View>
         );
-    }
+    };
 
     render() {
         // Si on charge depuis la liste des contacts, on diffère le rendu du composant (car problème avec la librarie Tags)
-        return this.state.isLoaded ? this.renderComponent() : null;
+        return this.state.isLoaded ? this.renderComponent() : null
+
     }
 }
 
@@ -246,7 +283,7 @@ class DelayedMessageContainer extends React.Component {
 const styles = StyleSheet.create({
     subContainer: {
         paddingHorizontal: 30,
-        marginVertical: 20,
+        height: "100%"
     },
     image: {
         flex: 1,
@@ -299,6 +336,21 @@ const styles = StyleSheet.create({
     datePickerStyle: {
         width: 200,
         marginTop: 20,
+    },
+    closeN: {
+
+    },
+    modal1: {
+        backgroundColor: colors.purple,
+        height: 80,
+        justifyContent: 'center',
+        borderWidth: 2,
+        borderStyle: 'solid',
+    },
+    modalText: {
+        color: colors.white,
+        fontSize: 32,
+        textAlign: 'center'
     },
 });
 

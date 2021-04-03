@@ -4,12 +4,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
 
-class ListMessageContainer extends React.Component {
+import ContactItem from '../ListeContact/ContactItem';
+import ActionButton from 'react-native-action-button';
+import colors from '../../config/colors';
+import {Icon} from 'react-native-elements';
+import PushNotification from 'react-native-push-notification';
+import {showNotification, handleScheduleNotification, delayedMessageNotification} from '../../notification.android';
+
+class ListeMessage extends React.Component {
     constructor(props) {
         super(props);
         this.readData().then();
         this.onStart().then();
     }
+
 
     state = {
         messages: [],
@@ -27,6 +35,7 @@ class ListMessageContainer extends React.Component {
         }
     };
 
+
     //Storer un message en JSON
     storeData = async (value) => {
         console.log(value);
@@ -40,6 +49,9 @@ class ListMessageContainer extends React.Component {
             console.log(e);
         }
     };
+
+
+
 
     //Messages Programmés
     onStart = async () => {
@@ -75,7 +87,7 @@ class ListMessageContainer extends React.Component {
                                 alert('failed with this error: '+ fail);
                             },
                             (success) => {
-                                console.log('SMS sent successfully');
+                                delayedMessageNotification(this.state.messages[i].message, this.state.messages[i].contact);
                             },
                         );
                     }
@@ -133,7 +145,7 @@ class ListMessageContainer extends React.Component {
         const { navigate } = this.props.navigation;
         this.state.messages.map(message => {
             message.status !== 'send' ? messages.push(message) : messagesSend.push(message);
-        })
+        });
 
         return(
           <>
@@ -145,7 +157,7 @@ class ListMessageContainer extends React.Component {
                   { messages.length ? (
                     <FlatList
                       data={messages}
-                      keyExtractor={(item, index) => index + 'SEND'}
+                      keyExtractor={(item, index) => index}
                       renderItem={({item, index}) => (
                         <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
                             <Text>{ item.message }</Text>
@@ -168,7 +180,7 @@ class ListMessageContainer extends React.Component {
                   { messagesSend.length ? (
                     <FlatList
                       data={messagesSend}
-                      keyExtractor={(item, index) => index + 'SENT'}
+                      keyExtractor={(item, index) => index}
                       renderItem={({item, index}) => (
                         <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
                             <Text>{ item.message }</Text>
@@ -235,4 +247,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ListMessageContainer;
+export default ListeMessage;

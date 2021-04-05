@@ -19,6 +19,9 @@ import Tags from 'react-native-tags';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomIconButton from '../../../components/CustomButtons/CustomIconButton/CustomIconButton';
+import CustomTextButton from '../../../components/CustomButtons/CustomTextButton/CustomTextButton';
 AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessageContainer')
 );
@@ -184,11 +187,7 @@ class DelayedMessageContainer extends React.Component {
               <Image
                 source={require('../../../assets/images/Illustration_mobile.png')}
                 style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
-              <Text
-                style={styles.title}>
-                  Envoi d'un message en différé
-              </Text>
-
+              <CustomLabel text="Envoi d'un message en différé" />
               <Tags
                 initialText=""
                 initialTags={ this.state.phoneNumbers }
@@ -206,21 +205,17 @@ class DelayedMessageContainer extends React.Component {
                 )}/>
 
               <View style={{ marginBottom: 10 }}>
-                  <Text style={[ styles.title, { fontSize: 20 }]}> Date d'envoi : {dateString[0]} </Text>
-                  <Text style={[ styles.title, { fontSize: 20 }]}> Heure d'envoi : {dateString[1]} </Text>
+                  <CustomLabel text={`Date d'envoi : ${dateString[0]}`} position="left" size={20} />
+                  <CustomLabel text={`Heure d'envoi : ${dateString[1]}`} position="left" size={20} />
               </View>
 
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <TouchableOpacity
-                    style={[styles.field, { flexDirection: 'column', width: '45%',}]}
-                    onPress={() => { this.setKeyValue('displayDate', true) }}>
-                      <Text style={[styles.input, { textAlign: 'center' }]}> Date </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.field, { flexDirection: 'column', width: '45%',}]}
-                    onPress={() => { this.setKeyValue('displayTime', true) }}>
-                      <Text style={[styles.input, { textAlign: 'center' }]}> Heure </Text>
-                  </TouchableOpacity>
+                  <View style={{width: '45%'}}>
+                      <CustomTextButton title="Date" color={colors.black} background="#E6E4E2" size={20} onPressButton={() => this.setKeyValue('displayDate', true)} />
+                  </View>
+                  <View style={{width: '45%'}}>
+                      <CustomTextButton title="Heure" color={colors.black} background="#E6E4E2" size={20} onPressButton={() => this.setKeyValue('displayTime', true)} />
+                  </View>
               </View>
 
               <View style={[styles.field, styles.input]}>
@@ -230,11 +225,7 @@ class DelayedMessageContainer extends React.Component {
                     value={this.state.message}
                     onChangeText={(text) => this.setKeyValue('message', text)}
                     placeholder="Message ..."/>
-                  <TouchableOpacity
-                    style={styles.sendButton}
-                    onPress={() => { this.verifyPhoneNumbers() }}>
-                      <Icon name="send" color={colors.black} size={20}/>
-                  </TouchableOpacity>
+                <CustomIconButton icon={{ type: 'material', name: 'send' }} onPressButton={this.verifyPhoneNumbers} />
               </View>
 
               {this.state.displayDate &&
@@ -323,22 +314,9 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         paddingHorizontal: 12,
     },
-    sendButton: {
-        flex: 1,
-        alignItems:'center',
-        justifyContent:'center',
-    },
-    title: {
-        fontSize: 25,
-        marginVertical: 10,
-        fontWeight: 'bold'
-    },
     datePickerStyle: {
         width: 200,
         marginTop: 20,
-    },
-    closeN: {
-
     },
     modal1: {
         backgroundColor: colors.purple,

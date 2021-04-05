@@ -17,6 +17,8 @@ import Tags from 'react-native-tags';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomIconButton from '../../../components/CustomButtons/CustomIconButton/CustomIconButton';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -169,10 +171,7 @@ class DirectMessage extends React.Component {
         <Image
           source={require('../../../assets/images/Illustration_mobile.png')}
           style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
-        <Text
-          style={ styles.title }>
-          Envoi d'un message instantané
-        </Text>
+        <CustomLabel text="Envoi d'un message instantané" />
         <Tags
           initialText=""
           initialTags={ this.state.phoneNumbers }
@@ -196,18 +195,13 @@ class DirectMessage extends React.Component {
             value={this.state.message}
             onChangeText={(message) => this.setKeyValue('message', message)}
             placeholder="Message ..." />
-          <TouchableOpacity
-            style={ styles.sendButton }
-            onPress={ ()=>{ this.sendSms() }}>
-            <Icon name="send" color={colors.black} size={20} />
-          </TouchableOpacity>
+          <CustomIconButton icon={{ type: 'material', name: 'send' }} onPressButton={this.sendSms} />
         </View>
-        <View>
-          <TouchableOpacity
-          onPress={() => { this.openCameraPicker() }}>
-            <Icon name="camera" color={colors.favorites} size={50}/>
-          </TouchableOpacity>
+
+        <View style={{flex: 0.3}}>
+          <CustomIconButton icon={{ type: 'material', name: 'camera' }} color={colors.favorites} size={50} onPressButton={this.openCameraPicker} />
         </View>
+
 
         <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
           <Text style={styles.modalText}>Message envoyé !</Text>
@@ -266,17 +260,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginVertical: 0,
     height: '100%',
-  },
-  sendButton: {
-    flex: 1,
-    alignItems:'center',
-    justifyContent:'center',
-  },
-  title: {
-    fontSize: 25,
-    marginVertical: 10,
-    textAlign: 'center',
-    fontWeight: 'bold'
   },
   modal1: {
     backgroundColor: colors.purple,

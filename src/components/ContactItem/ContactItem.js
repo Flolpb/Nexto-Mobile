@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import {Icon} from 'react-native-elements';
 import Interactable from 'react-native-interactable';
 import CustomMediumAvatar from '../CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
-import favoriteContactReducer from '../../store/reducers/favoriteContactReducer';
 
 class ContactItem extends React.Component {
 

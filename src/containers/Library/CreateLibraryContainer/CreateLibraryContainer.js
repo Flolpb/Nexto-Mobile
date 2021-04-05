@@ -10,6 +10,10 @@ import { Avatar } from 'react-native-elements';
 import NewMessageContainer from '../NewMessageContainer/NewMessageContainer';
 import CustomTextButton from '../../../components/CustomButtons/CustomTextButton/CustomTextButton';
 import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
+import CustomGradientTextButton
+  from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
+import CustomMediumGradientAvatar
+  from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 
 class CreateLibraryContainer extends React.Component {
 
@@ -112,10 +116,11 @@ class CreateLibraryContainer extends React.Component {
                     style={styles.textInput}
                     multiline={true}
                     value={this.state.libraryName}
+                    placeholderTextColor={colors.grey}
                     onChangeText={(text) => this.setKeyValue('libraryName', text)}
                     placeholder="Nom de la bibliothèque"/>
                 </View>
-                <CustomTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
+                <CustomGradientTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
               </View>
             </>
           }
@@ -133,14 +138,7 @@ class CreateLibraryContainer extends React.Component {
           ListFooterComponent={
             <View style={styles.subContainer}>
               <View style={styles.button}>
-                <Avatar
-                  size="medium"
-                  rounded
-                  onPress={() => { this.addMessageToLibrary() }}
-                  icon={{ name: 'add', type: 'material' }}
-                  overlayContainerStyle={styles.avatar}
-                  activeOpacity={0.7}
-                />
+                <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={this.addMessageToLibrary} />
               </View>
             </View>
           }
@@ -163,17 +161,9 @@ const styles = StyleSheet.create({
   field: {
     flexDirection:'row',
     borderWidth: 1,
-    borderColor: '#E6E4E2',
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    backgroundColor: '#E6E4E2',
+    borderColor: colors.lightgrey,
+    borderRadius: 20,
+    backgroundColor: colors.lightgrey,
     fontSize: 20,
     marginVertical: 10,
     paddingHorizontal: 20,

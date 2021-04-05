@@ -2,8 +2,13 @@ import React from 'react';
 import {View, StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
 import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import colors from '../../../config/colors';
+import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar';
 
 class ListLibraryContainer extends React.Component {
+
+  state = {
+    search: '',
+  }
 
   createSeparator = () => {
     return (
@@ -34,20 +39,13 @@ class ListLibraryContainer extends React.Component {
 
   createSearchBar = () => {
     return (
-      <SearchBar
-        inputStyle={ styles.searchBar }
-        searchIcon={{ name: 'search', color: colors.black }}
-        clearIcon={{ name: 'clear', color: colors.black }}
-        inputContainerStyle={ [styles.searchBar, styles.searchBarInput] }
-        containerStyle={ styles.searchBar }
-        placeholderTextColor={ colors.black }
-        selectionColor={ colors.black }
-        // value = { this.state.search }
-        placeholder="Rechercher ..."
-        // onChangeText={(text) => { this.searchFilter(text) }}
-      />
+      <CustomSearchBar value={this.state.search} onSearch={this.searchFilter} />
     )
   };
+
+  searchFilter = () => {
+    return '';
+  }
 
   render() {
     const { navigation } = this.props;

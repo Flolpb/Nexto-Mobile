@@ -32,12 +32,4 @@ const GlobalLibraryContainer = () => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.backGrey,
-    flexGrow: 1
-  },
-});
-
 export default GlobalLibraryContainer;

@@ -88,6 +88,8 @@ class NewMessageContainer extends React.Component {
               onEdit ? (
                   <TextInput
                     style={styles.textInput}
+                    placeholder="Votre message ..."
+                    placeholderTextColor={colors.grey}
                     multiline={true}
                     value={item}
                     onBlur={() => this.setKeyValue('onEdit', false)}
@@ -97,6 +99,8 @@ class NewMessageContainer extends React.Component {
                 <TextInput
                   onFocus={() => this.setKeyValue('onEdit', true)}
                   style={styles.textInput}
+                  placeholder="Votre message ..."
+                  placeholderTextColor={colors.grey}
                   multiline={true}
                 >
                   <Text>
@@ -118,17 +122,9 @@ const styles = StyleSheet.create({
   field: {
     flexDirection:'row',
     borderWidth: 1,
-    borderColor: '#E6E4E2',
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    backgroundColor: '#E6E4E2'
+    borderColor: colors.lightgrey,
+    borderRadius: 20,
+    backgroundColor: colors.lightgrey,
   },
   input: {
     fontSize: 20,

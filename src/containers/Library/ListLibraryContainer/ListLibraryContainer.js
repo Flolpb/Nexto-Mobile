@@ -3,6 +3,9 @@ import {View, StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
 import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import colors from '../../../config/colors';
 import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar';
+import CustomMediumGradientAvatar
+  from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import fonts from '../../../config/fonts';
 
 class ListLibraryContainer extends React.Component {
 
@@ -67,14 +70,7 @@ class ListLibraryContainer extends React.Component {
               <Text> Text </Text>
             )}/>
           <View style={ styles.createButton }>
-            <Avatar
-              size="medium"
-              rounded
-              onPress={() => { navigation.navigate("CreateBibliotheque") }}
-              icon={{ name: 'add', type: 'material' }}
-              overlayContainerStyle={{ backgroundColor: colors.black }}
-              activeOpacity={0.7}
-            />
+            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
           </View>
         </SafeAreaView>
       </>
@@ -109,6 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: colors.black,
     marginTop: 20,
+    fontFamily: fonts.medium,
   },
   searchBar: {
     backgroundColor: colors.transparent,

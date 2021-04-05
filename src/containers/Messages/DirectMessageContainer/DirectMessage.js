@@ -19,6 +19,13 @@ import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import CustomIconButton from '../../../components/CustomButtons/CustomIconButton/CustomIconButton';
+import fonts from '../../../config/fonts';
+import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
+import CustomTextInputWithButton
+  from '../../../components/CustomTextInputs/CustomTextInputWithButton/CustomTextInputWithButton';
+import CustomMediumGradientAvatar
+  from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import LinearGradient from 'react-native-linear-gradient';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -166,42 +173,44 @@ class DirectMessage extends React.Component {
 
   renderComponent = () => {
     return(
-      <View
-        style={ styles.subContainer }>
-        <Image
-          source={require('../../../assets/images/Illustration_mobile.png')}
-          style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
-        <CustomLabel text="Envoi d'un message instantané" />
-        <Tags
-          initialText=""
-          initialTags={ this.state.phoneNumbers }
-          textInputProps={{
-            placeholder: "Saisissez un numéro de téléphone ..."
-          }}
-          onChangeTags={tags => this.setTags(tags)}
-          inputContainerStyle={{ backgroundColor: 'rgba(0,0,0,0)', marginVertical: 10 }}
-          containerStyle={[styles.field, styles.tagContainer]}
-          inputStyle={{ fontSize: 15 }}
-          renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
-            <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
-              <Text style={styles.tag}>{tag}</Text>
-            </TouchableOpacity>
-          )}/>
-
-        <View style={[styles.field, styles.input]}>
-          <TextInput
-            style={{ flex: 4, fontSize: 15 }}
-            multiline={true}
-            value={this.state.message}
-            onChangeText={(message) => this.setKeyValue('message', message)}
-            placeholder="Message ..." />
-          <CustomIconButton icon={{ type: 'material', name: 'send' }} onPressButton={this.sendSms} />
+      <View style={styles.container}>
+        <View style={styles.subContainer}>
+          <CustomLabel text="1. Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16} fontType="bold" />
+          <Tags
+            initialText=""
+            initialTags={this.state.phoneNumbers}
+            textInputProps={{
+              placeholder: "Numéro(s) de téléphone ..."
+            }}
+            onChangeTags={tags => this.setTags(tags)}
+            inputContainerStyle={{ backgroundColor: 'rgba(0,0,0,0)', marginVertical: 10 }}
+            containerStyle={[styles.field, styles.tagContainer]}
+            inputStyle={styles.tagInput}
+            renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+              <LinearGradient
+                colors={[colors.lightpurple, colors.purple]}
+                start={{x: 0.0, y: 1.0}} end={{x: 1.0, y: 1.0}}
+                style={styles.tagStructure}>
+                <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
+                  <Text style={styles.tag}>{tag}</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            )}/>
         </View>
 
-        <View style={{flex: 0.3}}>
-          <CustomIconButton icon={{ type: 'material', name: 'camera' }} color={colors.favorites} size={50} onPressButton={this.openCameraPicker} />
+
+        <View style={styles.subContainer}>
+          <CustomLabel text="2. Saisir le message à envoyer" spaceBetween={3} position="left" size={16} fontType="bold" />
+          <CustomTextInputWithButton
+            value={this.state.message} onChangeTextInput={(message) => this.setKeyValue('message', message)}
+            icon={{ type: 'material', name: 'send' }} onPressButton={this.sendSms} placeholder="Votre message ..." />
         </View>
 
+        <View style={styles.subContainer}>
+          <View style={styles.button}>
+            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'camera' }}} onPressAvatar={this.openCameraPicker} />
+          </View>
+        </View>
 
         <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
           <Text style={styles.modalText}>Message envoyé !</Text>
@@ -218,6 +227,16 @@ class DirectMessage extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.backGrey,
+    flexGrow: 1,
+    justifyContent: 'center'
+  },
+  subContainer: {
+    paddingHorizontal: 30,
+    marginVertical: 5,
+  },
   image: {
     flex: 1,
     resizeMode: 'contain',
@@ -227,17 +246,9 @@ const styles = StyleSheet.create({
   field: {
     flexDirection:'row',
     borderWidth: 1,
-    borderColor: '#E6E4E2',
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    backgroundColor: '#E6E4E2'
+    borderColor: colors.lightgrey,
+    borderRadius: 20,
+    backgroundColor: colors.lightgrey,
   },
   input: {
     fontSize: 20,
@@ -248,30 +259,37 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 10,
   },
-  tag: {
-    borderWidth: 1,
+  tagStructure: {
+    flexDirection:'row',
     borderRadius: 30,
-    marginVertical: 5,
-    marginRight: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 12,
+    fontSize: 20,
+    marginVertical: 10,
+    paddingHorizontal: 20,
+    marginRight: 5
   },
-  subContainer: {
-    paddingHorizontal: 30,
-    marginVertical: 0,
-    height: '100%',
+  tag: {
+    marginVertical: 5,
+    paddingVertical: 5,
+    color: colors.white,
+    fontFamily: fonts.medium,
+  },
+  tagInput: {
+    fontSize: 15,
+    fontFamily: fonts.light,
   },
   modal1: {
     backgroundColor: colors.purple,
     height: 80,
     justifyContent: 'center',
-    borderWidth: 2,
-    borderStyle: 'solid',
   },
   modalText: {
     color: colors.white,
     fontSize: 32,
     textAlign: 'center'
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent:'center',
   },
 });
 export default DirectMessage;

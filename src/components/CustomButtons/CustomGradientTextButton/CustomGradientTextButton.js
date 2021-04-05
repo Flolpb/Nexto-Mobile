@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../config/colors';
+import fonts from '../../../config/fonts';
 
 const CustomGradientTextButton = ({title, textColor = colors.white, gradientColors = [colors.lightpurple, colors.purple], size = 15, onPressButton = () => {}}) => (
   <LinearGradient
@@ -12,7 +13,7 @@ const CustomGradientTextButton = ({title, textColor = colors.white, gradientColo
     <TouchableOpacity
       style={styles.button}
       onPress={onPressButton}>
-      <Text style={{ color: textColor, fontSize: size }}> {title} </Text>
+      <Text style={[styles.text, { color: textColor, fontSize: size }]}> {title} </Text>
     </TouchableOpacity>
   </LinearGradient>
 )
@@ -31,6 +32,9 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     paddingVertical: 15,
   },
+  text: {
+    fontFamily: fonts.medium
+  }
 });
 
 export default CustomGradientTextButton;

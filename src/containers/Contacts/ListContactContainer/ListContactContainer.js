@@ -15,6 +15,9 @@ import ContactItem from "../../../components/ContactItem/ContactItem"
 import {connect} from 'react-redux';
 import CustomMediumAvatar from '../../../components/CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
 import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar';
+import CustomMediumGradientAvatar
+  from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import fonts from '../../../config/fonts';
 
 class ListContactContainer extends React.Component {
 
@@ -231,7 +234,7 @@ class ListContactContainer extends React.Component {
                   modContact={this.modifyContact}/>
             )}/>
           <View style={ styles.createButton }>
-            <CustomMediumAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={this.newContact} />
+            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={this.newContact} />
           </View>
         </SafeAreaView>
       </>
@@ -264,6 +267,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: colors.black,
     marginTop: 20,
+    fontFamily: fonts.medium,
   },
   addPerson: {
     position: 'absolute',
@@ -289,7 +293,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   avatarBackgroundFav: {
-    backgroundColor: colors.favorites,
+    backgroundColor: colors.lightorange,
   },
   createButton: {
     position: 'absolute',

@@ -5,6 +5,7 @@ import DelayedMessageContainer from '../DelayedMessageContainer/DelayedMessageCo
 import DirectMessage from '../DirectMessageContainer/DirectMessage';
 import { PermissionsAndroid } from 'react-native';
 import colors from '../../../config/colors';
+import fonts from '../../../config/fonts';
 
 
 class GlobalMessageContainer extends React.Component {
@@ -37,7 +38,10 @@ class GlobalMessageContainer extends React.Component {
       <Tab.Navigator
         tabBarOptions={{
           style: {
-            backgroundColor: colors.purple
+            backgroundColor: colors.purple,
+          },
+          labelStyle: {
+            fontFamily: fonts.medium,
           },
           activeTintColor: colors.white,
           inactiveTintColor: colors.inactiveBlack,

@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import GlobalMessageContainer from '../../Messages/GlobalMessageContainer/GlobalMessageContainer';
 import ListeContact from '../ListContactContainer/ListContactContainer';
 import colors from '../../../config/colors';
+import fonts from '../../../config/fonts';
 
 const GlobalContactContainer = () => {
   const navigation = useNavigation();
@@ -28,7 +29,7 @@ const GlobalContactContainer = () => {
           },
           headerTintColor: colors.white,
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontFamily: fonts.bold,
             fontSize: 20,
           }
         }} />

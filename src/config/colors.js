@@ -12,5 +12,4 @@ export default {
   grey: "#696969",
   lightgrey: "#f2f2f2",
   green: "#7FFF00",
-  favorites: "#F8AD13",
 }

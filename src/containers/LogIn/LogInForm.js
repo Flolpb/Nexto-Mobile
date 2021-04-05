@@ -1,16 +1,13 @@
-import React, {Component, useState} from 'react'
+import React from 'react'
 import {
-    Button,
     StyleSheet,
-    TextInput,
     View,
-    Text,
-    TouchableOpacity,
     Image,
-    ImageBackground,
-    Dimensions,
+    Dimensions, Text,
 } from 'react-native';
 import colors from '../../config/colors';
+import CustomGradientTextButton from '../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
+import CustomTextInput from '../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 
 class LogInForm extends React.Component{
 
@@ -34,52 +31,38 @@ class LogInForm extends React.Component{
     render(){
 
         return(
-          <ImageBackground
-            style={{ width: Dimensions.get('window').width, }}
-            imageStyle={{ opacity: 0.80 }}
-            source={require('../../assets/images/fond.png')}>
-            <View style={styles.main_container}>
-                <View style={styles.imageContainer}>
-                    <Text style={ styles.titleContainer }>
-                        <Text style={[styles.title, { fontWeight: 'bold', fontSize: 80 }]}>N</Text>
-                        <Text style={styles.title}>exto</Text>
-                    </Text>
-                </View>
-
+          // <ImageBackground
+          //   style={{ width: Dimensions.get('window').width, }}
+          //   imageStyle={{ opacity: 0.80 }}
+          //   source={require('../../assets/images/fond.png')}>
+            <View style={styles.mainContainer}>
                 <View style={styles.imageContainer}>
                     <Image
-                      source={require('../../assets/images/logo.png')}
+                      source={require('../../assets/images/logov2.png')}
                       style={[styles.image, { width: Dimensions.get('window').width - 50 }]} />
                 </View>
 
-                <View style={styles.form_container}>
-                    <TextInput
-                        style={[styles.formShape, styles.formInput, {letterSpacing: 1}]}
-                        placeholder="Identifiant"
-                        placeholderTextColor={ colors.black }
-                        onChangeText={text => this.handleChangeUsername(text)}
-                        defaultValue={this.state.username}/>
-                    <TextInput
-                        style={[styles.formShape, styles.formInput, {letterSpacing: 0}]}
-                        textContentType='password'
-                        secureTextEntry={true}
-                        placeholder="Mot de passe"
-                        placeholderTextColor={ colors.black }
-                        onChangeText={text =>this.handleChangePassword(text)}
-                        defaultValue={this.state.password}/>
-                    <TouchableOpacity
-                        style={[styles.formShape, styles.formButton]}
-                        onPress={() => {this.props.onLogIn(this.state.username)}}>
-                        <Text style={styles.formButtonText}>Se connecter</Text>
-                    </TouchableOpacity>
+                <View style={styles.subContainer}>
+                    <CustomTextInput value={this.state.username} placeholder="Identifiant" isMultiline="false" onChangeTextInput={this.handleChangeUsername} />
+                    <CustomTextInput value={this.state.password} placeholder="Mot de passe" isMultiline="false" onChangeTextInput={this.handleChangePassword}
+                                     isPassword={this.state.password ? 'true' : 'false'} />
+                    <View style={{marginVertical: 20}}>
+                        <CustomGradientTextButton title="Connexion" onPressButton={() => this.props.onLogIn(this.state.username)} />
+                    </View>
                 </View>
             </View>
-          </ImageBackground>
+          // </ImageBackground>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        flexGrow: 1,
+        justifyContent: 'space-evenly',
+        backgroundColor: colors.backGrey,
+    },
     imageContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -89,52 +72,10 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'contain',
     },
-    titleContainer: {
-        position: 'absolute',
-        paddingBottom: 25
-    },
-    title: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 70,
-    },
-    formShape: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 40,
-        paddingVertical: 13,
-        elevation: 8,
-    },
-    formInput: {
-        textAlign: 'center',
-        backgroundColor: colors.white,
-        color: colors.backGrey,
-        width: '100%',
-        fontSize: 18,
-
-    },
-    formButton: {
-        backgroundColor: colors.purple,
-        width: '75%',
-    },
-    formButtonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-    form_container: {
-        width: '80%',
-        height: '45%',
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        elevation: 5,
-    },
-    main_container: {
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
+    subContainer: {
+        flex: 1,
+        paddingHorizontal: 30,
+        marginVertical: 20,
     },
 });
 

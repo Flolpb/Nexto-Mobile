@@ -2,12 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import colors from '../../config/colors';
 import {SearchBar} from 'react-native-elements';
-
-class LinearGradient extends React.Component<{ colors: string[], start: { x: number, y: number }, style: { alignItems: string, width: number, justifyContent: string, height: number }, end: { x: number, y: number }, children: React.ReactNode }> {
-  render() {
-    return null;
-  }
-}
+import fonts from '../../config/fonts';
 
 const CustomSearchBar = ({value, onSearch}) => (
     <SearchBar
@@ -16,10 +11,10 @@ const CustomSearchBar = ({value, onSearch}) => (
       clearIcon={{ name: 'clear', color: colors.black }}
       inputContainerStyle={ [styles.searchBar, styles.searchBarInput] }
       containerStyle={ styles.searchBar }
-      placeholderTextColor={ colors.black }
       selectionColor={ colors.black }
       value={value}
       placeholder="Rechercher ..."
+      placeholderTextColor={ colors.inactiveBlack }
       onChangeText={(text) => { onSearch(text) }}
     />
 )
@@ -31,15 +26,14 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: colors.transparent,
     paddingHorizontal: 10,
-    color: colors.black
+    color: colors.black,
+    fontFamily: fonts.mediumItalic,
   },
   searchBarInput: {
-    backgroundColor: colors.backGrey,
+    backgroundColor: colors.lightgrey,
     borderRadius: 15,
     margin: 5,
-    borderWidth: 0.3,
-    borderBottomWidth: 0.3,
-    borderColor: colors.purple,
+
   },
 })
 

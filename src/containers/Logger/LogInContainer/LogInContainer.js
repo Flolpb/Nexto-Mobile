@@ -5,11 +5,12 @@ import {
     Image,
     Dimensions, Text,
 } from 'react-native';
-import colors from '../../config/colors';
-import CustomGradientTextButton from '../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
-import CustomTextInput from '../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
+import colors from '../../../config/colors';
+import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
+import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 
-class LogInForm extends React.Component{
+class LogInContainer extends React.Component{
 
     constructor(props)
     {
@@ -20,16 +21,14 @@ class LogInForm extends React.Component{
         }
     }
 
-    handleChangeUsername = (userName) => {
-        this.setState({username: userName})
-    }
-
-    handleChangePassword = (passWord) => {
-        this.setState({password: passWord})
+    setKeyValue = (key, value) => {
+        this.setState({
+            [key]: value,
+        });
     }
 
     render(){
-
+        const { navigation } = this.props;
         return(
           // <ImageBackground
           //   style={{ width: Dimensions.get('window').width, }}
@@ -38,17 +37,29 @@ class LogInForm extends React.Component{
             <View style={styles.mainContainer}>
                 <View style={styles.imageContainer}>
                     <Image
-                      source={require('../../assets/images/logov2.png')}
+                      source={require('../../../assets/images/logov2.png')}
                       style={[styles.image, { width: Dimensions.get('window').width - 50 }]} />
                 </View>
 
                 <View style={styles.subContainer}>
-                    <CustomTextInput value={this.state.username} placeholder="Identifiant" isMultiline="false" onChangeTextInput={this.handleChangeUsername} />
-                    <CustomTextInput value={this.state.password} placeholder="Mot de passe" isMultiline="false" onChangeTextInput={this.handleChangePassword}
-                                     isPassword={this.state.password ? 'true' : 'false'} />
-                    <View style={{marginVertical: 20}}>
+                    <CustomTextInput value={this.state.username} placeholder="Identifiant" isMultiline="false"
+                                     onChangeTextInput={(text) => this.setKeyValue('username', text)} />
+
+                    <CustomTextInput value={this.state.mail} placeholder="Adresse-mail" isMultiline="false"
+                                     onChangeTextInput={(text) => this.setKeyValue('mail', text)} />
+
+                    <View style={{marginTop: 20}}>
                         <CustomGradientTextButton title="Connexion" onPressButton={() => this.props.onLogIn(this.state.username)} />
                     </View>
+
+                    <CustomLabel
+                      text="Vous n’avez pas de compte ? Inscrivez-vous"
+                      fontType="light"
+                      size={16}
+                      additionalStyle={{
+                          fontStyle: 'italic', textDecorationLine: 'underline'
+                      }}
+                      onPressLabel={() => navigation.navigate('NewAccountContainer')} />
                 </View>
             </View>
           // </ImageBackground>
@@ -79,4 +90,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LogInForm
+export default LogInContainer

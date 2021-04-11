@@ -84,7 +84,6 @@ class Navigation extends React.Component{
                         }} />
                       <Tab.Screen
                         name="GlobalMessageContainer"
-
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (

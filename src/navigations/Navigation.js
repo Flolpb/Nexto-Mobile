@@ -13,6 +13,17 @@ import GlobalContactContainer from '../containers/Contacts/GlobalContactContaine
 const Tab = createMaterialTopTabNavigator();
 
 class Navigation extends React.Component{
+
+    state = {
+      tabHeight: 50,
+    }
+
+    setTabHeight = (value) => {
+      this.setState({
+        tabHeight: value,
+      })
+    }
+
     render(){
         return(
             <>
@@ -31,7 +42,8 @@ class Navigation extends React.Component{
                           borderBottomWidth: 2,
                         },
                         style: {
-                          backgroundColor: colors.purple
+                          backgroundColor: colors.purple,
+                          height: this.state.tabHeight,
                         }
                     }} >
                       <Tab.Screen
@@ -72,14 +84,16 @@ class Navigation extends React.Component{
                         }} />
                       <Tab.Screen
                         name="GlobalMessageContainer"
-                        component={GlobalMessageContainer}
+
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
                             <Icon name="message" color={color} size={size} />
                           )
                         }}
-                      />
+                      >
+                        {props => <GlobalMessageContainer {...props} setTabHeight={this.setTabHeight} /> }
+                      </Tab.Screen>
                     </Tab.Navigator>
                 </NavigationContainer>
             </>

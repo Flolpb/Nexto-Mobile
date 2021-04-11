@@ -34,6 +34,7 @@ class GlobalMessageContainer extends React.Component {
   render() {
     const { route } = this.props
     const Tab = createMaterialTopTabNavigator();
+    console.log(this.props.hideTabNavigator)
     return(
       <Tab.Navigator
         tabBarOptions={{
@@ -54,11 +55,11 @@ class GlobalMessageContainer extends React.Component {
         sceneContainerStyle={styles.screen}>
         <Tab.Screen
           name="Instantané">
-          {props => <DirectMessage {...props} contactID={route.params} />}
+          {props => <DirectMessage {...props} {...this.props} contactID={route.params} />}
         </Tab.Screen>
         <Tab.Screen
           name="Différé">
-          {props => <DelayedMessageContainer {...props} contactID={route.params} />}
+          {props => <DelayedMessageContainer {...props} {...this.props} contactID={route.params} />}
         </Tab.Screen>
       </Tab.Navigator>
     )

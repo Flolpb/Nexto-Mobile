@@ -49,7 +49,9 @@ class LogInContainer extends React.Component{
                                      onChangeTextInput={(text) => this.setKeyValue('mail', text)} />
 
                     <View style={{marginTop: 20}}>
-                        <CustomGradientTextButton title="Connexion" onPressButton={() => this.props.onLogIn(this.state.username)} />
+                        <CustomGradientTextButton title="Connexion"
+                                                  // onPressButton={() => this.props.onLogIn(this.state.username)}
+                        />
                     </View>
 
                     <CustomLabel

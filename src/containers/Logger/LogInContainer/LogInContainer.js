@@ -50,7 +50,7 @@ class LogInContainer extends React.Component{
 
                     <View style={{marginTop: 20}}>
                         <CustomGradientTextButton title="Connexion"
-                                                  // onPressButton={() => this.props.onLogIn(this.state.username)}
+                                                  onPressButton={() => this.props.onLogIn(this.state.username)}
                         />
                     </View>
 

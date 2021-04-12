@@ -1,16 +1,7 @@
 import React from 'react'
-import {useNavigation} from '@react-navigation/core';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import GlobalMessageContainer from '../containers/Messages/GlobalMessageContainer/GlobalMessageContainer';
-import colors from '../config/colors';
-import fonts from '../config/fonts';
 import LogInContainer from '../containers/Logger/LogInContainer/LogInContainer';
 import {NavigationContainer} from '@react-navigation/native';
-import GlobalLibraryContainer from '../containers/Library/GlobalLibraryContainer/GlobalLibraryContainer';
-import {Icon} from 'react-native-elements';
-import GlobalContactContainer from '../containers/Contacts/GlobalContactContainer/GlobalContactContainer';
-import MainPage from '../containers/MainPage/MainPage';
-import ListMessageContainer from '../containers/Messages/ListMessageContainer/ListMessageContainer';
 import NewAccountContainer from '../containers/Logger/NewAcounntContainer/NewAccountContainer';
 
 

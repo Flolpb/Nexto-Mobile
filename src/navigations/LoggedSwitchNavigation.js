@@ -12,6 +12,7 @@ class LoggedSwitchNavigation extends React.Component
     }
 
     handleLogIn = (username) => {
+        console.log("test")
         const action = { type: "TOGGLE_LOGIN", username: username }
         this.props.dispatch(action)
     }

@@ -59,7 +59,9 @@ class NewAccountContainer extends React.Component{
                                      isPassword={this.state.passwordConfirm ? 'true' : 'false'} />
 
                     <View style={{marginTop: 20}}>
-                        <CustomGradientTextButton title="Inscription" onPressButton={() => this.props.onLogIn(this.state.username)} />
+                        <CustomGradientTextButton title="Inscription"
+                                                  // onPressButton={() => this.props.onLogIn(this.state.username)}
+                        />
                     </View>
 
                     <CustomLabel

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   searchBar: {
     backgroundColor: colors.transparent,
     borderBottomWidth: 0,
-    borderWidth: 0,
+    borderTopWidth: 0,
     borderColor: colors.transparent,
     paddingHorizontal: 10,
     color: colors.black,

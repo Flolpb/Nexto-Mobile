@@ -107,12 +107,6 @@ class ListContactContainer extends React.Component {
     }
   };
 
-  createSeparator = () => {
-    return (
-      <View style={styles.separator} />
-    )
-  };
-
   createEmptyViewList = () => {
     return (
       <View style={ styles.emptyView }>
@@ -222,7 +216,6 @@ class ListContactContainer extends React.Component {
             removeClippedSubviews={true}
             contentContainerStyle={styles.flatList}
             ListHeaderComponent={this.createListHeader}
-            ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={contacts}
             keyExtractor={(item, index) => item.recordID}
@@ -250,13 +243,6 @@ const styles = StyleSheet.create({
   },
   flatList: {
     minHeight: '100%',
-  },
-  separator: {
-    flex: 1,
-    marginRight: 30,
-    marginLeft: 20,
-    borderBottomColor: colors.black,
-    borderBottomWidth: 0.35,
   },
   emptyView: {
     flex: 1,

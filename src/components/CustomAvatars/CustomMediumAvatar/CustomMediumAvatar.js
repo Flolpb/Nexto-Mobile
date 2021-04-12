@@ -3,7 +3,7 @@ import {Avatar} from 'react-native-elements';
 import {StyleSheet} from 'react-native';
 import colors from '../../../config/colors';
 
-const CustomMediumAvatar = ({titleOrIcon, color = {color: colors.white}, background = {backgroundColor: colors.black}, onPressAvatar = () => {}, }) => (
+const CustomMediumAvatar = ({titleOrIcon, color = { color: colors.white }, background = {backgroundColor: colors.lightpurple}, onPressAvatar = () => {}, }) => (
   <Avatar
     size="medium"
     rounded
@@ -19,7 +19,7 @@ const CustomMediumAvatar = ({titleOrIcon, color = {color: colors.white}, backgro
 
 const styles = StyleSheet.create({
   avatarTitle: {
-    color: colors.white
+    color: colors.white,
   },
   avatarBackground: {
     backgroundColor: colors.black,

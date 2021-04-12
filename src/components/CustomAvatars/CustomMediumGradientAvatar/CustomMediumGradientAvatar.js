@@ -4,7 +4,7 @@ import {StyleSheet} from 'react-native';
 import colors from '../../../config/colors';
 import LinearGradient from 'react-native-linear-gradient';
 
-const CustomMediumGradientAvatar = ({titleOrIcon, gradientColors = [colors.lightpurple, colors.purple], onPressAvatar = () => {}, }) => (
+const CustomMediumGradientAvatar = ({titleOrIcon, gradientColors = [colors.lightpurple, colors.purple], titleStyle = null, onPressAvatar = () => {}, }) => (
   <LinearGradient
     colors={gradientColors}
     start={{x: 0.0, y: 1.0}} end={{x: 1.0, y: 1.0}}
@@ -16,7 +16,7 @@ const CustomMediumGradientAvatar = ({titleOrIcon, gradientColors = [colors.light
       onPress={onPressAvatar && (onPressAvatar)}
       title={titleOrIcon.type === 'string' && (titleOrIcon.value)}
       icon={titleOrIcon.type === 'icon' && (titleOrIcon.value)}
-      titleStyle={styles.avatarTitle}
+      titleStyle={titleStyle ? titleStyle : styles.avatarTitle}
       activeOpacity={0.7}
     />
   </LinearGradient>

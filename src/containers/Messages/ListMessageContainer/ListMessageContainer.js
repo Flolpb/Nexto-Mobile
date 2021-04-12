@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList} from 'react-native';
+import {Button, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList, SectionList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
@@ -9,6 +9,10 @@ import colors from '../../../config/colors';
 import {Icon} from 'react-native-elements';
 import PushNotification from 'react-native-push-notification';
 import {showNotification, handleScheduleNotification, delayedMessageNotification} from '../../../notification.android';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import MessageItem from '../../../components/MessageItem/MessageItem';
+import CustomMediumGradientAvatar
+    from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 
 class ListeMessageContainer extends React.Component {
     constructor(props) {
@@ -48,8 +52,6 @@ class ListeMessageContainer extends React.Component {
             console.log(e);
         }
     };
-
-
 
 
     //Messages Programmés
@@ -146,103 +148,62 @@ class ListeMessageContainer extends React.Component {
             message.status !== 'send' ? messages.push(message) : messagesSend.push(message);
         });
 
+        const DATASET = [
+            {
+                type: 'programmed',
+                title: 'Messages programmés',
+                emptyTitle: 'Aucun message programmé',
+                data: messages,
+            },
+            {
+                type: 'sent',
+                title: 'Historique des messages programmés',
+                emptyTitle: 'Aucun message dans l\'historique',
+                data: messagesSend,
+            }
+        ];
+
         return(
-          <>
-              <SafeAreaView
-                style={styles.container}>
-                  <View>
-                      <Text style={styles.titre}>Liste des messages programmés</Text>
+          <SafeAreaView style={styles.container}>
+              <SectionList
+                sections={DATASET}
+                keyExtractor={(item, index) => item + index}
+                renderItem={({ item, index, section }) =>
+                  <MessageItem type={section.type} item={item} index={index} last={index === section.data.length - 1} deleteData={this.deleteData}/>
+                }
+                renderSectionHeader={({ section: { title } }) => (
+                  <View style={{ marginVertical: 20 }}>
+                      <CustomLabel text={title} />
                   </View>
-                  { messages.length ? (
-                    <FlatList
-                      data={messages}
-                      keyExtractor={(item, index) => index}
-                      renderItem={({item, index}) => (
-                        <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
-                            <Text>{ item.message }</Text>
-                            <Text>{ item.contact }</Text>
-                            <View style={styles.date}>
-                                <Text>{item.date.split('T')[1].slice(0,5)}</Text>
-                                <Text>{item.date.split('T')[0]}</Text>
-                            </View>
-                            <Button title="supprimer" onPress={() => this.deleteData(index)}/>
-                        </TouchableOpacity>
-                      )}/>
-                  ) : (
-                    <Text style={styles.emptyListText}> Aucun message prêt à envoyer </Text>
-                  )}
+                )}
+                renderSectionFooter={({ section}) => {
+                    if (section.data.length === 0) {
+                        return <CustomLabel text={section.emptyTitle} size={18} fontType="light"/>
+                    }
+                }}
+                contentContainerStyle={{ paddingVertical: 20}}
+              />
 
-                  <View>
-                      <Text style={styles.titre}>Historique des messages envoyés</Text>
-                  </View>
-
-                  { messagesSend.length ? (
-                    <FlatList
-                      data={messagesSend}
-                      keyExtractor={(item, index) => index}
-                      renderItem={({item, index}) => (
-                        <TouchableOpacity style={styles.bloc} onPress={() => navigate('Différé')}>
-                            <Text>{ item.message }</Text>
-                            <Text>{ item.contact }</Text>
-                            <View style={styles.date}>
-                                <Text>{item.date.split('T')[1].slice(0,5)}</Text>
-                                <Text>{item.date.split('T')[0]}</Text>
-                            </View>
-                            <Button title="supprimer" onPress={() => this.deleteData(index)}/>
-                        </TouchableOpacity>
-                      )}/>
-                  ) : (
-                    <Text style={styles.emptyListText}> Aucun message envoyé récemment </Text>
-                  )}
-
-                  <Button title="Programmer un nouveau message !" onPress={() => navigate('Différé')}/>
-                  <Button title="Actualiser" onPress={() => this.readData()}/>
-              </SafeAreaView>
-          </>
+              <View style={ styles.createButton }>
+                  <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'refresh', type: 'material' }}} onPressAvatar={() => this.readData()} />
+              </View>
+          </SafeAreaView>
         )
     }
 
 }
 
 const styles = StyleSheet.create({
-    bloc: {
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        flexWrap: 'wrap',
-        paddingVertical: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderStyle: 'solid',
-        margin: 5
-    },
-    date: {
-        display: 'flex',
-        flexDirection: 'column',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-    },
-    titre: {
-        fontSize: 20,
-        marginVertical: 10,
-        textAlign: 'center',
-        fontWeight: 'bold'
-    },
-    border: {
-        backgroundColor: 'black',
-        width: '90%',
-        height: 2,
-    },
-    center: {
-        alignItems: 'center',
+    container: {
         flex: 1,
-        justifyContent: 'center',
+        flexGrow: 1,
+        backgroundColor: colors.backGrey,
     },
-    emptyListText: {
-        textAlign: 'center',
-        fontSize: 16,
-        fontWeight: '500'
-    }
+    createButton: {
+        position: 'absolute',
+        bottom: 30,
+        right: 20,
+    },
 });
 
 

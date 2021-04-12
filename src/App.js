@@ -19,7 +19,7 @@ class App extends React.Component {
   // Couleur de la barre du bas
   changeNavBarColor = async () => {
     try{
-      await changeNavigationBarColor(colors.purple, true, true);
+      await changeNavigationBarColor(colors.backGrey, true, true);
     }catch(e){
       console.log(e)// {success: false}
     }
@@ -29,7 +29,7 @@ class App extends React.Component {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         {/*Couleur de la barre du haut*/}
-        <StatusBar backgroundColor={ colors.purple } />
+        <StatusBar backgroundColor={ colors.backGrey } barStyle="dark-content" />
         <Provider store={ Store }>
           <PaperProvider>
             <LoggedSwitchNavigation />

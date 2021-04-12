@@ -34,24 +34,23 @@ class GlobalMessageContainer extends React.Component {
   render() {
     const { route } = this.props
     const Tab = createMaterialTopTabNavigator();
-    console.log(this.props.hideTabNavigator)
     return(
       <Tab.Navigator
         tabBarOptions={{
           style: {
-            backgroundColor: colors.purple,
+            backgroundColor: colors.backGrey,
           },
           labelStyle: {
             fontFamily: fonts.medium,
           },
-          activeTintColor: colors.white,
+          activeTintColor: colors.black,
           inactiveTintColor: colors.inactiveBlack,
           indicatorStyle: {
-            borderBottomColor: colors.white,
+            borderBottomColor: colors.inactiveBlack,
             borderBottomWidth: 2,
           },
         }}
-        swipeEnabled={false}
+        swipeEnabled={true}
         sceneContainerStyle={styles.screen}>
         <Tab.Screen
           name="Instantané">

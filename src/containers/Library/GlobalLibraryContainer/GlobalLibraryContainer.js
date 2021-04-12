@@ -20,13 +20,15 @@ const GlobalLibraryContainer = () => {
         component={CreateLibraryContainer}
         options={{
           title: 'Nouvelle bibliothèque',
-          headerStyle: {
-            backgroundColor: colors.purple,
-          },
-          headerTintColor: colors.white,
+          headerTintColor: colors.black,
           headerTitleStyle: {
+            color: colors.black,
             fontFamily: fonts.bold,
             fontSize: 20,
+          },
+          headerStyle: {
+            backgroundColor: colors.backGrey,
+            elevation: 0,
           },
         }} />
     </Stack.Navigator>

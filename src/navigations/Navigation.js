@@ -36,14 +36,16 @@ class Navigation extends React.Component{
                         showIcon: true,
                         showLabel: false,
                         activeTintColor: colors.white,
-                        inactiveTintColor: colors.inactiveBlack,
+                        inactiveTintColor: colors.lightpurple,
                         indicatorStyle: {
                           borderBottomColor: colors.white,
                           borderBottomWidth: 2,
                         },
                         style: {
-                          backgroundColor: colors.purple,
+                          backgroundColor: colors.backGrey,
                           height: this.state.tabHeight,
+                          borderTopColor: "transparent",
+                          elevation: 0,
                         }
                     }} >
                       <Tab.Screen

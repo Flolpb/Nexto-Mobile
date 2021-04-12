@@ -3,22 +3,30 @@ import {
     StyleSheet,
     View,
     Text,
-    TextInput,
     PermissionsAndroid,
     TouchableOpacity,
-    Dimensions, Image,
+    SafeAreaView, FlatList,
 } from 'react-native';
 import 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import getDate from '../../../utils/getDate';
 import { AppRegistry } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Icon} from 'react-native-elements';
 import colors from '../../../config/colors';
-import Tags from 'react-native-tags';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomTextInputWithButton
+    from '../../../components/CustomTextInputs/CustomTextInputWithButton/CustomTextInputWithButton';
+import CustomGradientTextButton
+    from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
+import fonts from '../../../config/fonts';
+import LinearGradient from 'react-native-linear-gradient';
+import {Icon} from 'react-native-elements';
+import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
+
+
 AppRegistry.registerHeadlessTask('SendMessage', () =>
     require('../SendMessage/SendMessageContainer')
 );
@@ -32,22 +40,20 @@ class DelayedMessageContainer extends React.Component {
     componentDidMount() {
         if (this.props.contactID) {
             this.getContact()
-        } else {
-            this.setState({
-                isLoaded: true,
-            })
         }
     }
 
     state = {
+        phoneNumber: '',
         phoneNumbers: [],
         message: '',
+        messages: [],
         date: new Date(),
         displayDate: false,
         displayTime: false,
-        messages: [],
-        isLoaded: false,
         toggleSwipeToClose: true,
+        modalVisible: false,
+        modalTitle: '',
     };
 
     getContact = async () => {
@@ -57,7 +63,6 @@ class DelayedMessageContainer extends React.Component {
                 this.setState({
                     phoneNumbers: [...this.state.phoneNumbers, contact.phoneNumbers[0].number],
                     contact: contact,
-                    isLoaded: true,
                 });
             });
         }
@@ -81,37 +86,50 @@ class DelayedMessageContainer extends React.Component {
         }
     };
 
+    showErrorModal = (title) => {
+        this.setState({
+            modalVisible: true,
+            modalTitle: title,
+        });
+    }
+
+    mergePhoneNumbers = () => {
+        if (this.state.phoneNumber) {
+            this.setState({
+                phoneNumbers: [...this.state.phoneNumbers, this.state.phoneNumber],
+                phoneNumber: '',
+            });
+        }
+    }
+
     verifyPhoneNumbers = () => {
-        console.log(this.state.phoneNumbers);
-        console.log(this.state.message);
-        if (this.state.phoneNumbers.length && this.state.message) {
-            this.state.phoneNumbers.map(phoneNumber => {
+        this.mergePhoneNumbers();
+        const { phoneNumbers, message } = this.state
+        if (!message) {
+            this.showErrorModal('Champ message incomplet.')
+        }
+        else if (phoneNumbers.length) {
+            phoneNumbers.map(phoneNumber => {
                 //test si le premier caractère est un "+"
                 const firstCaractere = phoneNumber.slice(0, 1);
-                if(firstCaractere === "+"){
+                if (firstCaractere === "+") {
                     let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
-                    if(isNaN(lastCaractere)){
+                    if (isNaN(lastCaractere)) {
                         this.programSms(phoneNumber).then();
+                    } else {
+                        this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${lastCaractere}`)
                     }
-                    else{
-                        alert("Mauvais format pour le numéro de tel: " + lastCaractere);
-                    }
-
                 }
                 // Test si le numéro de téléphone est bien composé seulement de numéros
-                else{
+                else {
                     let isNum = /^\d+$/.test(phoneNumber);
                     if (isNum) {
-                    this.programSms(phoneNumber).then();
-                    }else{
-                        alert("Mauvais format pour le numéro de téléphone: " + phoneNumber);
+                        this.programSms(phoneNumber).then();
+                    } else {
+                        this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${lastCaractere}`)
                     }
                 }
-
-
-            })
-        }else{
-            console.log(this.state.phoneNumbers + " || " + this.state.message);
+            });
         }
     };
 
@@ -121,22 +139,21 @@ class DelayedMessageContainer extends React.Component {
             value.date = this.state.date;
             value.message = this.state.message;
             const theNowValue = await AsyncStorage.getItem('message');
-            const joined = JSON.parse(theNowValue);
+            let joined = JSON.parse(theNowValue);
             value.contact = phoneNumber;
+            !joined && (joined = []);
             joined.push(value);
             const jsonValue = JSON.stringify(joined);
             await AsyncStorage.setItem('message', jsonValue);
             this.setState({
-                phoneNumbers: [],
                 message: '',
+                messages: [],
                 date: new Date(),
                 displayDate: false,
                 displayTime: false,
-                messages: []
             });
             this.readData();
             Keyboard.dismiss();
-            //alert('Message programmé !');
             this.refs.modal1.open();
 
         }catch (e) {
@@ -147,7 +164,7 @@ class DelayedMessageContainer extends React.Component {
     setKeyValue = (key, value) => {
         this.setState({
             [key]: value
-        })
+        });
     };
 
     setDate = (event, date) => {
@@ -164,126 +181,146 @@ class DelayedMessageContainer extends React.Component {
         this.setState({displayTime: false});
     };
 
-    setTags = (tags) => {
-        this.setState({
-            phoneNumbers: tags
-        })
+    setTags = (tag) => {
+        if (tag) {
+            this.setState({
+                phoneNumbers: [...this.state.phoneNumbers, tag],
+                phoneNumber: '',
+            })
+        } else {
+            this.showErrorModal('Champ numéro de téléphone incomplet.')
+        }
     };
+
+    deleteTag = (index) => {
+        let array = this.state.phoneNumbers;
+        array.splice(index, 1);
+        this.setKeyValue('phoneNumbers', array);
+    }
 
     openModal = () => {
       this.refs.modal1.open();
     };
 
-    renderComponent = () => {
+    renderHeader = () => (
+      <View style={styles.subContainer}>
+          <CustomLabel text="Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16} fontType="bold" />
+          <CustomTextInputWithButton
+            value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
+            icon={{ type: 'material', name: 'add' }} onPressButton={() => this.setTags(this.state.phoneNumber)} placeholder="Numéro de téléphone ..." />
+      </View>
+    )
+
+    renderFooter = () => {
         const { date } = this.state;
         let dateString = date ? getDate(date) : 'Aucune';
-
         return (
-          <View
-            style={styles.subContainer}>
-              <Image
-                source={require('../../../assets/images/Illustration_mobile.png')}
-                style={[styles.image, { width: Dimensions.get('window').width - 150 }]} />
-              <Text
-                style={styles.title}>
-                  Envoi d'un message en différé
-              </Text>
-
-              <Tags
-                initialText=""
-                initialTags={ this.state.phoneNumbers }
-                textInputProps={{
-                    placeholder: "Saisissez un numéro de téléphone ..."
-                }}
-                onChangeTags={tags => this.setTags(tags)}
-                inputContainerStyle={{ backgroundColor: 'rgba(0,0,0,0)', marginVertical: 10 }}
-                containerStyle={[styles.field, styles.tagContainer]}
-                inputStyle={{ fontSize: 15 }}
-                renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
-                  <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
-                      <Text style={styles.tag}>{tag}</Text>
-                  </TouchableOpacity>
-                )}/>
-
-              <View style={{ marginBottom: 10 }}>
-                  <Text style={[ styles.title, { fontSize: 20 }]}> Date d'envoi : {dateString[0]} </Text>
-                  <Text style={[ styles.title, { fontSize: 20 }]}> Heure d'envoi : {dateString[1]} </Text>
+          <>
+              <View style={styles.subContainer}>
+                  <CustomLabel text="Sélectionner une date et une heure d'envoi" spaceBetween={3} position="left" size={16} />
+                  <CustomLabel text={`Envoi le ${dateString[0]} à ${dateString[1]}`} spaceBetween={3} position="center" size={16} fontType="light" />
               </View>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <TouchableOpacity
-                    style={[styles.field, { flexDirection: 'column', width: '45%',}]}
-                    onPress={() => { this.setKeyValue('displayDate', true) }}>
-                      <Text style={[styles.input, { textAlign: 'center' }]}> Date </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.field, { flexDirection: 'column', width: '45%',}]}
-                    onPress={() => { this.setKeyValue('displayTime', true) }}>
-                      <Text style={[styles.input, { textAlign: 'center' }]}> Heure </Text>
-                  </TouchableOpacity>
+              <View style={[styles.subContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+                  <View style={{width: '45%'}}>
+                      <CustomGradientTextButton title="Date" onPressButton={() => this.setKeyValue('displayDate', true)} />
+                  </View>
+                  <View style={{width: '45%'}}>
+                      <CustomGradientTextButton title="Heure" onPressButton={() => this.setKeyValue('displayTime', true)} />
+                  </View>
               </View>
 
-              <View style={[styles.field, styles.input]}>
-                  <TextInput
-                    style={{flex: 4, fontSize: 15}}
-                    multiline={true}
-                    value={this.state.message}
-                    onChangeText={(text) => this.setKeyValue('message', text)}
-                    placeholder="Message ..."/>
-                  <TouchableOpacity
-                    style={styles.sendButton}
-                    onPress={() => { this.verifyPhoneNumbers() }}>
-                      <Icon name="send" color={colors.black} size={20}/>
-                  </TouchableOpacity>
+              <View style={styles.subContainer}>
+                  <CustomLabel text="Saisir le message à envoyer" spaceBetween={3} position="left" size={16} />
+                  <CustomTextInputWithButton
+                    value={this.state.message} onChangeTextInput={(message) => this.setKeyValue('message', message)}
+                    icon={{ type: 'material', name: 'send' }} onPressButton={this.verifyPhoneNumbers} placeholder="Votre message ..." />
               </View>
 
               {this.state.displayDate &&
-                  <DateTimePicker
-                    style={styles.datePickerStyle}
-                    value={date}
-                    mode="date"
-                    confirmBtnText="Confirm"
-                    customStyles={{
-                        dateIcon: {
-                            position: 'absolute',
-                            left: 0,
-                            top: 4,
-                            marginLeft: 0,
-                        },
-                        dateInput: {
-                            marginLeft: 36,
-                        },
-                    }}
-                    onChange={this.setDate}
-                  />
+              <DateTimePicker
+                style={styles.datePickerStyle}
+                value={date}
+                mode="date"
+                confirmBtnText="Confirm"
+                customStyles={{
+                    dateIcon: {
+                        position: 'absolute',
+                        left: 0,
+                        top: 4,
+                        marginLeft: 0,
+                    },
+                    dateInput: {
+                        marginLeft: 36,
+                    },
+                }}
+                onChange={this.setDate}
+              />
               }
               {this.state.displayTime &&
-                  <DateTimePicker
-                    style={styles.datePickerStyle}
-                    value={date}
-                    mode="time"
-                    onChange={this.setTime}/>
+              <DateTimePicker
+                style={styles.datePickerStyle}
+                value={date}
+                mode="time"
+                onChange={this.setTime}/>
               }
-
-                <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
-                    <Text style={styles.modalText}>Message programmé !</Text>
-                </Modal>
-          </View>
-        );
-    };
+          </>
+        )
+    }
 
     render() {
-        // Si on charge depuis la liste des contacts, on diffère le rendu du composant (car problème avec la librarie Tags)
-        return this.state.isLoaded ? this.renderComponent() : null
+        const { modalVisible, modalTitle } = this.state;
+        return(
+          <SafeAreaView style={styles.container}>
+              <CustomTextModal visible={modalVisible} setKeyValue={this.setKeyValue} title={modalTitle} icon={'error-outline'} />
+              <FlatList
+                numColumns={2}
+                columnWrapperStyle={styles.flatListColumns}
+                data={this.state.phoneNumbers}
+                contentContainerStyle={styles.flatList}
+                keyExtractor={(item, index) => index}
+                removeClippedSubviews={false}
+                ListHeaderComponent={this.renderHeader}
+                ListFooterComponent={this.renderFooter}
+                renderItem={({item, index}) => (
+                  <LinearGradient
+                    key={index}
+                    colors={[colors.lightpurple, colors.purple]}
+                    start={{x: 0.0, y: 1.0}} end={{x: 1.0, y: 1.0}}
+                    style={styles.tagStructure}>
+                      <Text style={styles.tag}>{item}</Text>
+                      <TouchableOpacity onPress={() => this.deleteTag(index)} style={styles.insideButton}>
+                          <Icon type="material" name="close" color={colors.white} size={16}/>
+                      </TouchableOpacity>
+                  </LinearGradient>
+                )}
+              />
 
+              <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
+                  <Text style={styles.modalText}>Message programmé !</Text>
+              </Modal>
+          </SafeAreaView>
+        )
     }
 }
 
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexGrow: 1,
+        backgroundColor: colors.backGrey,
+    },
+    flatList: {
+        flexGrow: 1,
+        justifyContent: 'center',
+    },
+    flatListColumns: {
+        alignSelf: 'center'
+    },
     subContainer: {
         paddingHorizontal: 30,
-        height: "100%"
+        marginVertical: 5,
     },
     image: {
         flex: 1,
@@ -294,63 +331,46 @@ const styles = StyleSheet.create({
     field: {
         flexDirection:'row',
         borderWidth: 1,
-        borderColor: '#E6E4E2',
-        borderRadius: 30,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        backgroundColor: '#E6E4E2'
+        borderColor: colors.lightgrey,
+        borderRadius: 20,
+        backgroundColor: colors.lightgrey,
     },
     input: {
         fontSize: 20,
         marginVertical: 10,
         paddingHorizontal: 20,
     },
-    tagContainer: {
-        marginVertical: 10,
-        paddingHorizontal: 10,
+    tagStructure: {
+        flexDirection:'row',
+        borderRadius: 30,
+        fontSize: 20,
+        margin: 5,
+        paddingHorizontal: 20,
     },
     tag: {
-        borderWidth: 1,
-        borderRadius: 30,
         marginVertical: 5,
-        marginRight: 5,
         paddingVertical: 5,
-        paddingHorizontal: 12,
-    },
-    sendButton: {
-        flex: 1,
-        alignItems:'center',
-        justifyContent:'center',
-    },
-    title: {
-        fontSize: 25,
-        marginVertical: 10,
-        fontWeight: 'bold'
+        color: colors.white,
+        fontFamily: fonts.medium,
     },
     datePickerStyle: {
         width: 200,
         marginTop: 20,
     },
-    closeN: {
-
-    },
     modal1: {
         backgroundColor: colors.purple,
         height: 80,
         justifyContent: 'center',
-        borderWidth: 2,
-        borderStyle: 'solid',
     },
     modalText: {
         color: colors.white,
         fontSize: 32,
         textAlign: 'center'
+    },
+    insideButton: {
+        marginLeft: 5,
+        alignItems:'center',
+        justifyContent:'center',
     },
 });
 

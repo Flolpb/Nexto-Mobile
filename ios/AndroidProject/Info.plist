@@ -71,6 +71,59 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Helvetica-Bold.ttf</string>
+		<string>Helvetica-BoldOblique.ttf</string>
+		<string>helvetica-light-587ebe5a59211.ttf</string>
+		<string>Helvetica-Oblique.ttf</string>
+		<string>Helvetica.ttf</string>
+		<string>HelveticaNowText-Black.ttf</string>
+		<string>HelveticaNowText-Black.woff</string>
+		<string>HelveticaNowText-Black.woff2</string>
+		<string>HelveticaNowText-BlackItalic.ttf</string>
+		<string>HelveticaNowText-BlackItalic.woff</string>
+		<string>HelveticaNowText-BlackItalic.woff2</string>
+		<string>HelveticaNowText-Bold.ttf</string>
+		<string>HelveticaNowText-Bold.woff</string>
+		<string>HelveticaNowText-Bold.woff2</string>
+		<string>HelveticaNowText-BoldItalic.ttf</string>
+		<string>HelveticaNowText-BoldItalic.woff</string>
+		<string>HelveticaNowText-BoldItalic.woff2</string>
+		<string>HelveticaNowText-ExtBdIta.ttf</string>
+		<string>HelveticaNowText-ExtBdIta.woff</string>
+		<string>HelveticaNowText-ExtBdIta.woff2</string>
+		<string>HelveticaNowText-ExtLtIta.ttf</string>
+		<string>HelveticaNowText-ExtLtIta.woff</string>
+		<string>HelveticaNowText-ExtLtIta.woff2</string>
+		<string>HelveticaNowText-ExtraBold.ttf</string>
+		<string>HelveticaNowText-ExtraBold.woff</string>
+		<string>HelveticaNowText-ExtraBold.woff2</string>
+		<string>HelveticaNowText-ExtraLight.ttf</string>
+		<string>HelveticaNowText-ExtraLight.woff</string>
+		<string>HelveticaNowText-ExtraLight.woff2</string>
+		<string>HelveticaNowText-Light.ttf</string>
+		<string>HelveticaNowText-Light.woff</string>
+		<string>HelveticaNowText-Light.woff2</string>
+		<string>HelveticaNowText-LightItalic.ttf</string>
+		<string>HelveticaNowText-LightItalic.woff</string>
+		<string>HelveticaNowText-LightItalic.woff2</string>
+		<string>HelveticaNowText-Medium.ttf</string>
+		<string>HelveticaNowText-Medium.woff</string>
+		<string>HelveticaNowText-Medium.woff2</string>
+		<string>HelveticaNowText-MediumItalic.ttf</string>
+		<string>HelveticaNowText-MediumItalic.woff</string>
+		<string>HelveticaNowText-MediumItalic.woff2</string>
+		<string>HelveticaNowText-RegIta.ttf</string>
+		<string>HelveticaNowText-RegIta.woff</string>
+		<string>HelveticaNowText-RegIta.woff2</string>
+		<string>HelveticaNowText-Regular.ttf</string>
+		<string>HelveticaNowText-Regular.woff</string>
+		<string>HelveticaNowText-Regular.woff2</string>
+		<string>HelveticaNowText-Thin.ttf</string>
+		<string>HelveticaNowText-Thin.woff</string>
+		<string>HelveticaNowText-Thin.woff2</string>
+		<string>HelveticaNowText-ThinItalic.ttf</string>
+		<string>HelveticaNowText-ThinItalic.woff</string>
+		<string>HelveticaNowText-ThinItalic.woff2</string>
 	</array>
 </dict>
 </plist>

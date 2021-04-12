@@ -6,10 +6,12 @@ import {
   View,
 } from 'react-native';
 import colors from '../../../config/colors';
-import { Avatar } from 'react-native-elements';
 import NewMessageContainer from '../NewMessageContainer/NewMessageContainer';
-import CustomTextButton from '../../../components/CustomButtons/CustomTextButton/CustomTextButton';
 import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
+import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
+import CustomMediumGradientAvatar from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
+import settings from '../../../config/settings';
 
 class CreateLibraryContainer extends React.Component {
 
@@ -33,12 +35,7 @@ class CreateLibraryContainer extends React.Component {
   }
 
   addMessageToLibrary = () => {
-    /*
-    *
-    TODO Set le nombre de messages MAX par bibliothèque dans une fichier de config
-    *
-    */
-    if (this.state.messages.length <= 9) {
+    if (this.state.messages.length < settings.maxMessagesPerLibrary) {
       this.setState({
         messages: [...this.state.messages, '']
       });
@@ -105,19 +102,10 @@ class CreateLibraryContainer extends React.Component {
           style={styles.container}
           removeClippedSubviews={false}
           ListHeaderComponent={
-            <>
-              <View style={styles.subContainer}>
-                <View style={styles.field}>
-                  <TextInput
-                    style={styles.textInput}
-                    multiline={true}
-                    value={this.state.libraryName}
-                    onChangeText={(text) => this.setKeyValue('libraryName', text)}
-                    placeholder="Nom de la bibliothèque"/>
-                </View>
-                <CustomTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
-              </View>
-            </>
+            <View style={styles.subContainer}>
+              <CustomTextInput value={this.state.libraryName} onChangeTextInput={(text) => this.setKeyValue('libraryName', text)} placeholder="Nom de la bibliothèque"/>
+              <CustomGradientTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
+            </View>
           }
           data={this.state.messages}
           keyExtractor={(item, index) => index.toString() }
@@ -133,14 +121,7 @@ class CreateLibraryContainer extends React.Component {
           ListFooterComponent={
             <View style={styles.subContainer}>
               <View style={styles.button}>
-                <Avatar
-                  size="medium"
-                  rounded
-                  onPress={() => { this.addMessageToLibrary() }}
-                  icon={{ name: 'add', type: 'material' }}
-                  overlayContainerStyle={styles.avatar}
-                  activeOpacity={0.7}
-                />
+                <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={this.addMessageToLibrary} />
               </View>
             </View>
           }
@@ -163,17 +144,9 @@ const styles = StyleSheet.create({
   field: {
     flexDirection:'row',
     borderWidth: 1,
-    borderColor: '#E6E4E2',
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    backgroundColor: '#E6E4E2',
+    borderColor: colors.lightgrey,
+    borderRadius: 20,
+    backgroundColor: colors.lightgrey,
     fontSize: 20,
     marginVertical: 10,
     paddingHorizontal: 20,

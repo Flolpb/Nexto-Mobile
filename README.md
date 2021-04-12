@@ -146,3 +146,6 @@ adb reverse tcp:8081 tcp:8081
 cd android && gradlew clean
 
 npm cache clean --force
+
+Lors de l'ajout de nouvelles fonts dans src/assets/fonts:
+npx react-native link

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import Navigation from '../../navigations/Navigation';
-import LogInForm from './LogInForm';
+import React from 'react';
+import Navigation from './Navigation';
+import LogInContainer from '../containers/Logger/LogInContainer/LogInContainer';
 import { connect } from 'react-redux'
-import {View} from 'react-native';
+import LoggerNavigation from './LoggerNavigation';
 
-class SwitchLogInForm extends React.Component
+class LoggedSwitchNavigation extends React.Component
 {
     constructor(props)
     {
@@ -12,6 +12,7 @@ class SwitchLogInForm extends React.Component
     }
 
     handleLogIn = (username) => {
+        console.log("test")
         const action = { type: "TOGGLE_LOGIN", username: username }
         this.props.dispatch(action)
     }
@@ -21,7 +22,7 @@ class SwitchLogInForm extends React.Component
           <>
               { this.props.isLogged
                 ? <Navigation />
-                : <LogInForm onLogIn={this.handleLogIn} />
+                : <LoggerNavigation onLogIn={this.handleLogIn} />
               }
           </>
         )
@@ -35,4 +36,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(SwitchLogInForm);
+export default connect(mapStateToProps)(LoggedSwitchNavigation);

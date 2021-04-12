@@ -4,6 +4,8 @@ import CustomDropdownButton from '../../../components/CustomButtons/CustomDropdo
 import CustomDropdownModal from '../../../components/CustomModals/CustomDropdownModal/CustomDropdownModal';
 import VARS from '../../../config/vars';
 import colors from '../../../config/colors';
+import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
+import fonts from '../../../config/fonts';
 
 class NewMessageContainer extends React.Component {
 
@@ -71,45 +73,45 @@ class NewMessageContainer extends React.Component {
     const { modalVisible, onEdit } = this.state;
     const { item, index, modifyMessageFromLibrary } = this.props;
     return(
-      <>
-        {
-          <View style={[styles.field, styles.input]}>
-            {/* Modal d'ajout de variable */}
-            <CustomDropdownModal
-              visible={modalVisible}
-              setKeyValue={this.setKeyValue}
-              title="Ajouter une variable"
-              vars={VARS}
-              onSelectOption={this.addVarInMessage}
-            />
+        <View style={[styles.field, styles.input]}>
+          {/* Modal d'ajout de variable */}
+          <CustomDropdownModal
+            visible={modalVisible}
+            setKeyValue={this.setKeyValue}
+            title="Ajouter une variable"
+            vars={VARS}
+            onSelectOption={this.addVarInMessage}
+          />
 
-            {/* Input de messages modifiables */}
-            {
-              onEdit ? (
-                  <TextInput
-                    style={styles.textInput}
-                    multiline={true}
-                    value={item}
-                    onBlur={() => this.setKeyValue('onEdit', false)}
-                    onChangeText={(text) => modifyMessageFromLibrary(index, text)}
-                  />
-              ) : (
+          {/* Input de messages modifiables */}
+          {
+            onEdit ? (
                 <TextInput
-                  onFocus={() => this.setKeyValue('onEdit', true)}
                   style={styles.textInput}
+                  placeholder="Votre message ..."
+                  placeholderTextColor={colors.grey}
                   multiline={true}
-                >
-                  <Text>
-                    { this.userFriendlyString(item).map((itm) => itm) }
-                  </Text>
-                </TextInput>
-              )
-            }
-            {/* Dropdown d'options de gestion de messages */}
-            <CustomDropdownButton index={index} vars={this.vars} onPressOption={this.manageOptionSelected}/>
-           </View>
-        }
-      </>
+                  value={item}
+                  onBlur={() => this.setKeyValue('onEdit', false)}
+                  onChangeText={(text) => modifyMessageFromLibrary(index, text)}
+                />
+            ) : (
+              <TextInput
+                onFocus={() => this.setKeyValue('onEdit', true)}
+                style={styles.textInput}
+                placeholder="Votre message ..."
+                placeholderTextColor={colors.inactiveBlack}
+                multiline={true}
+              >
+                <Text>
+                  { this.userFriendlyString(item).map((itm) => itm) }
+                </Text>
+              </TextInput>
+            )
+          }
+        {/* Dropdown d'options de gestion de messages */}
+        <CustomDropdownButton index={index} vars={this.vars} onPressOption={this.manageOptionSelected}/>
+       </View>
     )
   }
 }
@@ -118,17 +120,9 @@ const styles = StyleSheet.create({
   field: {
     flexDirection:'row',
     borderWidth: 1,
-    borderColor: '#E6E4E2',
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    backgroundColor: '#E6E4E2'
+    borderColor: colors.lightgrey,
+    borderRadius: 20,
+    backgroundColor: colors.lightgrey,
   },
   input: {
     fontSize: 20,
@@ -137,12 +131,12 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 4,
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: fonts.light,
   },
   textVar: {
     color: colors.purple,
-    fontStyle: 'italic',
-    fontWeight: 'bold',
+    fontFamily: fonts.boldItalic,
   }
 });
 

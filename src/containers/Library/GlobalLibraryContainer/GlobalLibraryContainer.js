@@ -4,6 +4,7 @@ import colors from '../../../config/colors';
 import {createStackNavigator} from '@react-navigation/stack';
 import ListLibraryContainer from '../ListLibraryContainer/ListLibraryContainer';
 import CreateLibraryContainer from '../CreateLibraryContainer/CreateLibraryContainer';
+import fonts from '../../../config/fonts';
 
 const GlobalLibraryContainer = () => {
   const Stack = createStackNavigator();
@@ -24,20 +25,12 @@ const GlobalLibraryContainer = () => {
           },
           headerTintColor: colors.white,
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontFamily: fonts.bold,
             fontSize: 20,
           },
         }} />
     </Stack.Navigator>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.backGrey,
-    flexGrow: 1
-  },
-});
 
 export default GlobalLibraryContainer;

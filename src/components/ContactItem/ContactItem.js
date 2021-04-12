@@ -5,7 +5,8 @@ import {connect} from 'react-redux';
 import {Icon} from 'react-native-elements';
 import Interactable from 'react-native-interactable';
 import CustomMediumAvatar from '../CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
-import favoriteContactReducer from '../../store/reducers/favoriteContactReducer';
+import fonts from '../../config/fonts';
+import CustomMediumGradientAvatar from '../CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 
 class ContactItem extends React.Component {
 
@@ -38,8 +39,8 @@ class ContactItem extends React.Component {
   displayContactInfo = (contact) => {
     return(
       <View style={ styles.infosContainer }>
-        <Text style={[styles.text, {fontWeight: "bold"}]}> {contact.displayName} </Text>
-        {contact.phoneNumbers[0] && <Text style={styles.text}>{contact.phoneNumbers[0].number}</Text>}
+        <Text style={[styles.text, styles.textBold]}>{contact.displayName}</Text>
+        {contact.phoneNumbers[0] && <Text style={[styles.text, styles.textLight]}>{contact.phoneNumbers[0].number}</Text>}
         { this.displayFavorite(contact.recordID) }
       </View>
     )
@@ -67,7 +68,7 @@ class ContactItem extends React.Component {
             name="star"
             solid={this.displayFavorite(contact.recordID)}
             style={styles.button}
-            color={colors.favorites}
+            color={colors.lightorange}
             size={30}
             onPress={() => {this.toggleFavorite(contact.recordID)}} />
         </Animated.View>
@@ -149,7 +150,10 @@ class ContactItem extends React.Component {
             }}
             style={styles.subContainer}>
             <View style={styles.avatar}>
-              <CustomMediumAvatar titleOrIcon={{type: 'string', value: this.generateAvatarLabel(contactItem)}} />
+              <CustomMediumGradientAvatar
+                titleOrIcon={{type: 'string', value: this.generateAvatarLabel(contactItem)}}
+                titleStyle={styles.avatarTitleStyle}
+              />
             </View>
             { infosContainer }
           </TouchableOpacity>
@@ -163,7 +167,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: colors.backGrey,
   },
   subContainer: {
     flex: 1,
@@ -171,7 +174,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     paddingLeft: 20,
-    backgroundColor: colors.backGrey,
     opacity: 1,
     width: '100%',
     borderRightColor: colors.black,
@@ -198,9 +200,23 @@ const styles = StyleSheet.create({
   avatar: {
     marginRight: 15,
   },
+  avatarTitleStyle: {
+    color: colors.white,
+    backgroundColor: colors.transparent,
+    textShadowColor: colors.lightorange,
+    textShadowOffset: {width: 1.5, height: 1.5},
+    textShadowRadius: 1.5,
+  },
   text: {
     color: colors.black,
-    fontSize: 16,
+    fontSize: 15,
+  },
+  textBold: {
+    fontSize: 15,
+    fontFamily: fonts.medium
+  },
+  textLight: {
+    fontFamily: fonts.light
   },
   button: {
     width: 40,

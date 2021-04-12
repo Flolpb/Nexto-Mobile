@@ -3,19 +3,13 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import {Icon} from 'react-native-elements';
 import colors from '../../../config/colors';
 
-class CustomIconButton extends React.Component {
-
-  render() {
-    const { icon, index, onPressButton } = this.props;
-    return(
-      <TouchableOpacity
-        style={styles.insideButton}
-        onPress={() => { onPressButton(index) }}>
-        <Icon type={icon.type} name={icon.name} color={colors.black} size={20}/>
-      </TouchableOpacity>
-    )
-  }
-}
+const CustomIconButton = ({icon, color = colors.black, size = 20, onPressButton, index = null}) => (
+    <TouchableOpacity
+      style={styles.insideButton}
+      onPress={() => { onPressButton(index) }}>
+      <Icon type={icon.type} name={icon.name} color={color} size={size}/>
+    </TouchableOpacity>
+)
 
 const styles = StyleSheet.create({
   insideButton: {

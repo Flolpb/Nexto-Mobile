@@ -7,13 +7,17 @@ import {
   Text,
   View,
 } from 'react-native';
-import {Avatar, Icon, SearchBar} from 'react-native-elements';
+import {Icon, SearchBar} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Contacts from 'react-native-contacts';
 import colors from '../../../config/colors';
 import ContactItem from "../../../components/ContactItem/ContactItem"
 import {connect} from 'react-redux';
 import CustomMediumAvatar from '../../../components/CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
+import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar';
+import CustomMediumGradientAvatar
+  from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import fonts from '../../../config/fonts';
 
 class ListContactContainer extends React.Component {
 
@@ -103,12 +107,6 @@ class ListContactContainer extends React.Component {
     }
   };
 
-  createSeparator = () => {
-    return (
-      <View style={styles.separator} />
-    )
-  };
-
   createEmptyViewList = () => {
     return (
       <View style={ styles.emptyView }>
@@ -127,22 +125,9 @@ class ListContactContainer extends React.Component {
     )
   };
 
-  createSearchBar = () => {
-    return (
-      <SearchBar
-        inputStyle={ styles.searchBar }
-        searchIcon={{ name: 'search', color: colors.black }}
-        clearIcon={{ name: 'clear', color: colors.black }}
-        inputContainerStyle={ [styles.searchBar, styles.searchBarInput] }
-        containerStyle={ styles.searchBar }
-        placeholderTextColor={ colors.black }
-        selectionColor={ colors.black }
-        value = { this.state.search }
-        placeholder="Rechercher ..."
-        onChangeText={(text) => { this.searchFilter(text) }}
-      />
-    )
-  };
+  createSearchBar = () => (
+      <CustomSearchBar value={this.state.search} onSearch={this.searchFilter} />
+  )
 
 
   generateAvatarLabel = (contact) => {
@@ -162,6 +147,7 @@ class ListContactContainer extends React.Component {
         let fav = contacts.filter(item => item.recordID === favID);
         favoritesContacts.push(fav);
       });
+
       favoritesContacts.map((fav) => {
         content.push(
           <TouchableOpacity
@@ -230,7 +216,6 @@ class ListContactContainer extends React.Component {
             removeClippedSubviews={true}
             contentContainerStyle={styles.flatList}
             ListHeaderComponent={this.createListHeader}
-            ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={contacts}
             keyExtractor={(item, index) => item.recordID}
@@ -242,7 +227,7 @@ class ListContactContainer extends React.Component {
                   modContact={this.modifyContact}/>
             )}/>
           <View style={ styles.createButton }>
-            <CustomMediumAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={this.newContact} />
+            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={this.newContact} />
           </View>
         </SafeAreaView>
       </>
@@ -259,13 +244,6 @@ const styles = StyleSheet.create({
   flatList: {
     minHeight: '100%',
   },
-  separator: {
-    flex: 1,
-    marginRight: 30,
-    marginLeft: 20,
-    borderBottomColor: colors.black,
-    borderBottomWidth: 0.35,
-  },
   emptyView: {
     flex: 1,
     alignItems: 'center',
@@ -275,27 +253,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: colors.black,
     marginTop: 20,
-  },
-  searchBar: {
-    backgroundColor: colors.transparent,
-    borderBottomWidth: 0,
-    borderWidth: 0,
-    borderColor: colors.transparent,
-    paddingHorizontal: 10,
-    color: colors.black
-  },
-  searchBarInput: {
-    backgroundColor: '#E6E4E2',
-    borderRadius: 30,
-    margin: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    fontFamily: fonts.medium,
   },
   addPerson: {
     position: 'absolute',
@@ -321,7 +279,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   avatarBackgroundFav: {
-    backgroundColor: colors.favorites,
+    backgroundColor: colors.lightorange,
   },
   createButton: {
     position: 'absolute',

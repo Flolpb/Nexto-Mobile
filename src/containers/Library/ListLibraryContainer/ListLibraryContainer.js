@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
+import {View, StyleSheet, SafeAreaView, FlatList, Text, Button} from 'react-native';
 import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import colors from '../../../config/colors';
 import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar';
 import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import fonts from '../../../config/fonts';
-import axios from 'axios';
+import UserHelper from '../../../helpers/UserHelper/UserHelper';
 
 class ListLibraryContainer extends React.Component {
 
@@ -51,20 +51,8 @@ class ListLibraryContainer extends React.Component {
     return '';
   }
 
-  async getAllUsers(libraries) {
-    let promises = [];
-    libraries.map((library) => {
-      promises.push(axios.get("http://api.app-nexto.com/api/users/" + library.user)
-        .then(response =>  response.data)
-        .catch(error => {
-          console.log(error);
-        }));
-      Promise.all(promises).then((results) => {
-        results.forEach((response) => {
-          library.userData = response;
-        });
-      });
-    });
+  getAllUsers = () => {
+    console.log(UserHelper.login());
   }
 
   render() {
@@ -82,12 +70,12 @@ class ListLibraryContainer extends React.Component {
         user: 1,
       }
     ]
-    this.getAllUsers(libraries).then(r => console.log(r));
 
     return (
       <>
         <SafeAreaView
           style={styles.container}>
+          <Button onPress={this.getAllUsers}  title="get"/>
           <FlatList
             initialNumToRender="10"
             maxToRenderPerBatch="10"

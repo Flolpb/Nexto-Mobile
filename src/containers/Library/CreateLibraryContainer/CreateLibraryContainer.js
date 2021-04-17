@@ -1,8 +1,7 @@
 import React from 'react';
 import {
   FlatList,
-  StyleSheet,
-  TextInput,
+  StyleSheet, Switch,
   View,
 } from 'react-native';
 import colors from '../../../config/colors';
@@ -12,11 +11,14 @@ import CustomGradientTextButton from '../../../components/CustomButtons/CustomGr
 import CustomMediumGradientAvatar from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 import settings from '../../../config/settings';
+import axios from 'axios';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 
 class CreateLibraryContainer extends React.Component {
 
   state = {
-    libraryName: '',
+    libraryName: 'Test',
+    isPublic: false,
     message: '',
     messages: [
       'TEST TEST',
@@ -90,7 +92,40 @@ class CreateLibraryContainer extends React.Component {
       });
       return false;
     }
-    console.log(this.state.messages);
+
+    this.setState({
+      loading: true,
+    });
+
+    const library = {
+      name: this.state.libraryName,
+      user: this.state.user,
+      isPublic: this.state.isPublic,
+      messages: this.state.messages
+    }
+    console.log(library)
+    axios.post("http://api.app-nexto.com/api/libraries", { library })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    axios.get("http://api.app-nexto.com/api/libraries")
+      .then(response => {
+        console.log('getting data from axios', response.data);
+        setTimeout(() => {
+          this.setState({
+            loading: false,
+            axiosData: response.data
+          })
+        }, 2000)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
   }
 
   render() {
@@ -104,6 +139,19 @@ class CreateLibraryContainer extends React.Component {
           ListHeaderComponent={
             <View style={styles.subContainer}>
               <CustomTextInput value={this.state.libraryName} onChangeTextInput={(text) => this.setKeyValue('libraryName', text)} placeholder="Nom de la bibliothèque"/>
+
+              <View style={styles.switch}>
+                <CustomLabel text="Privée" fontType="light" size={16} />
+                <Switch
+                  trackColor={{ false: colors.lightgrey, true: colors.lightpurple }}
+                  thumbColor={colors.lightgrey}
+                  onValueChange={(value) => this.setKeyValue('isPublic', value)}
+                  value={this.state.isPublic}
+                />
+                <CustomLabel text="Publique" fontType="light" size={16} />
+              </View>
+
+
               <CustomGradientTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
             </View>
           }
@@ -166,7 +214,11 @@ const styles = StyleSheet.create({
   item: {
     width: '90%',
     alignSelf:'center',
-  }
+  },
+  switch: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
+  },
 });
 
 export default CreateLibraryContainer;

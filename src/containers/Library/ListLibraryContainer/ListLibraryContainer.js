@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
+import {View, StyleSheet, SafeAreaView, FlatList, Text, Button} from 'react-native';
 import {Avatar, Icon, SearchBar} from 'react-native-elements';
 import colors from '../../../config/colors';
 import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar';
 import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import fonts from '../../../config/fonts';
+import UserHelper from '../../../helpers/UserHelper/UserHelper';
 
 class ListLibraryContainer extends React.Component {
 
@@ -50,24 +51,42 @@ class ListLibraryContainer extends React.Component {
     return '';
   }
 
+  getAllUsers = () => {
+    console.log(UserHelper.login());
+  }
+
   render() {
     const { navigation } = this.props;
-    const libraries = []
+    let libraries = [
+      {
+        name: 'Anniversaires',
+        isPublic: false,
+        messages: [
+          'TEST TEST',
+          'TEST <%FIRSTNAME%>',
+          '<%LINK%> Regardez ce super lien',
+          '<%LINK%> <%LINK%>',
+        ],
+        user: 1,
+      }
+    ]
+
     return (
       <>
         <SafeAreaView
           style={styles.container}>
+          <Button onPress={this.getAllUsers}  title="get"/>
           <FlatList
             initialNumToRender="10"
             maxToRenderPerBatch="10"
-            contentContainerStyle={{minHeight: '100%'}}
+            contentContainerStyle={styles.flatList}
             ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={libraries}
             keyExtractor={(item, index) => item.id}
             renderItem={({item}) => (
-              <Text> Text </Text>
+              <Text> {item.name} </Text>
             )}/>
           <View style={ styles.createButton }>
             <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
@@ -83,6 +102,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backGrey,
     flexGrow: 1
+  },
+  flatList: {
+    minHeight: '100%',
   },
   createButton: {
     position: 'absolute',

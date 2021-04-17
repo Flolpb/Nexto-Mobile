@@ -14,8 +14,8 @@ const CustomMediumGradientAvatar = ({titleOrIcon, gradientColors = [colors.light
       size="medium"
       rounded
       onPress={onPressAvatar && (onPressAvatar)}
-      title={titleOrIcon.type === 'string' && (titleOrIcon.value)}
-      icon={titleOrIcon.type === 'icon' && (titleOrIcon.value)}
+      title={titleOrIcon.type === 'string' ? titleOrIcon.value : ''}
+      icon={titleOrIcon.type === 'icon' ? titleOrIcon.value : {}}
       titleStyle={titleStyle ? titleStyle : styles.avatarTitle}
       activeOpacity={0.7}
     />

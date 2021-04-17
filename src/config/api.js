@@ -1,7 +1,7 @@
 const PROFILE = {
-  local: 'http://localhost:8000/',
-  dev: 'http://192.168.1.22:8000/',
-  prod: 'https://api.app-nexto.com/',
+  local: 'http://localhost:8000',
+  dev: 'http://192.168.1.22:8000',
+  prod: 'https://api.app-nexto.com',
 };
 
 /*

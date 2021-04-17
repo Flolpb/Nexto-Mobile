@@ -6,6 +6,7 @@ import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar
 import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import fonts from '../../../config/fonts';
+import axios from 'axios';
 
 class ListLibraryContainer extends React.Component {
 
@@ -50,9 +51,39 @@ class ListLibraryContainer extends React.Component {
     return '';
   }
 
+  async getAllUsers(libraries) {
+    let promises = [];
+    libraries.map((library) => {
+      promises.push(axios.get("http://api.app-nexto.com/api/users/" + library.user)
+        .then(response =>  response.data)
+        .catch(error => {
+          console.log(error);
+        }));
+      Promise.all(promises).then((results) => {
+        results.forEach((response) => {
+          library.userData = response;
+        });
+      });
+    });
+  }
+
   render() {
     const { navigation } = this.props;
-    const libraries = []
+    let libraries = [
+      {
+        name: 'Anniversaires',
+        isPublic: false,
+        messages: [
+          'TEST TEST',
+          'TEST <%FIRSTNAME%>',
+          '<%LINK%> Regardez ce super lien',
+          '<%LINK%> <%LINK%>',
+        ],
+        user: 1,
+      }
+    ]
+    this.getAllUsers(libraries).then(r => console.log(r));
+
     return (
       <>
         <SafeAreaView
@@ -60,14 +91,14 @@ class ListLibraryContainer extends React.Component {
           <FlatList
             initialNumToRender="10"
             maxToRenderPerBatch="10"
-            contentContainerStyle={{minHeight: '100%'}}
+            contentContainerStyle={styles.flatList}
             ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={libraries}
             keyExtractor={(item, index) => item.id}
             renderItem={({item}) => (
-              <Text> Text </Text>
+              <Text> {item.name} </Text>
             )}/>
           <View style={ styles.createButton }>
             <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
@@ -83,6 +114,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backGrey,
     flexGrow: 1
+  },
+  flatList: {
+    minHeight: '100%',
   },
   createButton: {
     position: 'absolute',

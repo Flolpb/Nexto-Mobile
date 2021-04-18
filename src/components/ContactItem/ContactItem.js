@@ -67,7 +67,6 @@ class ContactItem extends React.Component {
             type="font-awesome-5"
             name="star"
             solid={this.displayFavorite(contact.recordID)}
-            style={styles.button}
             color={colors.lightorange}
             size={30}
             onPress={() => {this.toggleFavorite(contact.recordID)}} />

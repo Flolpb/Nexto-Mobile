@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: colors.backGrey,
   }
-})
+});
 
 export default GlobalMessageContainer;

@@ -6,29 +6,9 @@ import colors from '../../config/colors';
 class MainPage extends React.Component {
     constructor(props){
         super(props);
-        this.askPermission();
     }
 
-    askPermission = async () => {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.READ_CONTACTS
-            );
-            const grantedWrite = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS
-            );
-            const grantedSendSMS = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.SEND_SMS,
-                {
-                    title: 'Nexto Send SMS Permission',
-                    message: 'Nexto needs access to send sms',
-                }
-            );
 
-        } catch (err) {
-            console.warn(err)
-        }
-    };
 
     render(){
         return (

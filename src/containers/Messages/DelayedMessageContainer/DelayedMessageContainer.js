@@ -39,7 +39,7 @@ class DelayedMessageContainer extends React.Component {
 
     componentDidMount() {
         if (this.props.contactID) {
-            this.getContact()
+            this.getContact();
         }
     }
 
@@ -55,6 +55,8 @@ class DelayedMessageContainer extends React.Component {
         modalVisible: false,
         modalTitle: '',
     };
+
+
 
     getContact = async () => {
         const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
@@ -91,7 +93,7 @@ class DelayedMessageContainer extends React.Component {
             modalVisible: true,
             modalTitle: title,
         });
-    }
+    };
 
     mergePhoneNumbers = () => {
         if (this.state.phoneNumber) {
@@ -100,11 +102,11 @@ class DelayedMessageContainer extends React.Component {
                 phoneNumber: '',
             });
         }
-    }
+    };
 
     verifyPhoneNumbers = () => {
         this.mergePhoneNumbers();
-        const { phoneNumbers, message } = this.state
+        const { phoneNumbers, message } = this.state;
         if (!message) {
             this.showErrorModal('Champ message incomplet.')
         }
@@ -175,10 +177,11 @@ class DelayedMessageContainer extends React.Component {
     };
 
     setTime = (event, date) => {
-        if(date != null){
-            this.setState({date: date});
-        }
         this.setState({displayTime: false});
+        if(date != null){
+            const currentDate = date || this.state.date;
+            this.setState({date: currentDate});
+        }
     };
 
     setTags = (tag) => {
@@ -196,7 +199,7 @@ class DelayedMessageContainer extends React.Component {
         let array = this.state.phoneNumbers;
         array.splice(index, 1);
         this.setKeyValue('phoneNumbers', array);
-    }
+    };
 
     openModal = () => {
       this.refs.modal1.open();
@@ -209,7 +212,7 @@ class DelayedMessageContainer extends React.Component {
             value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
             icon={{ type: 'material', name: 'add' }} onPressButton={() => this.setTags(this.state.phoneNumber)} placeholder="Numéro de téléphone ..." />
       </View>
-    )
+    );
 
     renderFooter = () => {
         const { date } = this.state;
@@ -257,12 +260,12 @@ class DelayedMessageContainer extends React.Component {
                 onChange={this.setDate}
               />
               }
-              {this.state.displayTime &&
+              {this.state.displayTime && (
               <DateTimePicker
                 style={styles.datePickerStyle}
                 value={date}
                 mode="time"
-                onChange={this.setTime}/>
+                onChange={this.setTime}/>)
               }
           </>
         )
@@ -356,6 +359,8 @@ const styles = StyleSheet.create({
     datePickerStyle: {
         width: 200,
         marginTop: 20,
+        backgroundColor: colors.purple,
+
     },
     modal1: {
         backgroundColor: colors.purple,

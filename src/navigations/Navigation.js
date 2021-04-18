@@ -16,13 +16,13 @@ class Navigation extends React.Component{
 
     state = {
       tabHeight: 50,
-    }
+    };
 
     setTabHeight = (value) => {
       this.setState({
         tabHeight: value,
       })
-    }
+    };
 
     render(){
         return(

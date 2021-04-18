@@ -12,27 +12,11 @@ class GlobalMessageContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.sendPermission();
   }
 
-  sendPermission = async () => {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.SEND_SMS,
-      {
-        title: 'Nexto Send SMS Permission',
-        message: 'Nexto needs access to send sms',
-      }
-    );
-
-    if(granted === PermissionsAndroid.RESULTS.GRANTED){
-      console.log('You can now send sms')
-    }else{
-      alert('You have denied Send SMS Permission');
-    }
-  };
 
   render() {
-    const { route } = this.props
+    const { route } = this.props;
     const Tab = createMaterialTopTabNavigator();
     return(
       <Tab.Navigator

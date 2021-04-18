@@ -1,18 +1,47 @@
 import React from 'react';
-import {Button, Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {Button, Dimensions, Image, PermissionsAndroid, StyleSheet, Text, View} from 'react-native';
 import colors from '../../config/colors';
 
 
-function MainPage({navigation}) {
-    return (
-        <View style={styles.container}>
-            <View style={styles.imageContainer}>
-                <Image
-                  source={require('../../assets/images/logov2.png')}
-                  style={[styles.image, { width: Dimensions.get('window').width - 10 }]} />
+class MainPage extends React.Component {
+    constructor(props){
+        super(props);
+        this.askPermission();
+    }
+
+    askPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+            );
+            const grantedWrite = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS
+            );
+            const grantedSendSMS = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.SEND_SMS,
+                {
+                    title: 'Nexto Send SMS Permission',
+                    message: 'Nexto needs access to send sms',
+                }
+            );
+
+        } catch (err) {
+            console.warn(err)
+        }
+    };
+
+    render(){
+        return (
+            <View style={styles.container}>
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={require('../../assets/images/logov2.png')}
+                        style={[styles.image, { width: Dimensions.get('window').width - 10 }]} />
+                </View>
             </View>
-        </View>
-    );
+        );
+    }
+
 }
 const styles = StyleSheet.create({
     title: {

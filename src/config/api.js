@@ -9,7 +9,7 @@ const PROFILE = {
  */
 
 const API = {
-  BASE_URL: PROFILE['prod'],
+  BASE_URL: PROFILE['dev'],
   VALID_TOKEN: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtYWlsIjoidGVzdDJAdGVzdC5mciIsImV4cCI6MTYxODc0NDM1OX0.vWo--iCzVJRV-7xTfGuIkxF6Vvx7ScN5x_cG9_g73io",
 }
 

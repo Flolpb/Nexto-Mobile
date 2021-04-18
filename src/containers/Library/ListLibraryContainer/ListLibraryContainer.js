@@ -6,12 +6,33 @@ import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar
 import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import fonts from '../../../config/fonts';
-import UserHelper from '../../../helpers/UserHelper/UserHelper';
+import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
 
 class ListLibraryContainer extends React.Component {
 
   state = {
     search: '',
+    libraries: [],
+  }
+
+  componentDidMount() {
+    this.getAllLibraries();
+  }
+
+  getAllLibraries = () => {
+    const params = {
+      user: 1,
+    };
+    LibraryHelper.getAllLibraries(params).then(r => {
+      this.setKeyValue('libraries', r);
+      console.log(r)
+    });
+  }
+
+  setKeyValue = (key, value) => {
+    this.setState({
+      [key]: value,
+    });
   }
 
   createSeparator = () => {
@@ -51,36 +72,12 @@ class ListLibraryContainer extends React.Component {
     return '';
   }
 
-  getAllUsers = () => {
-    UserHelper.getAllUsers().then(r => console.log(r));
-    // UserHelper.getUserById(1).then(r => console.log(r));
-    // UserHelper.login({
-    //   "mail": "test2@test.fr",
-    //   "password": "1234",
-    // }).then(r => console.log(r));
-  }
-
   render() {
     const { navigation } = this.props;
-    let libraries = [
-      {
-        name: 'Anniversaires',
-        isPublic: false,
-        messages: [
-          'TEST TEST',
-          'TEST <%FIRSTNAME%>',
-          '<%LINK%> Regardez ce super lien',
-          '<%LINK%> <%LINK%>',
-        ],
-        user: 1,
-      }
-    ]
-
     return (
       <>
         <SafeAreaView
           style={styles.container}>
-          <Button onPress={this.getAllUsers}  title="get"/>
           <FlatList
             initialNumToRender="10"
             maxToRenderPerBatch="10"
@@ -88,7 +85,7 @@ class ListLibraryContainer extends React.Component {
             ListHeaderComponent={this.createListHeader}
             ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
-            data={libraries}
+            data={this.state.libraries}
             keyExtractor={(item, index) => item.id}
             renderItem={({item}) => (
               <Text> {item.name} </Text>

@@ -4,37 +4,38 @@ import axios from 'axios';
 const USER_HELPER_URL = API.BASE_URL + "/api/users";
 
 const UserHelper = {
-  getAllUsers: () => {
-    const headers = {
-      'Accept': 'application/json;charset=utf-8',
-      'Content-Type': 'application/json;charset=utf-8',
-      'Authorization': API.VALID_TOKEN,
-    };
-    axios.get(USER_HELPER_URL, headers)
-      .then(response => response.data['hydra:member'])
-      .catch(error => console.log(error));
+  getAllUsers: async () => {
+    try {
+      const headers = {
+        "Content-Type": 'application/json',
+        "Authorization": API.VALID_TOKEN,
+      };
+      return (await axios.get(USER_HELPER_URL, {headers})).data['hydra:member'];
+    } catch (err) {
+      console.log(err)
+    }
   },
-  getUserById: (id) => {
-    const headers = {
-      'Accept': 'application/json;charset=utf-8',
-      'Content-Type': 'application/json;charset=utf-8',
-      'Authorization': API.VALID_TOKEN,
-    };
-    axios.get(`${USER_HELPER_URL}/${id}`)
-      .then(response =>  response.data)
-      .catch(error => console.log(error));
+  getUserById: async (id) => {
+    try {
+      const headers = {
+        "Content-Type": 'application/json',
+        "Authorization": API.VALID_TOKEN,
+      };
+      return (await axios.get(`${USER_HELPER_URL}/${id}`, { headers })).data;
+    } catch (err) {
+      console.log(err)
+    }
   },
-  login: () => {
-    const headers = {
-      'Accept': 'application/json;charset=utf-8',
-      'Content-Type': 'application/json;charset=utf-8',
-    };
-    axios.post(`${API.BASE_URL}/auth/login`, {
-      "mail": "test@test.fr",
-      "password": "1234",
-    }, headers)
-      .then(response => response.data)
-      .catch(error => console.log(error));
+  login: async (formData) => {
+    try {
+      const headers = {
+        "Content-Type": 'application/json',
+        "Authorization": API.VALID_TOKEN,
+      };
+      return (await axios.post(`${API.BASE_URL}/auth/login`, formData, {headers})).data;
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

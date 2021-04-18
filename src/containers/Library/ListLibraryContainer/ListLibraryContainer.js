@@ -52,7 +52,12 @@ class ListLibraryContainer extends React.Component {
   }
 
   getAllUsers = () => {
-    console.log(UserHelper.getUserById(1));
+    UserHelper.getAllUsers().then(r => console.log(r));
+    // UserHelper.getUserById(1).then(r => console.log(r));
+    // UserHelper.login({
+    //   "mail": "test2@test.fr",
+    //   "password": "1234",
+    // }).then(r => console.log(r));
   }
 
   render() {

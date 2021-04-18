@@ -3,7 +3,7 @@ import {
     StyleSheet,
     View,
     Image,
-    Dimensions, Text,
+    Dimensions, Text, PermissionsAndroid,
 } from 'react-native';
 import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
@@ -14,18 +14,40 @@ class LogInContainer extends React.Component{
 
     constructor(props)
     {
-        super(props)
+        super(props);
         this.state = {
             username: '',
             password: ''
         }
+        this.askPermission();
     }
 
     setKeyValue = (key, value) => {
         this.setState({
             [key]: value,
         });
-    }
+    };
+
+    askPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+            );
+            const grantedWrite = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS
+            );
+            const grantedSendSMS = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.SEND_SMS,
+                {
+                    title: 'Nexto Send SMS Permission',
+                    message: 'Nexto needs access to send sms',
+                }
+            );
+
+        } catch (err) {
+            console.warn(err)
+        }
+    };
 
     render(){
         const { navigation } = this.props;

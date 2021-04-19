@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
 
+import getDate from '../../../utils/getDate';
 import ContactItem from '../../../components/ContactItem/ContactItem';
 import colors from '../../../config/colors';
 import {Icon} from 'react-native-elements';

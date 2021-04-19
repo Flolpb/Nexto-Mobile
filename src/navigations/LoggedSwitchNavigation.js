@@ -14,6 +14,20 @@ class LoggedSwitchNavigation extends React.Component
     {
         super(props)
     }
+
+    async componentDidMount()
+    {
+      if(await API.VALID_TOKEN() !== null)
+      {
+        AuthHelper.remember()
+        .then(async (data) => {
+          if(data.type === "success")
+          {
+            this.toggleLogIn(data.mail)
+          }
+        })
+      }
+    }
     
 
     _storeToken = async (token) => {

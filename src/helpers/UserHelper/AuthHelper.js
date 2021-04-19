@@ -16,6 +16,17 @@ const AuthHelper = {
           console.log(err);
         }
       },
+    remember: async () => {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': await API.VALID_TOKEN(),
+            };
+            return (await axios.get(`${API.BASE_URL}/auth/remember`, {headers})).data;
+        } catch (err) {
+          console.log(err);
+        }
+    }
 }
 
 export default AuthHelper;

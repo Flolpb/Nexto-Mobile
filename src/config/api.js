@@ -6,21 +6,6 @@ const PROFILE = {
   prod: 'https://api.app-nexto.com',
 };
 
-/* const getTokenFromLocalStorage = async () => {
-  try {
-    console.log('tam')
-    const value = await AsyncStorage.getItem('AUTH_TOKEN');
-    if (value !== null) {
-      // We have data!!
-      console.log(value)
-      return value
-    }
-  } catch (error) {
-    // Error retrieving data
-    return null
-  }
-}; */
-
 /*
   VALEUR A CHANGER EN FONCTION DE LA DESTINATION DES REQUETES
  */
@@ -39,7 +24,7 @@ let API = {
     } catch (error) {
       // Error retrieving data
       console.log(error)
-      return error
+      return null
     }
   },
 }

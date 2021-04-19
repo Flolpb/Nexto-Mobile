@@ -13,11 +13,12 @@ import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import MessageItem from '../../../components/MessageItem/MessageItem';
 import CustomMediumGradientAvatar
     from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import connect from 'react-redux/lib/connect/connect';
 
 class ListeMessageContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.readData().then();
+        this.reload().then();
         this.onStart().then();
     }
 
@@ -53,6 +54,11 @@ class ListeMessageContainer extends React.Component {
         }
     };
 
+    reload = async () => {
+        BackgroundTimer.runBackgroundTimer(() => {
+            this.readData();
+        }, 1000)
+    };
 
     //Messages Programmés
     onStart = async () => {
@@ -184,9 +190,6 @@ class ListeMessageContainer extends React.Component {
                 contentContainerStyle={{ paddingVertical: 20}}
               />
 
-              <View style={ styles.createButton }>
-                  <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'refresh', type: 'material' }}} onPressAvatar={() => this.readData()} />
-              </View>
           </SafeAreaView>
         )
     }
@@ -205,6 +208,8 @@ const styles = StyleSheet.create({
         right: 20,
     },
 });
+
+
 
 
 export default ListeMessageContainer;

@@ -10,7 +10,6 @@ const LibraryHelper = {
         "Content-Type": 'application/json',
         "Authorization": API.VALID_TOKEN,
       };
-      console.log(filters)
       return (await axios.get(LIBRARY_HELPER_URL, {
         params: {
           ...filters
@@ -19,6 +18,7 @@ const LibraryHelper = {
       })).data['hydra:member'];
     } catch (err) {
       console.log(err)
+      return false;
     }
   },
   getLibraryById: async (id) => {

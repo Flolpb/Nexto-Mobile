@@ -7,25 +7,34 @@ import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import fonts from '../../../config/fonts';
 import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
+import LibraryItem from '../../../components/LibraryItem/LibraryItem';
+import {connect} from 'react-redux';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 
 class ListLibraryContainer extends React.Component {
 
   state = {
     search: '',
+    emptyError: true,
     libraries: [],
   }
 
   componentDidMount() {
-    this.getAllLibraries();
+    this.getAllUserLibraries();
   }
 
-  getAllLibraries = () => {
+  getAllUserLibraries = () => {
     const params = {
       user: 1,
     };
     LibraryHelper.getAllLibraries(params).then(r => {
-      this.setKeyValue('libraries', r);
-      console.log(r)
+      if (!r) {
+        this.setKeyValue('emptyError', true);
+      } else {
+        this.setKeyValue('emptyError', false);
+        const action = { type: "STORE_LIBRARIES", libraries: r};
+        this.props.dispatch(action);
+      }
     });
   }
 
@@ -35,29 +44,40 @@ class ListLibraryContainer extends React.Component {
     });
   }
 
-  createSeparator = () => {
-    return (
-      <View
-        style={[
-          styles.separator,
-        ]}
-      />
-    )
-  };
-
   createEmptyViewList = () => {
-    return (
-      <View style={ styles.emptyView }>
-        <Icon type="material-community" name="bookshelf" size={75}/>
-        <Text style={ styles.emptyTag }> Aucune bibliothèque </Text>
-      </View>
-    )
+      {
+        return this.state.emptyError ? (
+          <View style={ styles.emptyView }>
+            <Text style={ styles.emptyTag }>Erreur de chargement.</Text>
+            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'refresh', type: 'material' }}} onPressAvatar={() => this.getAllUserLibraries()} />
+          </View>
+        ) : (
+          <View style={ styles.emptyView }>
+            <Icon type="material-community" name="bookshelf" size={75}/>
+            <Text style={ styles.emptyTag }>Aucune bibliothèque</Text>
+          </View>
+        )
+      }
   };
 
   createListHeader = () => {
+    const { lastAddedLibrary } = this.props;
     return(
       <>
         { this.createSearchBar() }
+        {
+          lastAddedLibrary && (
+            <>
+              <View style={{ marginHorizontal: 20 }}>
+                <CustomLabel text={"Dernière bibliothèque ajoutée"} position="left" />
+              </View>
+              <LibraryItem item={lastAddedLibrary} />
+            </>
+          )
+        }
+        <View style={{ marginHorizontal: 20 }}>
+          <CustomLabel text={"Mes bibliothèques"} position="left" />
+        </View>
       </>
     )
   };
@@ -73,7 +93,7 @@ class ListLibraryContainer extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    let { navigation, libraries } = this.props;
     return (
       <>
         <SafeAreaView
@@ -83,12 +103,11 @@ class ListLibraryContainer extends React.Component {
             maxToRenderPerBatch="10"
             contentContainerStyle={styles.flatList}
             ListHeaderComponent={this.createListHeader}
-            ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
-            data={this.state.libraries}
+            data={libraries}
             keyExtractor={(item, index) => item.id}
-            renderItem={({item}) => (
-              <Text> {item.name} </Text>
+            renderItem={({item, index}) => (
+              <LibraryItem key={index} item={item} />
             )}/>
           <View style={ styles.createButton }>
             <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
@@ -127,9 +146,11 @@ const styles = StyleSheet.create({
   },
   emptyTag: {
     fontSize: 30,
-    color: colors.black,
-    marginTop: 20,
     fontFamily: fonts.medium,
+    color: colors.black,
+    marginVertical: 20,
+    paddingHorizontal: 5,
+    textAlign: 'center'
   },
   searchBar: {
     backgroundColor: colors.transparent,
@@ -154,5 +175,12 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ListLibraryContainer;
+const mapStateToProps = (state) => {
+  return {
+    lastAddedLibrary: state.manageLibraries.lastAddedLibrary,
+    libraries: state.manageLibraries.libraries,
+  }
+};
+
+export default connect(mapStateToProps)(ListLibraryContainer);
 

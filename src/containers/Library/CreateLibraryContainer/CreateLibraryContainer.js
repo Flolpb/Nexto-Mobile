@@ -14,6 +14,8 @@ import settings from '../../../config/settings';
 import axios from 'axios';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
+import mapStateToProps from 'react-redux/lib/connect/mapStateToProps';
+import connect from 'react-redux/lib/connect/connect';
 
 class CreateLibraryContainer extends React.Component {
 
@@ -109,6 +111,8 @@ class CreateLibraryContainer extends React.Component {
       if (!r) {
         this.showModal('Erreur lors de la création de la bibliothèque. Veuillez réessayer.');
       } else {
+        const action = { type: 'ADD_LIBRARY', library: r }
+        this.props.dispatch(action);
         this.props.navigation.navigate('ListeBibliotheque');
       }
     });
@@ -207,4 +211,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateLibraryContainer;
+
+export default connect()(CreateLibraryContainer);

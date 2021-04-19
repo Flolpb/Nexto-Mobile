@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightgrey,
     borderRadius: 15,
     margin: 5,
-
   },
 })
 

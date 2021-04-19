@@ -24,6 +24,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
 import CustomDropdownModal from '../../../components/CustomModals/CustomDropdownModal/CustomDropdownModal';
 import connect from 'react-redux/lib/connect/connect';
+import CustomGradientTextButton
+  from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -106,7 +108,7 @@ class DirectMessage extends React.Component {
         phoneNumber: '',
       });
     }
-  }
+  };
 
 
   deleteTag = (index) => {
@@ -225,7 +227,7 @@ class DirectMessage extends React.Component {
           icon={{type: 'material', name: 'add'}} onPressButton={() => this.setTags(this.state.phoneNumber)}
           placeholder="Numéro de téléphone ..."/>
 
-      <Button title={"Ajouter un contact"} onPress={() => this.setKeyValue('contactVisible', true)} />
+      <CustomGradientTextButton title="Ajouter un contact" onPressButton={() => this.setKeyValue('contactVisible', true)} />
       <CustomDropdownModal
           visible={contactVisible}
           attributeModal={"contactVisible"}

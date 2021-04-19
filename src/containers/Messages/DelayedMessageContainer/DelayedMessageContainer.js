@@ -236,7 +236,7 @@ class DelayedMessageContainer extends React.Component {
                 <CustomTextInputWithButton
                 value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
                 icon={{ type: 'material', name: 'add' }} onPressButton={() => this.setTags(this.state.phoneNumber)} placeholder="Numéro de téléphone ..." />
-                <Button title={"Ajouter un contact"} onPress={() => this.setKeyValue('contactVisible', true)} />
+                <CustomGradientTextButton title="Ajouter un contact" onPressButton={() => this.setKeyValue('contactVisible', true)} />
                 <CustomDropdownModal
                 visible={contactVisible}
                 attributeModal={"contactVisible"}

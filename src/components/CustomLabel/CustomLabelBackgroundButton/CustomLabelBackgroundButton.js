@@ -1,14 +1,14 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import colors from '../../../config/colors';
 import fonts from '../../../config/fonts';
 import CustomIconButton from '../../CustomButtons/CustomIconButton/CustomIconButton';
 
-const CustomLabelBackgroundButton = ({text, onPressButton, icon }) => (
-  <View style={styles.field}>
+const CustomLabelBackgroundButton = ({text, onPressButton, icon, onPressLabel = () => {} }) => (
+  <TouchableOpacity style={styles.field} onPress={onPressLabel}>
     <Text style={styles.textInput}> {text} </Text>
     <CustomIconButton icon={icon} onPressButton={onPressButton} />
-  </View>
+  </TouchableOpacity>
 )
 
 const styles = StyleSheet.create({

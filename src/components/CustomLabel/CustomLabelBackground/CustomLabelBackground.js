@@ -5,7 +5,7 @@ import fonts from '../../../config/fonts';
 
 const CustomLabelButton = ({ text, size = 16, spaceBetween = 10}) => (
   <View style={[styles.field, { marginVertical: spaceBetween }]}>
-    <Text style={[styles.textInput, { fontSize: size }]}> {text} </Text>
+    <Text style={[styles.text, { fontSize: size }]}> {text} </Text>
   </View>
 )
 
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
   },
-  textInput: {
+  text: {
     flex: 4,
     fontSize: 18,
     fontFamily: fonts.medium,

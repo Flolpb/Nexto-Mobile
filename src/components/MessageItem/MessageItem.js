@@ -2,7 +2,6 @@ import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import colors from '../../config/colors';
 import fonts from '../../config/fonts';
-import CustomTextButton from '../CustomButtons/CustomTextButton/CustomTextButton';
 import CustomGradientTextButton from '../CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
 import CustomLabel from '../CustomLabel/CustomLabel';
 import {connect} from 'react-redux';

@@ -11,10 +11,8 @@ import CustomGradientTextButton from '../../../components/CustomButtons/CustomGr
 import CustomMediumGradientAvatar from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 import settings from '../../../config/settings';
-import axios from 'axios';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
-import mapStateToProps from 'react-redux/lib/connect/mapStateToProps';
 import connect from 'react-redux/lib/connect/connect';
 
 class CreateLibraryContainer extends React.Component {
@@ -23,12 +21,7 @@ class CreateLibraryContainer extends React.Component {
     libraryName: 'Test',
     isPublic: false,
     message: '',
-    messages: [
-      'TEST TEST',
-      'TEST <%FIRSTNAME%>',
-      '<%LINK%> Regardez ce super lien',
-      '<%LINK%> <%LINK%>',
-    ],
+    messages: [],
     modalVisible: false,
     modalTitle: '',
   }

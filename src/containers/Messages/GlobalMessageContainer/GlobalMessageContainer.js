@@ -48,6 +48,7 @@ class GlobalMessageContainer extends React.Component {
     const { route } = this.props
     const Stack = createStackNavigator();
     const Tab = createMaterialTopTabNavigator();
+    console.log(this.state.chosenLibrary)
     return(
       <Stack.Navigator
         initialRouteName="GlobalMessageContainer">

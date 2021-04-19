@@ -71,7 +71,13 @@ class ListLibraryContainer extends React.Component {
               <View style={{ marginHorizontal: 20 }}>
                 <CustomLabel text={"Dernière bibliothèque ajoutée"} position="left" />
               </View>
-              <LibraryItem item={lastAddedLibrary} />
+              {
+                this.props.selectionFromMessage ? (
+                  <LibraryItem item={lastAddedLibrary} onPressItem={() => this.selectLibrary(lastAddedLibrary)} />
+                ) : (
+                  <LibraryItem item={lastAddedLibrary} />
+                )
+              }
             </>
           )
         }
@@ -139,9 +145,13 @@ class ListLibraryContainer extends React.Component {
               )
             }
             }/>
-          <View style={ styles.createButton }>
-            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
-          </View>
+          {
+            !this.props.selectionFromMessage && (
+              <View style={ styles.createButton }>
+                <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
+              </View>
+            )
+          }
         </SafeAreaView>
       </>
     )

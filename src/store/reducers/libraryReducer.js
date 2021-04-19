@@ -15,6 +15,7 @@ function manageLibraries(state = initialState, action) {
       nextState = {
         ...state,
         lastAddedLibrary: action.library,
+        libraries: [...state.libraries, action.library]
       }
       return nextState || state;
     default:

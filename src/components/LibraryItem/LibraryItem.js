@@ -36,19 +36,10 @@ class LibraryItem extends React.Component {
           style={[styles.container, styles.textContainer]}
           onPress={onPressItem}
           >
-          <CustomLabel text={item.name} position="left" fontType="medium" size={18} />
-          {
-            item.messages.slice(0,3).map((message) => (
-              <Text>
-                { this.userFriendlyString(message) }
-              </Text>
-            ))
-          }
-          {
-            item.messages.length > 3 && (
-              <CustomLabel text={`Autres messages (${item.messages.length - 3})`} position="center" fontType="medium" size={16} />
-            )
-          }
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <CustomLabel text={`${item.name.slice(0,30)}${item.name.length>30 ? (' ...') : ''}`} position="left" fontType="medium" size={18} />
+            <CustomLabel text={`${item.messages.length} messages`} position="left" fontType="light" size={16} />
+          </View>
         </TouchableOpacity>
     )
   }
@@ -63,8 +54,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: colors.lightgrey,
     borderRadius: 20,
-    paddingLeft: 20,
-    paddingBottom: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   textVar: {
     color: colors.purple,

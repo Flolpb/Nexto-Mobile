@@ -66,7 +66,7 @@ class ListLibraryContainer extends React.Component {
       <>
         { this.createSearchBar() }
         {
-          lastAddedLibrary && (
+          lastAddedLibrary && !this.state.search && (
             <>
               <View style={{ marginHorizontal: 20 }}>
                 <CustomLabel text={"Dernière bibliothèque ajoutée"} position="left" />
@@ -75,9 +75,13 @@ class ListLibraryContainer extends React.Component {
             </>
           )
         }
-        <View style={{ marginHorizontal: 20 }}>
-          <CustomLabel text={"Mes bibliothèques"} position="left" />
-        </View>
+        {
+          !this.state.search && (
+            <View style={{ marginHorizontal: 20 }}>
+              <CustomLabel text={"Mes bibliothèques"} position="left" />
+            </View>
+          )
+        }
       </>
     )
   };
@@ -88,12 +92,28 @@ class ListLibraryContainer extends React.Component {
     )
   };
 
-  searchFilter = () => {
-    return '';
-  }
+  searchFilter = (text) => {
+    if (text) {
+      const { libraries } = this.props;
+      let filteredLibraries;
+      filteredLibraries = libraries.filter(item => {
+        return item.name.toUpperCase().indexOf(text.toUpperCase()) > -1;
+      });
+      this.setState({
+        search: text,
+        filteredLibraries: filteredLibraries
+      });
+    } else {
+      this.setState({
+        search: text,
+        filteredLibraries: undefined
+      });
+    }
+  };
 
   render() {
-    let { navigation, libraries } = this.props;
+    let { navigation  } = this.props;
+    const libraries = this.state.filteredLibraries ? this.state.filteredLibraries : this.props.libraries;
     return (
       <>
         <SafeAreaView

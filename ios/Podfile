@@ -16,6 +16,10 @@ target 'AndroidProject' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 >>>>>>> 423a56441aea64517494da333a41c89451375398
 
+  pod 'Interactable', :path => '../node_modules/react-native-interactable'
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'AndroidProjectTests' do
     inherit! :complete
     # Pods for testing

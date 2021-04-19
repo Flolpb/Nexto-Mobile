@@ -2,5 +2,14 @@ export default {
   black: "#353535",
   inactiveBlack: "#b3b3b3",
   white: "#f7f7f7",
-  transparent: "rgba(0,0,0,0)"
+  transparent: "rgba(0,0,0,0)",
+  purple: '#431D60',
+  lightpurple: 'rgba(67,29,96,0.7)',
+  orange: '#F8AD13',
+  lightorange: 'rgba(248,173,19,0.7)',
+  // backGrey: '#C9C6C1',
+  backGrey: '#e7e7e7',
+  grey: "#696969",
+  lightgrey: "#f2f2f2",
+  green: "#7FFF00",
 }

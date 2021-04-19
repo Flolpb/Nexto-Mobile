@@ -2,37 +2,64 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import 'react-native-gesture-handler';
-import {Icon} from 'react-native-elements';
-import ListeMessage from '../components/ListeMessage/ListeMessage';
-import Accueil from '../components/Accueil/Accueil';
-import ListeContact from '../components/ListeContact/ListeContact';
-import MessageContainer from '../components/MessageContainer/MessageContainer';
 import colors from '../config/colors';
-
+import {Icon} from 'react-native-elements';
+import ListMessageContainer from '../containers/Messages/ListMessageContainer/ListMessageContainer';
+import MainPage from '../containers/MainPage/MainPage';
+import GlobalMessageContainer from '../containers/Messages/GlobalMessageContainer/GlobalMessageContainer';
+import GlobalLibraryContainer from '../containers/Library/GlobalLibraryContainer/GlobalLibraryContainer';
+import GlobalContactContainer from '../containers/Contacts/GlobalContactContainer/GlobalContactContainer';
 
 const Tab = createMaterialTopTabNavigator();
 
 class Navigation extends React.Component{
+
+    state = {
+      tabHeight: 50,
+    };
+
+    setTabHeight = (value) => {
+      this.setState({
+        tabHeight: value,
+      })
+    };
+
     render(){
         return(
             <>
                 <NavigationContainer>
                     <Tab.Navigator
-                      initialRouteName="Home"
+                      swipeEnabled={false}
+                      initialRouteName="MainPage"
                       tabBarPosition="bottom"
                       tabBarOptions={{
                         showIcon: true,
                         showLabel: false,
-                        activeTintColor: colors.black,
-                        inactiveTintColor: colors.inactiveBlack,
+                        activeTintColor: colors.white,
+                        inactiveTintColor: colors.lightpurple,
                         indicatorStyle: {
-                          borderBottomColor: colors.black,
+                          borderBottomColor: colors.white,
                           borderBottomWidth: 2,
                         },
+                        style: {
+                          backgroundColor: colors.backGrey,
+                          height: this.state.tabHeight,
+                          borderTopColor: "transparent",
+                          elevation: 0,
+                        }
                     }} >
                       <Tab.Screen
-                        name="Liste des contacts"
-                        component={ListeContact}
+                        name="GlobalLibraryContainer"
+                        component={GlobalLibraryContainer}
+                        options={{
+                          tabBarColor: colors.white,
+                          tabBarIcon: ({color, size}) => (
+                            <Icon type="material-community" name="bookshelf" color={color} size={size} />
+                          )
+                        }} />
+                      <Tab.Screen
+                        name="GlobalContactContainer"
+                        component={GlobalContactContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -40,8 +67,8 @@ class Navigation extends React.Component{
                           )
                       }} />
                       <Tab.Screen
-                        name="Home"
-                        component={Accueil}
+                        name="MainPage"
+                        component={MainPage}
                         options={{
                             tabBarColor: colors.white,
                             tabBarIcon: ({color, size}) => (
@@ -49,8 +76,8 @@ class Navigation extends React.Component{
                             )
                         }} />
                       <Tab.Screen
-                        name="Liste des Messages"
-                        component={ListeMessage}
+                        name="ListMessageContainer"
+                        component={ListMessageContainer}
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
@@ -58,15 +85,16 @@ class Navigation extends React.Component{
                           )
                         }} />
                       <Tab.Screen
-                        name="Message"
-                        component={MessageContainer}
+                        name="GlobalMessageContainer"
                         options={{
                           tabBarColor: colors.white,
                           tabBarIcon: ({color, size}) => (
                             <Icon name="message" color={color} size={size} />
                           )
                         }}
-                      />
+                      >
+                        {props => <GlobalMessageContainer {...props} setTabHeight={this.setTabHeight} /> }
+                      </Tab.Screen>
                     </Tab.Navigator>
                 </NavigationContainer>
             </>

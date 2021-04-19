@@ -1,17 +1,41 @@
 import React from 'react';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider } from 'react-redux';
 import 'react-native-gesture-handler';
-import Navigation from './navigations/Navigation';
-import { Provider } from 'react-redux'
-import Store from './store/configureStore'
-import SwitchLogInForm from './components/LogIn/SwitchLogInForm'
+import Store from './store/configureStore';
+import {SafeAreaView, StatusBar} from 'react-native';
+import colors from './config/colors';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import LoggedSwitchNavigation from './navigations/LoggedSwitchNavigation';
 
 
 class App extends React.Component {
+
+  constructor() {
+    super();
+    this.changeNavBarColor()
+  }
+
+  // Couleur de la barre du bas
+  changeNavBarColor = async () => {
+    try{
+      await changeNavigationBarColor(colors.backGrey, true, true);
+    }catch(e){
+      console.log(e)// {success: false}
+    }
+  }
+
   render() {
     return (
-      <Provider store={ Store }>
-        <SwitchLogInForm />
-      </Provider>
+      <SafeAreaView style={{ flex: 1 }}>
+        {/*Couleur de la barre du haut*/}
+        <StatusBar backgroundColor={ colors.backGrey } barStyle="dark-content" />
+        <Provider store={ Store }>
+          <PaperProvider>
+            <LoggedSwitchNavigation />
+          </PaperProvider>
+        </Provider>
+      </SafeAreaView>
     );
   }
 }

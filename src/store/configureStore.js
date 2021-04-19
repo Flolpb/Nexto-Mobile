@@ -1,9 +1,13 @@
-import { createStore, combineReducers } from 'redux';
-import toggleFavorite from './reducers/favoriteReducer'
+import {combineReducers, createStore} from 'redux';
+import toggleContactFavorite from './reducers/favoriteContactReducer'
+import manageContacts from './reducers/contactReducer';
+import manageLibraries from './reducers/libraryReducer';
 import toggleLogIn from './reducers/logInReducer'
 
 const combinedStore = combineReducers({
-    toggleFavorite,
+    toggleContactFavorite,
+    manageContacts,
+    manageLibraries,
     toggleLogIn
 })
 

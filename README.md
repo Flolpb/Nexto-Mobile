@@ -94,7 +94,7 @@ Tout en haut à droite, sélectionnez "Nouveau", puis renseignez le chemin de Pl
 
 Connectez votre téléphone à votre ordinateur, via un câble USB.
 
-Dans les options du téléphone, accédez aux paramètres de **débogage USB**. Si vous n'y avez pas accès, activez le mode Développeur du téléphone (voir ce [tutoriel](https://www.nextpit.fr/comment-activer-options-developpeurs-android) si besoin).
+Dans les options du téléphone, accédez aux paramètres de **débogage USB**. Si vous n'y avez pas accès, activez le mode Développeur du téléphone (voir ce [tuto](https://www.nextpit.fr/comment-activer-options-developpeurs-android) si besoin).
 
 Pour vérifier si le téléphone est bien reconnu, dans votre terminal du projet tapez : 
 
@@ -146,3 +146,6 @@ adb reverse tcp:8081 tcp:8081
 cd android && gradlew clean
 
 npm cache clean --force
+
+Lors de l'ajout de nouvelles fonts dans src/assets/fonts:
+npx react-native link

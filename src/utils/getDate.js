@@ -1,13 +1,18 @@
-export default function getDate(separator='', d){
+export default function getDate(d){
 
     let min = d.getMinutes();
-    if(parseInt(min) < 10){
-        min = "0"+min;
-    }
+    min.toString().length === 1 && (min = '0' + min.toString());
+
     let hours = d.getHours();
+    hours.toString().length === 1 && (hours = '0' + hours.toString());
+
     let day = d.getDate();
+    day.toString().length === 1 && (day = '0' + day.toString());
+
     let month = d.getMonth() + 1;
+    month.toString().length === 1 && (month = '0' + month.toString());
+
     let year = d.getFullYear();
 
-    return `${day}${separator}${month<10?`0${month}`:`${month}`}${separator}${year} ${hours}${separator}${min}`
+    return [`${day}/${month}/${year}`, `${hours}:${min}`];
 }

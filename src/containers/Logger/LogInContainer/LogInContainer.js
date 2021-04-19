@@ -16,8 +16,8 @@ class LogInContainer extends React.Component{
     {
         super(props)
         this.state = {
-            username: '',
-            password: ''
+            mail: 'test2@test.fr',
+            password: '1234'
         }
     }
 
@@ -42,15 +42,15 @@ class LogInContainer extends React.Component{
                 </View>
 
                 <View style={styles.subContainer}>
-                    <CustomTextInput value={this.state.username} placeholder="Identifiant" isMultiline="false"
-                                     onChangeTextInput={(text) => this.setKeyValue('username', text)} />
-
-                    <CustomTextInput value={this.state.mail} placeholder="Adresse-mail" isMultiline="false"
+                    <CustomTextInput value={this.state.mail} placeholder="Identifiant" isMultiline="false"
                                      onChangeTextInput={(text) => this.setKeyValue('mail', text)} />
+
+                    <CustomTextInput value={this.state.password} placeholder="Mot de passe" isMultiline="false"
+                                     onChangeTextInput={(text) => this.setKeyValue('password', text)} />
 
                     <View style={{marginTop: 20}}>
                         <CustomGradientTextButton title="Connexion"
-                                                  onPressButton={() => this.props.onLogIn(this.state.username)}
+                                                  onPressButton={() => this.props.onLogIn(this.state.mail, this.state.password)}
                         />
                     </View>
 

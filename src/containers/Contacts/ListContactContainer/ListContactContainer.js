@@ -122,7 +122,7 @@ class ListContactContainer extends React.Component {
 
   createSearchBar = () => (
       <CustomSearchBar value={this.state.search} onSearch={this.searchFilter} />
-  )
+  );
 
 
   generateAvatarLabel = (contact) => {

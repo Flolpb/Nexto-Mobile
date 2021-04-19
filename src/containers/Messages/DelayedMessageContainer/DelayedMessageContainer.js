@@ -5,7 +5,7 @@ import {
     Text,
     PermissionsAndroid,
     TouchableOpacity,
-    SafeAreaView, FlatList,
+    SafeAreaView, FlatList, Button,
 } from 'react-native';
 import 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -25,6 +25,9 @@ import fonts from '../../../config/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import {Icon} from 'react-native-elements';
 import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
+import VARS from '../../../config/vars';
+import CustomDropdownModal from '../../../components/CustomModals/CustomDropdownModal/CustomDropdownModal';
+import connect from 'react-redux/lib/connect/connect';
 
 
 class DelayedMessageContainer extends React.Component {
@@ -50,6 +53,7 @@ class DelayedMessageContainer extends React.Component {
         toggleSwipeToClose: true,
         modalVisible: false,
         modalTitle: '',
+        contactVisible: false,
     };
 
     getContact = async () => {
@@ -63,6 +67,8 @@ class DelayedMessageContainer extends React.Component {
             });
         }
     };
+
+
 
     readData = async () => {
         try{
@@ -108,12 +114,14 @@ class DelayedMessageContainer extends React.Component {
             phoneNumbers.map(phoneNumber => {
                 //test si le premier caractère est un "+"
                 const firstCaractere = phoneNumber.slice(0, 1);
+                let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
                 if (firstCaractere === "+") {
-                    let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
-                    if (isNaN(lastCaractere)) {
-                        this.programSms(phoneNumber).then();
-                    } else {
-                        this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${lastCaractere}`)
+                    if(lastCaractere != null){
+                        if (isNaN(lastCaractere)) {
+                            this.programSms(phoneNumber).then();
+                        } else {
+                            this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${lastCaractere}`)
+                        }
                     }
                 }
                 // Test si le numéro de téléphone est bien composé seulement de numéros
@@ -172,9 +180,9 @@ class DelayedMessageContainer extends React.Component {
 
     setTime = (event, date) => {
         this.setState({displayTime: false});
+
         if(date != null){
-            const currentDate = date || this.state.date;
-            this.setState({date: currentDate});
+            this.setState({date: date});
         }
     };
 
@@ -199,18 +207,49 @@ class DelayedMessageContainer extends React.Component {
       this.refs.modal1.open();
     };
 
-    renderHeader = () => (
-      <View style={styles.subContainer}>
-          <CustomLabel text="Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16} fontType="bold" />
-          <CustomTextInputWithButton
-            value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
-            icon={{ type: 'material', name: 'add' }} onPressButton={() => this.setTags(this.state.phoneNumber)} placeholder="Numéro de téléphone ..." />
-      </View>
-    );
+    addContact = (contact) => {
+        Contacts.getContactById(contact.recordID).then(contact => {
+            this.setState({
+                phoneNumbers: [...this.state.phoneNumbers, contact.phoneNumbers[0].number],
+                contact: contact,
+            });
+        });
+    };
+
+    renderHeader = () => {
+        let contacts = [];
+
+        for(let i = 0; i < this.props.contacts.length; i++){
+            contacts.push({label: this.props.contacts[i].displayName, value: this.props.contacts[i]});
+        }
+
+        let { contactVisible } = this.state;
+
+        return(
+        <>
+            <View style={styles.subContainer}>
+                <CustomLabel text="Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16} fontType="bold" />
+                <CustomTextInputWithButton
+                value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
+                icon={{ type: 'material', name: 'add' }} onPressButton={() => this.setTags(this.state.phoneNumber)} placeholder="Numéro de téléphone ..." />
+                <CustomGradientTextButton title="Ajouter un contact" onPressButton={() => this.setKeyValue('contactVisible', true)} />
+                <CustomDropdownModal
+                visible={contactVisible}
+                attributeModal={"contactVisible"}
+                setKeyValue={this.setKeyValue}
+                title="Ajouter un contact"
+                vars={contacts}
+                onSelectOption={this.addContact}
+                />
+            </View>
+         </>
+        )
+    };
 
     renderFooter = () => {
         const { date } = this.state;
         let dateString = date ? getDate(date) : 'Aucune';
+
         return (
           <>
               <View style={styles.subContainer}>
@@ -263,7 +302,7 @@ class DelayedMessageContainer extends React.Component {
               }
           </>
         )
-    }
+    };
 
     render() {
         const { modalVisible, modalTitle } = this.state;
@@ -373,4 +412,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DelayedMessageContainer;
+const mapStateToProps = (state) => {
+    return {
+        contacts: state.manageContacts.contacts,
+    }
+};
+
+export default connect(mapStateToProps)(DelayedMessageContainer);

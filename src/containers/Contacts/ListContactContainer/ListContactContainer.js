@@ -40,13 +40,8 @@ class ListContactContainer extends React.Component {
 
   askPermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_CONTACTS
-      );
-      const grantedWrite = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
+      if (granted) {
         this.getContacts()
       }
     } catch (err) {
@@ -127,7 +122,7 @@ class ListContactContainer extends React.Component {
 
   createSearchBar = () => (
       <CustomSearchBar value={this.state.search} onSearch={this.searchFilter} />
-  )
+  );
 
 
   generateAvatarLabel = (contact) => {

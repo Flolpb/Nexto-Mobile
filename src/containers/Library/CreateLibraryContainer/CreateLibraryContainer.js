@@ -18,7 +18,7 @@ import connect from 'react-redux/lib/connect/connect';
 class CreateLibraryContainer extends React.Component {
 
   state = {
-    libraryName: 'Test',
+    libraryName: '',
     isPublic: false,
     message: '',
     messages: [],
@@ -81,6 +81,12 @@ class CreateLibraryContainer extends React.Component {
     // Vérification du nom de la librairie
     if (this.state.libraryName === '') {
       this.showModal('Le nom de la bibliothèque n\'est pas renseignée.');
+      return false;
+    }
+
+    // Vérification d'une bibliothèque vide
+    if (!this.state.messages.length) {
+      this.showModal('La bibliothèque ne contient pas de message.');
       return false;
     }
 

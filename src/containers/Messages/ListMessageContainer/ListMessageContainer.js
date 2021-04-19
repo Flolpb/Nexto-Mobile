@@ -3,17 +3,21 @@ import {StyleSheet, View, SafeAreaView, SectionList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
+
+import getDate from '../../../utils/getDate';
+import ContactItem from '../../../components/ContactItem/ContactItem';
 import colors from '../../../config/colors';
 import {delayedMessageNotification} from '../../../notification.android';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import MessageItem from '../../../components/MessageItem/MessageItem';
 import CustomMediumGradientAvatar
     from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import connect from 'react-redux/lib/connect/connect';
 
 class ListeMessageContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.readData().then();
+        this.reload().then();
         this.onStart().then();
     }
 
@@ -48,6 +52,11 @@ class ListeMessageContainer extends React.Component {
         }
     };
 
+    reload = async () => {
+        BackgroundTimer.runBackgroundTimer(() => {
+            this.readData();
+        }, 1000)
+    };
 
     //Messages Programmés
     onStart = async () => {
@@ -179,9 +188,6 @@ class ListeMessageContainer extends React.Component {
                 contentContainerStyle={{ paddingVertical: 20}}
               />
 
-              <View style={ styles.createButton }>
-                  <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'refresh', type: 'material' }}} onPressAvatar={() => this.readData()} />
-              </View>
           </SafeAreaView>
         )
     }

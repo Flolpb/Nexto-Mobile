@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   PermissionsAndroid,
-  SafeAreaView, FlatList,
+  SafeAreaView, FlatList, Switch, TextInput,
 } from 'react-native';
 import SmsAndroid from 'react-native-get-sms-android';
 import colors from '../../../config/colors';
@@ -22,6 +22,10 @@ import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
+import CustomGradientTextButton
+  from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
+import CustomLabelBackgroundButton from '../../../components/CustomLabel/CustomLabelBackgroundButton/CustomLabelBackgroundButton';
+import CustomLabelBackground from '../../../components/CustomLabel/CustomLabelBackground/CustomLabelBackground';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -41,6 +45,7 @@ class DirectMessage extends React.Component {
     message: '',
     modalVisible: false,
     modalTitle: '',
+    fromLibrary: true,
   };
 
   askPermissions = async () => {
@@ -195,27 +200,82 @@ class DirectMessage extends React.Component {
     </View>
   )
 
-  renderFooter = () => (
-    <>
-      <View style={styles.subContainer}>
-        <CustomLabel text="Saisir le message à envoyer" spaceBetween={3} position="left" size={16} fontType="bold" />
-        <CustomTextInputWithButton
-          value={this.state.message} onChangeTextInput={(message) => this.setKeyValue('message', message)}
-          icon={{ type: 'material', name: 'send' }} onPressButton={this.sendSms} placeholder="Votre message ..." />
-      </View>
+  renderFooter = () => {
+    const { fromLibrary, message } = this.state;
+    const { navigation, setChosenLibrary, chosenLibrary } = this.props;
+    return(
+      <>
+        {
+          fromLibrary ? (
+            <>
+              {
+                chosenLibrary ? (
+                  <>
+                    <View style={styles.subContainer}>
+                      <CustomLabel text="Bibliothèque sélectionnée" size={16} />
+                      <CustomLabelBackgroundButton text={chosenLibrary.name} onPressButton={setChosenLibrary} icon={{ name: 'close', type: 'material' }} />
+                    </View>
+                    <View style={styles.subContainer}>
+                      <CustomLabel text="Messages de la bibliothèque" size={16} />
+                      {
+                        chosenLibrary.messages.map((message, index) => (
+                          <CustomLabelBackground key={index} text={message} size={14} spaceBetween={10} />
+                        ))
+                      }
+                    </View>
+                    <View style={styles.subContainer}>
+                      <View style={styles.button}>
+                        <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'send' }}} onPressAvatar={() => this.sendSms()} />
+                      </View>
+                    </View>
+                  </>
+                ) : (
+                  <View style={styles.subContainer}>
+                    <CustomGradientTextButton
+                      title="Sélectionner une bibliothèque"
+                      onPressButton={() => navigation.navigate('ListLibraryContainerFromMessage')}
+                    />
+                  </View>
+                )
+              }
+            </>
+          ) : (
+            <>
+              <View style={styles.subContainer}>
+                <CustomLabel text="Saisir le message à envoyer" spaceBetween={3} position="left" size={16} fontType="bold" />
+                <CustomTextInputWithButton
+                  value={message} onChangeTextInput={(message) => this.setKeyValue('message', message)}
+                  icon={{ type: 'material', name: 'send' }} onPressButton={this.sendSms} placeholder="Votre message ..." />
+              </View>
 
-      <View style={styles.subContainer}>
-        <View style={styles.button}>
-          <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'camera' }}} onPressAvatar={this.openCameraPicker} />
-        </View>
-      </View>
-    </>
-  )
+              <View style={styles.subContainer}>
+                <View style={styles.button}>
+                  <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'camera' }}} onPressAvatar={this.openCameraPicker} />
+                </View>
+              </View>
+            </>
+          )
+        }
+      </>
+    )
+  }
 
 
   render() {
     const { modalVisible, modalTitle } = this.state;
     return(
+      <>
+      <SafeAreaView>
+        <View style={styles.switch}>
+          <CustomLabel text="Depuis une bibliothèque" fontType="medium" size={18} />
+          <Switch
+            trackColor={{ false: colors.lightgrey, true: colors.lightpurple }}
+            thumbColor={colors.lightgrey}
+            onValueChange={(value) => this.setKeyValue('fromLibrary', value)}
+            value={this.state.fromLibrary}
+          />
+        </View>
+      </SafeAreaView>
       <SafeAreaView style={styles.container}>
         <CustomTextModal visible={modalVisible} setKeyValue={this.setKeyValue} title={modalTitle} icon={'error-outline'} />
         <FlatList
@@ -244,6 +304,7 @@ class DirectMessage extends React.Component {
           <Text style={styles.modalText}>Message envoyé !</Text>
         </Modal>
       </SafeAreaView>
+      </>
     )
   }
 }
@@ -315,6 +376,11 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     alignItems:'center',
     justifyContent:'center',
+  },
+  switch: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginVertical: 10,
   },
 });
 export default DirectMessage;

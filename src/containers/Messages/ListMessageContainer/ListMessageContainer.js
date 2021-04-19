@@ -1,14 +1,10 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList, SectionList} from 'react-native';
+import {StyleSheet, View, SafeAreaView, SectionList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
-
-import ContactItem from '../../../components/ContactItem/ContactItem';
 import colors from '../../../config/colors';
-import {Icon} from 'react-native-elements';
-import PushNotification from 'react-native-push-notification';
-import {showNotification, handleScheduleNotification, delayedMessageNotification} from '../../../notification.android';
+import {delayedMessageNotification} from '../../../notification.android';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import MessageItem from '../../../components/MessageItem/MessageItem';
 import CustomMediumGradientAvatar
@@ -20,7 +16,6 @@ class ListeMessageContainer extends React.Component {
         this.readData().then();
         this.onStart().then();
     }
-
 
     state = {
         messages: [],
@@ -172,8 +167,8 @@ class ListeMessageContainer extends React.Component {
                   <MessageItem type={section.type} item={item} index={index} last={index === section.data.length - 1} deleteData={this.deleteData}/>
                 }
                 renderSectionHeader={({ section: { title } }) => (
-                  <View style={{ marginVertical: 20 }}>
-                      <CustomLabel text={title} />
+                  <View style={{ margin: 20 }}>
+                      <CustomLabel text={title} position="left" />
                   </View>
                 )}
                 renderSectionFooter={({ section}) => {

@@ -27,10 +27,6 @@ import {Icon} from 'react-native-elements';
 import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
 
 
-AppRegistry.registerHeadlessTask('SendMessage', () =>
-    require('../SendMessage/SendMessageContainer')
-);
-
 class DelayedMessageContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -55,8 +51,6 @@ class DelayedMessageContainer extends React.Component {
         modalVisible: false,
         modalTitle: '',
     };
-
-
 
     getContact = async () => {
         const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);

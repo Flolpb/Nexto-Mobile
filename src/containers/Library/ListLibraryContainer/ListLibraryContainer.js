@@ -111,8 +111,13 @@ class ListLibraryContainer extends React.Component {
     }
   };
 
+  selectLibrary = (library) => {
+    this.props.setChosenLibrary(library);
+    this.props.navigation.navigate('GlobalMessageContainer');
+  }
+
   render() {
-    let { navigation  } = this.props;
+    let { navigation } = this.props;
     const libraries = this.state.filteredLibraries ? this.state.filteredLibraries : this.props.libraries;
     return (
       <>
@@ -126,9 +131,14 @@ class ListLibraryContainer extends React.Component {
             ListEmptyComponent={this.createEmptyViewList}
             data={libraries}
             keyExtractor={(item, index) => item.id}
-            renderItem={({item, index}) => (
-              <LibraryItem key={index} item={item} />
-            )}/>
+            renderItem={({item, index}) => {
+              return this.props.selectionFromMessage ? (
+                <LibraryItem key={index} item={item} onPressItem={() => this.selectLibrary(item)} />
+              ) : (
+                <LibraryItem key={index} item={item} />
+              )
+            }
+            }/>
           <View style={ styles.createButton }>
             <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
           </View>
@@ -192,6 +202,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  field: {
+    flexDirection:'row',
+    borderWidth: 1,
+    borderColor: colors.lightgrey,
+    borderRadius: 20,
+    backgroundColor: colors.lightgrey,
+    marginVertical: 20,
+    paddingHorizontal: 20,
+  },
+  textInput: {
+    flex: 4,
+    fontSize: 15,
+    fontFamily: fonts.light,
   },
 })
 

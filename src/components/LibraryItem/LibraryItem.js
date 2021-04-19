@@ -30,15 +30,11 @@ class LibraryItem extends React.Component {
   }
 
   render() {
-    const { item } = this.props;
+    const { item, onPressItem } = this.props;
     return(
-        <TouchableOpacity style={[styles.container, styles.textContainer]}
-          // onPress={() => {
-          //   // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
-          //   navigation.navigate("ListeContactMessageScreen", {
-          //     contactID: contactItem.recordID,
-          //   })
-          // }}
+        <TouchableOpacity
+          style={[styles.container, styles.textContainer]}
+          onPress={onPressItem}
           >
           <CustomLabel text={item.name} position="left" fontType="medium" size={18} />
           {

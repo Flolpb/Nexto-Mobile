@@ -141,7 +141,6 @@ class CreateLibraryContainer extends React.Component {
                 <CustomLabel text="Publique" fontType="light" size={16} />
               </View>
 
-
               <CustomGradientTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
             </View>
           }

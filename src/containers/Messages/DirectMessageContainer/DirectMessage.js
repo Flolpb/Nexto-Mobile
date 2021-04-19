@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   PermissionsAndroid,
-  SafeAreaView, FlatList,
+  SafeAreaView, FlatList, Button,
 } from 'react-native';
 import SmsAndroid from 'react-native-get-sms-android';
 import colors from '../../../config/colors';
@@ -22,6 +22,8 @@ import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomTextModal from '../../../components/CustomModals/CustomTextModal/CustomTextModal';
+import CustomDropdownModal from '../../../components/CustomModals/CustomDropdownModal/CustomDropdownModal';
+import connect from 'react-redux/lib/connect/connect';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -41,6 +43,7 @@ class DirectMessage extends React.Component {
     message: '',
     modalVisible: false,
     modalTitle: '',
+    contactVisible: false
   };
 
   askPermissions = async () => {
@@ -105,6 +108,13 @@ class DirectMessage extends React.Component {
     }
   }
 
+
+  deleteTag = (index) => {
+    let array = this.state.phoneNumbers;
+    array.splice(index, 1);
+    this.setKeyValue('phoneNumbers', array);
+  };
+
   sendSms = () => {
     this.mergePhoneNumbers();
     const { phoneNumbers, message } = this.state
@@ -166,6 +176,16 @@ class DirectMessage extends React.Component {
     }
   };
 
+
+  addContact = (contact) => {
+    Contacts.getContactById(contact.recordID).then(contact => {
+      this.setState({
+        phoneNumbers: [...this.state.phoneNumbers, contact.phoneNumbers[0].number],
+        contact: contact,
+      });
+    });
+  };
+
   getContact = async () => {
     const granted =  await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CONTACTS);
     if (granted) {
@@ -184,16 +204,39 @@ class DirectMessage extends React.Component {
       modalVisible: true,
       modalTitle: title,
     });
-  }
+  };
 
-  renderHeader = () => (
+  renderHeader = () => {
+    let contacts = [];
+
+    for(let i = 0; i < this.props.contacts.length; i++){
+      contacts.push({label: this.props.contacts[i].displayName, value: this.props.contacts[i]});
+    }
+
+    let { contactVisible } = this.state;
+
+    return(
     <View style={styles.subContainer}>
-      <CustomLabel text="Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16} fontType="bold" />
+      <CustomLabel text="Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16}
+                   fontType="bold"/>
       <CustomTextInputWithButton
-        value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
-        icon={{ type: 'material', name: 'add' }} onPressButton={() => this.setTags(this.state.phoneNumber)} placeholder="Numéro de téléphone ..." />
+          value={this.state.phoneNumber}
+          onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
+          icon={{type: 'material', name: 'add'}} onPressButton={() => this.setTags(this.state.phoneNumber)}
+          placeholder="Numéro de téléphone ..."/>
+
+      <Button title={"Ajouter un contact"} onPress={() => this.setKeyValue('contactVisible', true)} />
+      <CustomDropdownModal
+          visible={contactVisible}
+          attributeModal={"contactVisible"}
+          setKeyValue={this.setKeyValue}
+          title="Ajouter un contact"
+          vars={contacts}
+          onSelectOption={this.addContact}
+      />
     </View>
-  )
+    )
+  };
 
   renderFooter = () => (
     <>
@@ -210,7 +253,7 @@ class DirectMessage extends React.Component {
         </View>
       </View>
     </>
-  )
+  );
 
 
   render() {
@@ -317,4 +360,11 @@ const styles = StyleSheet.create({
     justifyContent:'center',
   },
 });
-export default DirectMessage;
+
+const mapStateToProps = (state) => {
+  return {
+    contacts: state.manageContacts.contacts,
+  }
+};
+
+export default connect(mapStateToProps)(DirectMessage);

@@ -27,6 +27,21 @@ let API = {
       return null
     }
   },
+  USER_ID: async () => {
+    try {
+      return (await AsyncStorage.getItem('AUTH_USER_ID').then(data => {
+        if (data !== null) {
+          // We have data!!
+          return data
+        }
+      }))
+      
+    } catch (error) {
+      // Error retrieving data
+      console.log(error)
+      return null
+    }
+  },
 }
 
 export default API;

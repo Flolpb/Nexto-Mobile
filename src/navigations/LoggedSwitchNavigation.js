@@ -8,11 +8,14 @@ import AuthHelper from '../helpers/UserHelper/AuthHelper';
 import API from '../config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 class LoggedSwitchNavigation extends React.Component
 {
     constructor(props)
     {
         super(props)
+        this.state = {
+        }
     }
 
     async componentDidMount()
@@ -24,6 +27,9 @@ class LoggedSwitchNavigation extends React.Component
           if(data.type === "success")
           {
             this.toggleLogIn(data.mail)
+
+            /* Keep User Id */
+            this._storeUserId(r.id)
           }
         })
       }
@@ -33,6 +39,17 @@ class LoggedSwitchNavigation extends React.Component
     _storeToken = async (token) => {
       try {
         await AsyncStorage.setItem('AUTH_TOKEN', token).then(async () => {
+
+        })
+      } catch (error) {
+        // Error saving data
+        return false
+      }
+    };
+
+    _storeUserId = async (id) => {
+      try {
+        await AsyncStorage.setItem('AUTH_USER_ID', id).then(async () => {
 
         })
       } catch (error) {
@@ -66,6 +83,9 @@ class LoggedSwitchNavigation extends React.Component
 
             /* Keep Token */
             this._storeToken(r.token)
+
+            /* Keep User Id */
+            this._storeUserId(r.id)
           }
           
         });

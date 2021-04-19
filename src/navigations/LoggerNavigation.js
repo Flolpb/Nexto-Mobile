@@ -5,7 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import NewAccountContainer from '../containers/Logger/NewAcounntContainer/NewAccountContainer';
 
 
-const LoggerNavigation = ({ onLogIn }) => {
+const LoggerNavigation = ({ onLogIn, onRegister }) => {
   const Tab = createMaterialTopTabNavigator();
   return(
     <>
@@ -22,8 +22,9 @@ const LoggerNavigation = ({ onLogIn }) => {
             {props => <LogInContainer {...props} onLogIn={onLogIn} />}
           </Tab.Screen>
           <Tab.Screen
-            name="NewAccountContainer"
-            component={NewAccountContainer}/>
+            name="NewAccountContainer">
+            {props => <NewAccountContainer {...props} onRegister={onRegister} />}
+            </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
     </>

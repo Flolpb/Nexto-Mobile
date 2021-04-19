@@ -26,7 +26,18 @@ const AuthHelper = {
         } catch (err) {
           console.log(err);
         }
-    }
+    },
+    register: async (formData) => {
+        try {
+          const headers = {
+            'Content-Type': 'application/json',
+            'WWW-Authenticate': 'mobile',
+          };
+          return (await axios.post(`${API.BASE_URL}/auth/register`, formData, {headers})).data;
+        } catch (err) {
+          console.log(err);
+        }
+      },
 }
 
 export default AuthHelper;

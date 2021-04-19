@@ -47,6 +47,17 @@ class LoggedSwitchNavigation extends React.Component
       }
     };
 
+    _clearToken = async () => {
+      try {
+        await AsyncStorage.setItem('AUTH_TOKEN', '').then(async () => {
+
+        })
+      } catch (error) {
+        // Error saving data
+        return false
+      }
+    };
+
     _storeUserId = async (id) => {
       try {
         await AsyncStorage.setItem('AUTH_USER_ID', id).then(async () => {
@@ -58,6 +69,45 @@ class LoggedSwitchNavigation extends React.Component
       }
     };
 
+    _clearUserId = async () => {
+      try {
+        await AsyncStorage.setItem('AUTH_USER_ID', '').then(async () => {
+
+        })
+      } catch (error) {
+        // Error saving data
+        return false
+      }
+    };
+
+    handleRegister = async (username, mail, firstname, name, phone_number, password) => {
+      const registerRequest = {
+        'username': username,
+        'mail': mail,
+        'firstname': firstname,
+        'name': name,
+        'phone_number': phone_number,
+        'password': password,
+      }
+
+      AuthHelper.register(registerRequest)
+      .then(async (res) => {
+
+        console.log(res)
+        if(/* res.registered */res)
+          {
+            /* Navigation */
+            this.toggleLogIn(mail)
+
+            /* Keep Token */
+            this._storeToken(res.token)
+
+            /* Keep User Id */
+            this._storeUserId(res.id)
+          }
+      });
+    }
+
     toggleLogIn = (mail) => {
       const action = { type: "TOGGLE_LOGIN", mail: mail }
       this.props.dispatch(action)
@@ -67,14 +117,11 @@ class LoggedSwitchNavigation extends React.Component
 
         const loginRequest = {
           'mail': mail,
-          'password': password
+          'password': password,
         }
-
 
         AuthHelper.login(loginRequest)
         .then(async (r) => {
-
-          
 
           if(r.logged)
           {
@@ -96,8 +143,8 @@ class LoggedSwitchNavigation extends React.Component
         return (
           <>
               { this.props.isLogged
-                ? <Navigation />
-                : <LoggerNavigation onLogIn={this.handleLogIn} />
+                ? <Navigation onLogOut={this._clearToken} />
+                : <LoggerNavigation onLogIn={this.handleLogIn} onRegister={this.handleRegister} />
               }
           </>
         )

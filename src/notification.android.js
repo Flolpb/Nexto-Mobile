@@ -7,7 +7,7 @@ const showNotification = (message) => {
         message: message,
         soundName: "default",
     });
-    console.log("envoie d'une notification: " + message)
+    console.log("Envoi d'une notification: " + message)
 };
 
 const delayedMessageNotification = (message, contact) => {
@@ -18,7 +18,7 @@ const delayedMessageNotification = (message, contact) => {
     PushNotification.localNotification({
         channelId: "localId",
         title: 'Nexto',
-        message: "Envoie de : " + message + " au " + contact,
+        message: "Envoi de : " + message + " au " + contact,
         soundName: "default",
     });
 };

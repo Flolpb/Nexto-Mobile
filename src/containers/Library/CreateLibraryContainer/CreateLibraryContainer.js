@@ -11,21 +11,17 @@ import CustomGradientTextButton from '../../../components/CustomButtons/CustomGr
 import CustomMediumGradientAvatar from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 import settings from '../../../config/settings';
-import axios from 'axios';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
+import connect from 'react-redux/lib/connect/connect';
 
 class CreateLibraryContainer extends React.Component {
 
   state = {
-    libraryName: 'Test',
+    libraryName: '',
     isPublic: false,
     message: '',
-    messages: [
-      'TEST TEST',
-      'TEST <%FIRSTNAME%>',
-      '<%LINK%> Regardez ce super lien',
-      '<%LINK%> <%LINK%>',
-    ],
+    messages: [],
     modalVisible: false,
     modalTitle: '',
   }
@@ -33,6 +29,13 @@ class CreateLibraryContainer extends React.Component {
   setKeyValue = (key, value) => {
     this.setState({
       [key]: value,
+    });
+  }
+
+  showModal = (title) => {
+    this.setState({
+      modalVisible: true,
+      modalTitle: title,
     });
   }
 
@@ -77,19 +80,19 @@ class CreateLibraryContainer extends React.Component {
   createLibrary = () => {
     // Vérification du nom de la librairie
     if (this.state.libraryName === '') {
-      this.setState({
-        modalVisible: true,
-        modalTitle: 'Le nom de la bibliothèque n\'est pas renseignée.',
-      });
+      this.showModal('Le nom de la bibliothèque n\'est pas renseignée.');
+      return false;
+    }
+
+    // Vérification d'une bibliothèque vide
+    if (!this.state.messages.length) {
+      this.showModal('La bibliothèque ne contient pas de message.');
       return false;
     }
 
     // Vérification des messages vides
     if (this.state.messages.some((message) => message === '')) {
-      this.setState({
-        modalVisible: true,
-        modalTitle: 'La liste de messages contient des messages vides.',
-      });
+      this.showModal('La liste de messages contient des messages vides.');
       return false;
     }
 
@@ -97,35 +100,21 @@ class CreateLibraryContainer extends React.Component {
       loading: true,
     });
 
-    const library = {
-      name: this.state.libraryName,
-      user: this.state.user,
-      isPublic: this.state.isPublic,
-      messages: this.state.messages
+    let library = {
+      "name": this.state.libraryName,
+      "user": "/api/users/1",
+      "isPublic": this.state.isPublic,
+      "messages": this.state.messages
     }
-    console.log(library)
-    axios.post("http://api.app-nexto.com/api/libraries", { library })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-    axios.get("http://api.app-nexto.com/api/libraries")
-      .then(response => {
-        console.log('getting data from axios', response.data);
-        setTimeout(() => {
-          this.setState({
-            loading: false,
-            axiosData: response.data
-          })
-        }, 2000)
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
+    LibraryHelper.createLibrary(library).then(r => {
+      if (!r) {
+        this.showModal('Erreur lors de la création de la bibliothèque. Veuillez réessayer.');
+      } else {
+        const action = { type: 'ADD_LIBRARY', library: r }
+        this.props.dispatch(action);
+        this.props.navigation.navigate('ListeBibliotheque');
+      }
+    });
   }
 
   render() {
@@ -150,7 +139,6 @@ class CreateLibraryContainer extends React.Component {
                 />
                 <CustomLabel text="Publique" fontType="light" size={16} />
               </View>
-
 
               <CustomGradientTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
             </View>
@@ -221,4 +209,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateLibraryContainer;
+
+export default connect()(CreateLibraryContainer);

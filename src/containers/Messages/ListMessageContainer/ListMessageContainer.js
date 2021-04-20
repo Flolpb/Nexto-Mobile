@@ -1,26 +1,24 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View, TouchableOpacity, SafeAreaView, FlatList, SectionList} from 'react-native';
+import {StyleSheet, View, SafeAreaView, SectionList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackgroundTimer from 'react-native-background-timer';
 import SmsAndroid from 'react-native-get-sms-android';
 
+import getDate from '../../../utils/getDate';
 import ContactItem from '../../../components/ContactItem/ContactItem';
 import colors from '../../../config/colors';
-import {Icon} from 'react-native-elements';
-import PushNotification from 'react-native-push-notification';
-import {showNotification, handleScheduleNotification, delayedMessageNotification} from '../../../notification.android';
+import {delayedMessageNotification} from '../../../notification.android';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 import MessageItem from '../../../components/MessageItem/MessageItem';
 import CustomMediumGradientAvatar
     from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import connect from 'react-redux/lib/connect/connect';
 
 class ListeMessageContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.readData().then();
         this.onStart().then();
     }
-
 
     state = {
         messages: [],
@@ -54,12 +52,30 @@ class ListeMessageContainer extends React.Component {
     };
 
 
+    convertUTCDateToLocalDate(date){
+        const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+
+        const offset = date.getTimezoneOffset() / 60;
+        const hours = date.getHours();
+
+        newDate.setHours(hours - offset);
+
+        return newDate;
+    }
+
     //Messages Programmés
     onStart = async () => {
         BackgroundTimer.runBackgroundTimer(() => {
+            this.readData();
             for (let i  = 0; i < this.state.messages.length; i++){
                 if(this.state.messages[i].status !== "send"){
-                    let separate = this.state.messages[i].date.split('T');
+                    const utcDate = new Date(this.state.messages[i].date);
+                    const newDate = new Date(utcDate.getTime() + utcDate.getTimezoneOffset()*60*1000);
+                    const offset = utcDate.getTimezoneOffset() / 60;
+                    const hours = utcDate.getHours();
+
+                    newDate.setHours(hours - offset);
+                    /*let separate = this.state.messages[i].date.split('T');
                     separate[1] = separate[1].split('.');
                     separate[1] = separate[1][0].split(':');
                     separate[0] = separate[0].split('-');
@@ -72,14 +88,17 @@ class ListeMessageContainer extends React.Component {
                     dateM.setFullYear(year);
                     dateM.setMonth(month);
                     dateM.setDate(day);
-                    dateM.setHours(hours);
+                    dateM.setHours(hours + 2);
                     dateM.setMinutes(minutes);
                     dateM.setSeconds(0);
-                    dateM.setMilliseconds(0);
+                    dateM.setMilliseconds(0);*/
                     let dateNow = new Date();
                     let monthNow = dateNow.getMonth();
                     dateNow.setMonth(monthNow);
-                    if(dateM.valueOf() < dateNow.valueOf()){
+                    dateNow = this.convertUTCDateToLocalDate(dateNow);
+                    console.log(dateNow);
+                    console.log(newDate);
+                    if(newDate.valueOf() < dateNow.valueOf()){
                         this.changeStatus(i);
                         SmsAndroid.autoSend(
                             this.state.messages[i].contact,
@@ -95,7 +114,7 @@ class ListeMessageContainer extends React.Component {
                 }
             }
         },
-        60000);
+        1000);
     };
 
     //supprimer tous les messages stockés dans le téléphone
@@ -172,8 +191,8 @@ class ListeMessageContainer extends React.Component {
                   <MessageItem type={section.type} item={item} index={index} last={index === section.data.length - 1} deleteData={this.deleteData}/>
                 }
                 renderSectionHeader={({ section: { title } }) => (
-                  <View style={{ marginVertical: 20 }}>
-                      <CustomLabel text={title} />
+                  <View style={{ margin: 20 }}>
+                      <CustomLabel text={title} position="left" />
                   </View>
                 )}
                 renderSectionFooter={({ section}) => {
@@ -184,9 +203,6 @@ class ListeMessageContainer extends React.Component {
                 contentContainerStyle={{ paddingVertical: 20}}
               />
 
-              <View style={ styles.createButton }>
-                  <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'refresh', type: 'material' }}} onPressAvatar={() => this.readData()} />
-              </View>
           </SafeAreaView>
         )
     }

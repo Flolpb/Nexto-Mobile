@@ -3,8 +3,8 @@ import {TextInput, View, StyleSheet} from 'react-native';
 import colors from '../../../config/colors';
 import fonts from '../../../config/fonts';
 
-const CustomTextInput = ({value, onChangeTextInput, isMultiline = 'true', isPassword = 'false', placeholder = '', placeholderColor = colors.inactiveBlack}) => (
-  <View style={styles.field}>
+const CustomTextInput = ({value, onChangeTextInput, spaceBetween = 20, isMultiline = 'true', isPassword = 'false', placeholder = '', placeholderColor = colors.inactiveBlack}) => (
+  <View style={[styles.field, { marginVertical: spaceBetween }]}>
     <TextInput
       style={styles.textInput}
       multiline={isMultiline === 'true'}
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     borderColor: colors.lightgrey,
     borderRadius: 20,
     backgroundColor: colors.lightgrey,
-    marginVertical: 20,
     paddingHorizontal: 20,
   },
   textInput: {

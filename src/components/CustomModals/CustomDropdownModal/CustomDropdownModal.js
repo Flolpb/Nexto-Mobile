@@ -9,11 +9,11 @@ class CustomDropdownModal extends React.Component {
   }
 
   render() {
-    const { visible, setKeyValue, title, vars, onSelectOption } = this.props;
+    const { visible, setKeyValue, title, vars, onSelectOption , attributeModal='modalVisible'} = this.props;
     return(
       <Portal>
         <Modal visible={visible}
-               onDismiss={() => setKeyValue('modalVisible', false)}
+               onDismiss={() => setKeyValue(attributeModal, false)}
                contentContainerStyle={styles.container}>
           <FlatList
             ListHeaderComponent={ <Text style={styles.title}> {title} </Text> }
@@ -22,7 +22,7 @@ class CustomDropdownModal extends React.Component {
             renderItem={({item, index}) => (
               <TouchableOpacity style={styles.item} onPress={() => {
                 onSelectOption(item.value);
-                setKeyValue('modalVisible', false);
+                setKeyValue(attributeModal, false);
               }}>
                 <Text style={styles.textItem}> {item.label} </Text>
               </TouchableOpacity>

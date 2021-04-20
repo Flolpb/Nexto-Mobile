@@ -3,7 +3,7 @@ import {
     StyleSheet,
     View, ScrollView,
     Image,
-    Dimensions, Text,
+    Dimensions, Text, ImageBackground,
 } from 'react-native';
 import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
@@ -35,11 +35,11 @@ class NewAccountContainer extends React.Component{
     render(){
         const { navigation } = this.props;
         return(
-          // <ImageBackground
-          //   style={{ width: Dimensions.get('window').width, }}
-          //   imageStyle={{ opacity: 0.80 }}
-          //   source={require('../../assets/images/fond.png')}>
             <ScrollView style={styles.mainContainer}>
+            <ImageBackground
+                style={{ width: Dimensions.get('window').width, flex: 1, height: Dimensions.get('window').height}}
+                imageStyle={{ opacity: 1.0 }}
+                source={require('../../../assets/images/fond.png')}>
                 <View style={styles.imageContainer}>
                     <Image
                       source={require('../../../assets/images/logov2.png')}
@@ -85,8 +85,8 @@ class NewAccountContainer extends React.Component{
                       }}
                       onPressLabel={() => navigation.navigate('LogInContainer')} />
                 </View>
+                </ImageBackground>
             </ScrollView>
-          // </ImageBackground>
         )
     }
 }

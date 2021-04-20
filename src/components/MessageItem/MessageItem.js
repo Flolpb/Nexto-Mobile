@@ -2,21 +2,41 @@ import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import colors from '../../config/colors';
 import fonts from '../../config/fonts';
-import CustomTextButton from '../CustomButtons/CustomTextButton/CustomTextButton';
 import CustomGradientTextButton from '../CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
 import CustomLabel from '../CustomLabel/CustomLabel';
 import {connect} from 'react-redux';
 
+import getDate from '../../utils/getDate';
 class MessageItem extends React.Component {
 
   // Cherche si un contact existe selon le numéro de téléphone de la props item
   searchContact = () => {
     return this.props.contacts.find((item) => item.phoneNumbers[0].number === this.props.item.contact);
-  }
+  };
 
   render() {
     const { item, index, last, deleteData } = this.props;
     let contact = this.searchContact();
+
+    let separate = item.date.split('T');
+    separate[1] = separate[1].split('.');
+    separate[1] = separate[1][0].split(':');
+    separate[0] = separate[0].split('-');
+    let year = parseInt(separate[0][0]);
+    let month = parseInt(separate[0][1]) - 1;
+    let day = parseInt(separate[0][2]);
+    let hours = parseInt(separate[1][0]);
+    let minutes = parseInt(separate[1][1]);
+    let dateM = new Date();
+    dateM.setFullYear(year);
+    dateM.setMonth(month);
+    dateM.setDate(day);
+    dateM.setHours(hours+2);
+    dateM.setMinutes(minutes);
+    dateM.setSeconds(0);
+    dateM.setMilliseconds(0);
+
+
     return(
       <>
         <View style={styles.container}>
@@ -41,7 +61,7 @@ class MessageItem extends React.Component {
             </View>
             <View style={styles.messageContainer}>
               <Text style={styles.message}>{item.message}</Text>
-              <Text style={styles.insideText}>{item.date.split('T')[1].slice(0,5)} {"\n"} {item.date.split('T')[0]}</Text>
+              <Text style={styles.insideText}>{getDate(dateM)[1]} {"\n"} {getDate(dateM)[0]}</Text>
             </View>
 
           </View>

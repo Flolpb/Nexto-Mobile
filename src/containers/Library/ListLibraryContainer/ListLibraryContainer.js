@@ -6,37 +6,88 @@ import CustomSearchBar from '../../../components/CustomSearchBar/CustomSearchBar
 import CustomMediumGradientAvatar
   from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import fonts from '../../../config/fonts';
-import UserHelper from '../../../helpers/UserHelper/UserHelper';
+import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
+import LibraryItem from '../../../components/LibraryItem/LibraryItem';
+import {connect} from 'react-redux';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel';
 
 class ListLibraryContainer extends React.Component {
 
   state = {
     search: '',
+    emptyError: true,
+    libraries: [],
   }
 
-  createSeparator = () => {
-    return (
-      <View
-        style={[
-          styles.separator,
-        ]}
-      />
-    )
-  };
+  componentDidMount() {
+    this.getAllUserLibraries();
+  }
+
+  getAllUserLibraries = () => {
+    const params = {
+      user: 1,
+    };
+    LibraryHelper.getAllLibraries(params).then(r => {
+      if (!r) {
+        this.setKeyValue('emptyError', true);
+      } else {
+        this.setKeyValue('emptyError', false);
+        const action = { type: "STORE_LIBRARIES", libraries: r};
+        this.props.dispatch(action);
+      }
+    });
+  }
+
+  setKeyValue = (key, value) => {
+    this.setState({
+      [key]: value,
+    });
+  }
 
   createEmptyViewList = () => {
-    return (
-      <View style={ styles.emptyView }>
-        <Icon type="material-community" name="bookshelf" size={75}/>
-        <Text style={ styles.emptyTag }> Aucune bibliothèque </Text>
-      </View>
-    )
+      {
+        return this.state.emptyError ? (
+          <View style={ styles.emptyView }>
+            <Text style={ styles.emptyTag }>Erreur de chargement.</Text>
+            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'refresh', type: 'material' }}} onPressAvatar={() => this.getAllUserLibraries()} />
+          </View>
+        ) : (
+          <View style={ styles.emptyView }>
+            <Icon type="material-community" name="bookshelf" size={75}/>
+            <Text style={ styles.emptyTag }>Aucune bibliothèque</Text>
+          </View>
+        )
+      }
   };
 
   createListHeader = () => {
+    const { lastAddedLibrary } = this.props;
     return(
       <>
         { this.createSearchBar() }
+        {
+          lastAddedLibrary && !this.state.search && (
+            <>
+              <View style={{ marginHorizontal: 20 }}>
+                <CustomLabel text={"Dernière bibliothèque ajoutée"} position="left" />
+              </View>
+              {
+                this.props.selectionFromMessage ? (
+                  <LibraryItem item={lastAddedLibrary} onPressItem={() => this.selectLibrary(lastAddedLibrary)} />
+                ) : (
+                  <LibraryItem item={lastAddedLibrary} />
+                )
+              }
+            </>
+          )
+        }
+        {
+          !this.state.search && (
+            <View style={{ marginHorizontal: 20 }}>
+              <CustomLabel text={"Mes bibliothèques"} position="left" />
+            </View>
+          )
+        }
       </>
     )
   };
@@ -47,55 +98,60 @@ class ListLibraryContainer extends React.Component {
     )
   };
 
-  searchFilter = () => {
-    return '';
-  }
+  searchFilter = (text) => {
+    if (text) {
+      const { libraries } = this.props;
+      let filteredLibraries;
+      filteredLibraries = libraries.filter(item => {
+        return item.name.toUpperCase().indexOf(text.toUpperCase()) > -1;
+      });
+      this.setState({
+        search: text,
+        filteredLibraries: filteredLibraries
+      });
+    } else {
+      this.setState({
+        search: text,
+        filteredLibraries: undefined
+      });
+    }
+  };
 
-  getAllUsers = () => {
-    UserHelper.getAllUsers().then(r => console.log(r));
-    // UserHelper.getUserById(1).then(r => console.log(r));
-    // UserHelper.login({
-    //   "mail": "test2@test.fr",
-    //   "password": "1234",
-    // }).then(r => console.log(r));
+  selectLibrary = (library) => {
+    this.props.setChosenLibrary(library);
+    this.props.navigation.navigate('GlobalMessageContainer');
   }
 
   render() {
-    const { navigation } = this.props;
-    let libraries = [
-      {
-        name: 'Anniversaires',
-        isPublic: false,
-        messages: [
-          'TEST TEST',
-          'TEST <%FIRSTNAME%>',
-          '<%LINK%> Regardez ce super lien',
-          '<%LINK%> <%LINK%>',
-        ],
-        user: 1,
-      }
-    ]
-
+    let { navigation } = this.props;
+    const libraries = this.state.filteredLibraries ? this.state.filteredLibraries : this.props.libraries;
     return (
       <>
         <SafeAreaView
           style={styles.container}>
-          <Button onPress={this.getAllUsers}  title="get"/>
           <FlatList
             initialNumToRender="10"
             maxToRenderPerBatch="10"
             contentContainerStyle={styles.flatList}
             ListHeaderComponent={this.createListHeader}
-            ItemSeparatorComponent={this.createSeparator}
             ListEmptyComponent={this.createEmptyViewList}
             data={libraries}
             keyExtractor={(item, index) => item.id}
-            renderItem={({item}) => (
-              <Text> {item.name} </Text>
-            )}/>
-          <View style={ styles.createButton }>
-            <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
-          </View>
+            renderItem={({item, index}) => {
+              return this.props.selectionFromMessage ? (
+                <LibraryItem key={index} item={item} onPressItem={() => this.selectLibrary(item)} />
+              ) : (
+                <LibraryItem key={index} item={item} />
+              )
+            }
+            }/>
+          {
+            !this.props.selectionFromMessage && (
+              <View style={ styles.createButton }>
+                <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value: { name: 'add', type: 'material' }}} onPressAvatar={() => navigation.navigate("CreateBibliotheque")} />
+              </View>
+            )
+          }
         </SafeAreaView>
       </>
     )
@@ -130,9 +186,11 @@ const styles = StyleSheet.create({
   },
   emptyTag: {
     fontSize: 30,
-    color: colors.black,
-    marginTop: 20,
     fontFamily: fonts.medium,
+    color: colors.black,
+    marginVertical: 20,
+    paddingHorizontal: 5,
+    textAlign: 'center'
   },
   searchBar: {
     backgroundColor: colors.transparent,
@@ -155,7 +213,28 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  field: {
+    flexDirection:'row',
+    borderWidth: 1,
+    borderColor: colors.lightgrey,
+    borderRadius: 20,
+    backgroundColor: colors.lightgrey,
+    marginVertical: 20,
+    paddingHorizontal: 20,
+  },
+  textInput: {
+    flex: 4,
+    fontSize: 15,
+    fontFamily: fonts.light,
+  },
 })
 
-export default ListLibraryContainer;
+const mapStateToProps = (state) => {
+  return {
+    lastAddedLibrary: state.manageLibraries.lastAddedLibrary,
+    libraries: state.manageLibraries.libraries,
+  }
+};
+
+export default connect(mapStateToProps)(ListLibraryContainer);
 

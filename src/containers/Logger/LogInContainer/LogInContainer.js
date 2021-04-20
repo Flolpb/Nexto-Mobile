@@ -8,7 +8,7 @@ import {
 import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 
 class LogInContainer extends React.Component{
 
@@ -16,8 +16,8 @@ class LogInContainer extends React.Component{
     {
         super(props);
         this.state = {
-            username: '',
-            password: ''
+            mail: 'test2@test.fr',
+            password: '1234'
         }
         this.askPermission();
     }
@@ -67,15 +67,16 @@ class LogInContainer extends React.Component{
                 </View>
 
                 <View style={styles.subContainer}>
-                    <CustomTextInput style={styles.textInput} value={this.state.username} placeholder="Identifiant" isMultiline="false"
-                                     onChangeTextInput={(text) => this.setKeyValue('username', text)} />
 
                     <CustomTextInput value={this.state.mail} placeholder="Adresse-mail" isMultiline="false"
                                      onChangeTextInput={(text) => this.setKeyValue('mail', text)} />
 
+                    <CustomTextInput value={this.state.password} placeholder="Mot de passe" isMultiline="false"
+                                     onChangeTextInput={(text) => this.setKeyValue('password', text)} />
+
                     <View style={{marginTop: 20}}>
                         <CustomGradientTextButton title="Connexion"
-                                                  onPressButton={() => this.props.onLogIn(this.state.username)}
+                                                  onPressButton={() => this.props.onLogIn(this.state.mail, this.state.password)}
                         />
                     </View>
 

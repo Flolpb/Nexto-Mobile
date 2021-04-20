@@ -1,6 +1,6 @@
 const initialState = {
     isLogged: false,
-    username: 'Anonyme'
+    username: ''
   }
 function toggleLogIn(state = initialState, action) {
   let nextState;
@@ -9,7 +9,7 @@ function toggleLogIn(state = initialState, action) {
         nextState = {
           ...state,
           isLogged: !state.isLogged,
-          username: state.isLogged ? 'Anonyme' : action.username
+          mail: state.isLogged ? '' : action.mail
         }
         return nextState || state
       default:

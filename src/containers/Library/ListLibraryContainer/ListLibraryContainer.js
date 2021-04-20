@@ -9,7 +9,7 @@ import fonts from '../../../config/fonts';
 import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
 import LibraryItem from '../../../components/LibraryItem/LibraryItem';
 import {connect} from 'react-redux';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 
 class ListLibraryContainer extends React.Component {
 

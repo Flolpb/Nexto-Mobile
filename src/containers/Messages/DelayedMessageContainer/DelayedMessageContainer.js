@@ -5,18 +5,17 @@ import {
     Text,
     PermissionsAndroid,
     TouchableOpacity,
-    SafeAreaView, FlatList, Button,
+    SafeAreaView, FlatList,
 } from 'react-native';
 import 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import getDate from '../../../utils/getDate';
-import { AppRegistry } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../../config/colors';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 import CustomTextInputWithButton
     from '../../../components/CustomTextInputs/CustomTextInputWithButton/CustomTextInputWithButton';
 import CustomGradientTextButton
@@ -28,6 +27,12 @@ import CustomTextModal from '../../../components/CustomModals/CustomTextModal/Cu
 import VARS from '../../../config/vars';
 import CustomDropdownModal from '../../../components/CustomModals/CustomDropdownModal/CustomDropdownModal';
 import connect from 'react-redux/lib/connect/connect';
+import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
+import CustomMediumGradientAvatar
+    from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
+import CustomMediumAvatar from '../../../components/CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
+import CustomLabelBackgroundButton
+    from '../../../components/CustomLabel/CustomLabelBackgroundButton/CustomLabelBackgroundButton';
 
 
 class DelayedMessageContainer extends React.Component {
@@ -39,6 +44,23 @@ class DelayedMessageContainer extends React.Component {
     componentDidMount() {
         if (this.props.contactID) {
             this.getContact();
+        } else if (this.props.chosenLibrary) {
+            this.whichVarToFill();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.chosenLibrary !== this.props.chosenLibrary) {
+            this.setState({
+                varsList: [],
+                vars: {},
+            }, (() => {
+                if (this.props.chosenLibrary) {
+                    this.whichVarToFill(this.props.chosenLibrary.messages);
+                } else {
+                    this.resetChosenLibrary();
+                }
+            }));
         }
     }
 
@@ -54,6 +76,9 @@ class DelayedMessageContainer extends React.Component {
         modalVisible: false,
         modalTitle: '',
         contactVisible: false,
+        fromLibrary: true,
+        varsList: [],
+        vars: {},
     };
 
     getContact = async () => {
@@ -95,53 +120,88 @@ class DelayedMessageContainer extends React.Component {
         });
     };
 
-    mergePhoneNumbers = () => {
+    mergePhoneNumbers = async () => {
         if (this.state.phoneNumber) {
-            this.setState({
+            await(this.setState({
                 phoneNumbers: [...this.state.phoneNumbers, this.state.phoneNumber],
                 phoneNumber: '',
-            });
+            }));
         }
     };
 
     verifyPhoneNumbers = () => {
-        this.mergePhoneNumbers();
-        const { phoneNumbers, message } = this.state;
-        if (!message) {
-            this.showErrorModal('Champ message incomplet.')
-        }
-        else if (phoneNumbers.length) {
-            phoneNumbers.map(phoneNumber => {
-                //test si le premier caractère est un "+"
-                const firstCaractere = phoneNumber.slice(0, 1);
-                let lastCaractere = phoneNumber.slice(1, phoneNumber.length);
-                if (firstCaractere === "+") {
-                    if(lastCaractere != null){
-                        if (isNaN(lastCaractere)) {
-                            this.programSms(phoneNumber).then();
-                        } else {
-                            this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${lastCaractere}`)
+        this.mergePhoneNumbers().then(r => {
+            const { phoneNumbers, message } = this.state;
+            if (!message) {
+                this.showErrorModal('Champ message incomplet.')
+            }
+            else if (phoneNumbers.length) {
+                phoneNumbers.map(phoneNumber => {
+                    //test si le premier caractère est un "+"
+                    if (phoneNumber.slice(0, 1) === "+") {
+                        if(phoneNumber.slice(1, phoneNumber.length) != null){
+                            if (isNaN(phoneNumber.slice(1, phoneNumber.length))) {
+                                this.programSms(phoneNumber)
+                            } else {
+                                this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${phoneNumber.slice(1, phoneNumber.length)}`)
+                            }
                         }
                     }
-                }
-                // Test si le numéro de téléphone est bien composé seulement de numéros
-                else {
-                    let isNum = /^\d+$/.test(phoneNumber);
-                    if (isNum) {
-                        this.programSms(phoneNumber).then();
-                    } else {
-                        this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${lastCaractere}`)
+                    // Test si le numéro de téléphone est bien composé seulement de numéros
+                    else {
+                        let isNum = /^\d+$/.test(phoneNumber);
+                        if (isNum) {
+                            this.programSms(phoneNumber).then();
+                        } else {
+                            this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${phoneNumber.slice(1, phoneNumber.length)}`)
+                        }
                     }
-                }
-            });
-        }
+                });
+            } else {
+                this.showErrorModal(`Informations incomplètes`);
+            }
+        });
     };
 
-    programSms = async (phoneNumber) => {
+    verifyPhoneNumbersRandomMessage = (messages) => {
+        this.mergePhoneNumbers().then(r => {
+            const { phoneNumbers } = this.state;
+            if (!messages.length) {
+                this.showErrorModal('Champ message incomplet.')
+            }
+            else if (phoneNumbers.length) {
+                phoneNumbers.map(phoneNumber => {
+                    //test si le premier caractère est un "+"
+                    if (phoneNumber.slice(0, 1) === "+") {
+                        if(phoneNumber.slice(1, phoneNumber.length) != null){
+                            if (isNaN(phoneNumber.slice(1, phoneNumber.length))) {
+                                this.programSms(phoneNumber, messages[Math.floor(Math.random() * messages.length)]);
+                            } else {
+                                this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${phoneNumber.slice(1, phoneNumber.length)}`);
+                            }
+                        }
+                    }
+                    // Test si le numéro de téléphone est bien composé seulement de numéros
+                    else {
+                        let isNum = /^\d+$/.test(phoneNumber);
+                        if (isNum) {
+                            this.programSms(phoneNumber, messages[Math.floor(Math.random() * messages.length)]);
+                        } else {
+                            this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${phoneNumber.slice(1, phoneNumber.length)}`)
+                        }
+                    }
+                });
+            } else {
+                this.showErrorModal(`Informations incomplètes`);
+            }
+        });
+    };
+
+    programSms = async (phoneNumber, message = this.state.message) => {
         try{
             let value = {};
             value.date = this.state.date;
-            value.message = this.state.message;
+            value.message = message;
             const theNowValue = await AsyncStorage.getItem('message');
             let joined = JSON.parse(theNowValue);
             value.contact = phoneNumber;
@@ -216,6 +276,83 @@ class DelayedMessageContainer extends React.Component {
         });
     };
 
+    // Convertit la chaîne du message avec les valeurs des variables personalisées en brutes
+    userFriendlyString = (string, jsxElements = [], count = 0) => {
+        let str = string.toString();
+        let array = [str.indexOf("<%"), str.indexOf("%>")];
+        let selectedVar = VARS.find((v) => v.value === str.substring(array[0] + 2, array[1]))
+        if (array.every((v) => v !== -1)) {
+            count++;
+            jsxElements.push(<Text key={count}>{str.substring(0, array[0])}</Text>);
+            if (selectedVar) {
+                count++;
+                jsxElements.push(<Text key={count} style={styles.textVar}>{selectedVar.label}</Text>);
+            } else {
+                count++;
+                jsxElements.push(<Text key={count}>{str.substring(array[0], array[1] + 2)}</Text>);
+            }
+            return this.userFriendlyString(str.substring(array[1] + 2, string.length), jsxElements, count);
+        } else {
+            count++;
+            return [...jsxElements, <Text key={count}>{string}</Text>]
+        }
+    }
+
+    whichVarToFill = () => {
+        const { messages } = this.props.chosenLibrary;
+        const { varsList } = this.state;
+        messages.map(message => {
+            this.checkVarInMessage(message, varsList)
+        });
+        this.setKeyValue('varsList', varsList);
+    }
+
+    checkVarInMessage = (message, varsList = []) => {
+        let array = [message.indexOf("<%"), message.indexOf("%>")];
+        if (array.every((v) => v !== -1)) {
+            let foundVar = message.substring(array[0], array[1] + 2)
+            !varsList.includes(foundVar) && (varsList.push(foundVar));
+            return this.checkVarInMessage(message.substring(array[1] + 2, message.length), varsList);
+        } else {
+            return varsList;
+        }
+    }
+
+    resetChosenLibrary = () => {
+        this.setKeyValue('varsList', []);
+        this.setKeyValue('vars', {});
+        this.props.setChosenLibrary();
+    }
+
+    varToLabelConverter = (value) => {
+        return VARS.find(v => v.value === value.substring(2, value.length - 2)).label;
+    }
+
+    constructMessage = () => {
+        // Vérification de toutes les variables nécéssaires
+        let result = this.state.varsList.map(v => {
+            if (!this.state.vars[v]) {
+                this.showErrorModal('Variables incomplètes.')
+                return false;
+            }
+            return true;
+        });
+
+        if (result.every(r => r === true)) {
+            let { varsList } = this.state;
+            let { messages } = this.props.chosenLibrary;
+            let array = [];
+            messages.forEach(message => {
+                varsList.map(v => {
+                    return message = message.replace(v, this.state.vars[v]);
+                });
+                array.push(message)
+            });
+            console.log(array)
+            this.verifyPhoneNumbersRandomMessage(array);
+        }
+    }
+
     renderHeader = () => {
         let contacts = [];
 
@@ -228,11 +365,21 @@ class DelayedMessageContainer extends React.Component {
         return(
         <>
             <View style={styles.subContainer}>
-                <CustomLabel text="Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16} fontType="bold" />
-                <CustomTextInputWithButton
-                value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
-                icon={{ type: 'material', name: 'add' }} onPressButton={() => this.setTags(this.state.phoneNumber)} placeholder="Numéro de téléphone ..." />
-                <CustomGradientTextButton title="Ajouter un contact" onPressButton={() => this.setKeyValue('contactVisible', true)} />
+                <CustomLabel text={"Message différé"} position="left" size={20} />
+                {
+                    this.state.phoneNumber ? (
+                      <CustomTextInputWithButton
+                        value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
+                        icon={{type: 'material', name: 'add'}} onPressButton={() => this.setTags(this.state.phoneNumber)}
+                        placeholder="Numéro de téléphone ..."/>
+                    ) : (
+                      <CustomTextInputWithButton
+                        value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
+                        icon={{type: 'material', name: 'search'}} onPressButton={() => this.setKeyValue('contactVisible', true)}
+                        placeholder="Numéro de téléphone ..."/>
+                    )
+                }
+
                 <CustomDropdownModal
                 visible={contactVisible}
                 attributeModal={"contactVisible"}
@@ -247,58 +394,119 @@ class DelayedMessageContainer extends React.Component {
     };
 
     renderFooter = () => {
-        const { date } = this.state;
+        const { navigation, chosenLibrary } = this.props;
+        const { fromLibrary, message, varsList, date, displayDate, displayTime } = this.state;
         let dateString = date ? getDate(date) : 'Aucune';
 
         return (
           <>
-              <View style={styles.subContainer}>
-                  <CustomLabel text="Sélectionner une date et une heure d'envoi" spaceBetween={3} position="left" size={16} />
-                  <CustomLabel text={`Envoi le ${dateString[0]} à ${dateString[1]}`} spaceBetween={3} position="center" size={16} fontType="light" />
-              </View>
-
-              <View style={[styles.subContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                  <View style={{width: '45%'}}>
-                      <CustomGradientTextButton title="Date" onPressButton={() => this.setKeyValue('displayDate', true)} />
+              <>
+                  <View style={styles.subContainer}>
+                      <CustomLabel text={"Date & heure"} position="left" size={20} />
+                      <CustomLabel text={`Envoi le ${dateString[0]} à ${dateString[1]}`} spaceBetween={3} position="center" size={16} fontType="light" />
                   </View>
-                  <View style={{width: '45%'}}>
-                      <CustomGradientTextButton title="Heure" onPressButton={() => this.setKeyValue('displayTime', true)} />
+
+                  <View style={[styles.subContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+                      <View style={{width: '45%'}}>
+                          <CustomGradientTextButton title="Date" onPressButton={() => this.setKeyValue('displayDate', true)} />
+                      </View>
+                      <View style={{width: '45%'}}>
+                          <CustomGradientTextButton title="Heure" onPressButton={() => this.setKeyValue('displayTime', true)} />
+                      </View>
                   </View>
-              </View>
 
-              <View style={styles.subContainer}>
-                  <CustomLabel text="Saisir le message à envoyer" spaceBetween={3} position="left" size={16} />
-                  <CustomTextInputWithButton
-                    value={this.state.message} onChangeTextInput={(message) => this.setKeyValue('message', message)}
-                    icon={{ type: 'material', name: 'send' }} onPressButton={this.verifyPhoneNumbers} placeholder="Votre message ..." />
-              </View>
+                  {displayDate &&
+                  <DateTimePicker
+                    style={styles.datePickerStyle}
+                    value={date}
+                    mode="date"
+                    confirmBtnText="Confirm"
+                    customStyles={{
+                        dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0,
+                        },
+                        dateInput: {
+                            marginLeft: 36,
+                        },
+                    }}
+                    onChange={this.setDate}
+                  />
+                  }
+                  {displayTime && (
+                    <DateTimePicker
+                      style={styles.datePickerStyle}
+                      value={date}
+                      mode="time"
+                      onChange={this.setTime}/>)
+                  }
+              </>
+              {
+                  fromLibrary ? (
+                    <>
+                        {
+                            chosenLibrary ? (
+                              <>
+                                  <View style={styles.subContainer}>
+                                      <CustomLabel text={"Bibliothèque sélectionnée"} position="left" size={20} />
+                                      <CustomLabelBackgroundButton text={chosenLibrary.name} onPressLabel={() => navigation.navigate('ListLibraryContainerFromMessage')} onPressButton={() => this.resetChosenLibrary()} icon={{ name: 'close', type: 'material' }} />
+                                  </View>
+                                  <View style={styles.subContainer}>
+                                      {
+                                          varsList.length ? (
+                                            <>
+                                                <CustomLabel text={"Variables à compléter"} position="left" size={20} />
+                                                { varsList.map((v, index) =>
+                                                  <CustomTextInput
+                                                    key={index}
+                                                    value={this.state.vars[v]}
+                                                    spaceBetween={10}
+                                                    placeholder={this.varToLabelConverter(v)}
+                                                    onChangeTextInput={(text) => {
+                                                        this.setState({
+                                                            vars: {
+                                                                ...this.state.vars,
+                                                                [v]: text,
+                                                            },
+                                                        });
+                                                    }}
+                                                  /> )}
+                                            </>
+                                          ) : (
+                                            <>
+                                                <CustomLabel text={"Variables à compléter"} position="left" size={20} />
+                                                <CustomLabel text="Aucune variable à compléter" size={14} fontType="light" />
+                                            </>
+                                          )
+                                      }
+                                  </View>
+                              </>
+                            ) : (
+                              <View style={styles.subContainer}>
+                                  <CustomGradientTextButton
+                                    title="Sélectionner une bibliothèque"
+                                    onPressButton={() => navigation.navigate('ListLibraryContainerFromMessage')}
+                                  />
+                              </View>
+                            )
+                        }
+                    </>
+                  ) : (
+                    <>
+                        <View style={styles.subContainer}>
+                            <CustomTextInput
+                              value={message} onChangeTextInput={(message) => this.setKeyValue('message', message)} placeholder="Votre message ..." />
+                        </View>
 
-              {this.state.displayDate &&
-              <DateTimePicker
-                style={styles.datePickerStyle}
-                value={date}
-                mode="date"
-                confirmBtnText="Confirm"
-                customStyles={{
-                    dateIcon: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0,
-                    },
-                    dateInput: {
-                        marginLeft: 36,
-                    },
-                }}
-                onChange={this.setDate}
-              />
-              }
-              {this.state.displayTime && (
-              <DateTimePicker
-                style={styles.datePickerStyle}
-                value={date}
-                mode="time"
-                onChange={this.setTime}/>)
+                        {/*<View style={styles.subContainer}>*/}
+                        {/*  <View style={styles.button}>*/}
+                        {/*    <CustomMediumGradientAvatar titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'camera' }}} onPressAvatar={this.openCameraPicker} />*/}
+                        {/*  </View>*/}
+                        {/*</View>*/}
+                    </>
+                  )
               }
           </>
         )
@@ -331,6 +539,28 @@ class DelayedMessageContainer extends React.Component {
                   </LinearGradient>
                 )}
               />
+
+              <View style={styles.switchButton}>
+                  {
+                      this.state.fromLibrary ? (
+                        <CustomMediumGradientAvatar
+                          titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf' }}}
+                          onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+                      ) : (
+                        <CustomMediumAvatar
+                          background={{backgroundColor: colors.grey}}
+                          color={{ color: colors.white }}
+                          titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf', color: colors.backGrey }}}
+                          onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+                      )
+                  }
+              </View>
+
+              <View style={styles.sendButton}>
+                  <CustomMediumGradientAvatar
+                    titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'send' }}}
+                    onPressAvatar={this.state.fromLibrary ? () => this.constructMessage() : () => this.verifyPhoneNumbers()} />
+              </View>
 
               <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
                   <Text style={styles.modalText}>Message programmé !</Text>
@@ -409,6 +639,16 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         alignItems:'center',
         justifyContent:'center',
+    },
+    sendButton: {
+        position: 'absolute',
+        bottom: 30,
+        right: 20,
+    },
+    switchButton: {
+        position: 'absolute',
+        bottom: 100,
+        right: 20,
     },
 });
 

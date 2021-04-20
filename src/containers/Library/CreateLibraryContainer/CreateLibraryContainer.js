@@ -11,7 +11,7 @@ import CustomGradientTextButton from '../../../components/CustomButtons/CustomGr
 import CustomMediumGradientAvatar from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 import settings from '../../../config/settings';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
 import connect from 'react-redux/lib/connect/connect';
 

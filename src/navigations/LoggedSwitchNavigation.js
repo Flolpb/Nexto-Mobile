@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import LoggerNavigation from './LoggerNavigation';
 import UserHelper from '../helpers/UserHelper/UserHelper';
 import AuthHelper from '../helpers/UserHelper/AuthHelper';
+import StorageHelper from '../helpers/UserHelper/StorageHelper';
 import API from '../config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,58 +28,13 @@ class LoggedSwitchNavigation extends React.Component
           if(data.type === "success")
           {
             this.toggleLogIn(data.mail)
-
             /* Keep User Id */
-            this._storeUserId(r.id)
+            StorageHelper._storeUserId(r.id)
           }
         })
       }
     }
     
-
-    _storeToken = async (token) => {
-      try {
-        await AsyncStorage.setItem('AUTH_TOKEN', token).then(async () => {
-
-        })
-      } catch (error) {
-        // Error saving data
-        return false
-      }
-    };
-
-    _clearToken = async () => {
-      try {
-        await AsyncStorage.setItem('AUTH_TOKEN', '').then(async () => {
-
-        })
-      } catch (error) {
-        // Error saving data
-        return false
-      }
-    };
-
-    _storeUserId = async (id) => {
-      try {
-        await AsyncStorage.setItem('AUTH_USER_ID', id).then(async () => {
-
-        })
-      } catch (error) {
-        // Error saving data
-        return false
-      }
-    };
-
-    _clearUserId = async () => {
-      try {
-        await AsyncStorage.setItem('AUTH_USER_ID', '').then(async () => {
-
-        })
-      } catch (error) {
-        // Error saving data
-        return false
-      }
-    };
 
     handleRegister = async (username, mail, firstname, name, phone_number, password) => {
       const registerRequest = {
@@ -93,18 +49,21 @@ class LoggedSwitchNavigation extends React.Component
       AuthHelper.register(registerRequest)
       .then(async (res) => {
 
-        console.log(res)
-        if(/* res.registered */res)
+        if(res.registered)
           {
             /* Navigation */
             this.toggleLogIn(mail)
 
             /* Keep Token */
-            this._storeToken(res.token)
+            StorageHelper._storeToken(res.token)
 
             /* Keep User Id */
-            this._storeUserId(res.id)
+            StorageHelper._storeUserId(res.id)
           }
+        else{
+          // Message d'erreur 
+          console.log(res.message)
+        }
       });
     }
 
@@ -129,10 +88,10 @@ class LoggedSwitchNavigation extends React.Component
             this.toggleLogIn(mail)
 
             /* Keep Token */
-            this._storeToken(r.token)
+            StorageHelper._storeToken(r.token)
 
             /* Keep User Id */
-            this._storeUserId(r.id)
+            StorageHelper._storeUserId(r.id)
           }
           
         });

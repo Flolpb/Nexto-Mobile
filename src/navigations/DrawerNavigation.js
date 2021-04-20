@@ -7,21 +7,23 @@ import {NavigationContainer} from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
-const DrawerContent = ({ onLogOut }) => {
+const DrawerContent = (props) => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Drawer content</Text>
-      <Button title="LogOut" onPress={() => onLogOut} />
+      <Button title="LogOut" onPress={props.onLogOut} />
     </View>
   );
 }
 
-const DrawerNavigation = ({ onLogOut }) => (
-  <NavigationContainer>
-    <Drawer.Navigator drawerContent={() => <DrawerContent onLogOut={onLogOut} />}>
-      <Drawer.Screen name="Navigation" component={Navigation} />
-    </Drawer.Navigator>
-  </NavigationContainer>
-)
+const DrawerNavigation = ({ onLogOut }) => {
+  return(
+    <NavigationContainer>
+      <Drawer.Navigator drawerContent={props => <DrawerContent {...props} onLogOut={onLogOut} />}>
+        <Drawer.Screen name="Navigation" component={Navigation} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  )
+}
 
 export default DrawerNavigation;

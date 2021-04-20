@@ -69,6 +69,12 @@ class LoggedSwitchNavigation extends React.Component
       this.props.dispatch(action)
     }
 
+    toggleLogOut = () => {
+      StorageHelper._clearToken();
+      const action = { type: "TOGGLE_LOGOUT" }
+      this.props.dispatch(action);
+    }
+
     handleLogIn = async (mail, password) => {
 
         const loginRequest = {
@@ -98,7 +104,7 @@ class LoggedSwitchNavigation extends React.Component
         return (
           <>
               { this.props.isLogged
-                ? <DrawerNavigation onLogOut={StorageHelper._clearToken()} />
+                ? <DrawerNavigation onLogOut={this.toggleLogOut} />
                 : <LoggerNavigation onLogIn={this.handleLogIn} onRegister={this.handleRegister} />
               }
           </>

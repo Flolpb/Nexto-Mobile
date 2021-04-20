@@ -27,6 +27,7 @@
     "react-native-contacts": "^6.0.3",
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^3.0.0-alpha.1",
+    "react-native-form-validator": "^0.3.5",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-get-sms-android": "^2.1.0",
     "react-native-image-crop-picker": "^0.35.2",

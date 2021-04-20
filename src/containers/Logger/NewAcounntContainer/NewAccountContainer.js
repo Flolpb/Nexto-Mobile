@@ -9,8 +9,9 @@ import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
+import ValidationComponent from 'react-native-form-validator';
 
-class NewAccountContainer extends React.Component{
+class NewAccountContainer extends ValidationComponent{
 
     constructor(props)
     {
@@ -30,6 +31,31 @@ class NewAccountContainer extends React.Component{
         this.setState({
             [key]: value,
         });
+    }
+
+    _validate() {
+        return this.validate({
+            username: {minlength:3, maxlength:25, required: true},
+            mail: {email: true},
+            name: {minlength:3, maxlength:50, required: true},
+            firstname: {minlength:3, maxlength:50, required: true},
+            phone_number: {numbers: true},
+            passwordConfirm: {equalPassword: this.state.password}
+        });
+    }
+
+    _onSubmit = () => {
+        if(this._validate())
+        {
+            this.props.onRegister(
+                this.state.username,
+                this.state.mail,
+                this.state.firstname,
+                this.state.name, 
+                this.state.phone_number, 
+                this.state.password,
+                )
+        }
     }
 
     render(){
@@ -73,9 +99,13 @@ class NewAccountContainer extends React.Component{
 
                     <View style={{marginTop: 20}}>
                         <CustomGradientTextButton title="Inscription"
-                                                  onPressButton={() => this.props.onRegister(this.state.username, this.state.mail, this.state.firstname, this.state.name, this.state.phone_number, this.state.password)}
+                                                  onPressButton={this._onSubmit}
                         />
                     </View>
+
+                    <Text>
+                        {this.getErrorMessages()}
+                    </Text>
 
                     <CustomLabel
                       text="Déjà un compte ? Connectez-vous"

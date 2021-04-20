@@ -4,6 +4,15 @@ import LogInContainer from '../containers/Logger/LogInContainer/LogInContainer';
 import {NavigationContainer} from '@react-navigation/native';
 import NewAccountContainer from '../containers/Logger/NewAcounntContainer/NewAccountContainer';
 
+const labels = {
+  username: 'Identifiant',
+  firstname: 'Prénom',
+  name: 'Nom',
+  mail: 'Adresse mail',
+  number: 'Numéro de téléphone',
+  password: 'Mot de passe',
+  passwordConfirm: 'Confirmation du mot de passe'
+};
 
 const LoggerNavigation = ({ onLogIn, onRegister }) => {
   const Tab = createMaterialTopTabNavigator();
@@ -23,7 +32,7 @@ const LoggerNavigation = ({ onLogIn, onRegister }) => {
           </Tab.Screen>
           <Tab.Screen
             name="NewAccountContainer">
-            {props => <NewAccountContainer {...props} onRegister={onRegister} />}
+            {props => <NewAccountContainer {...props} onRegister={onRegister} deviceLocale="fr" labels={labels} />}
             </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>

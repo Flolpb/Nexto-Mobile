@@ -84,7 +84,7 @@ class LoggedSwitchNavigation extends React.Component
           if(r.logged)
           {
             /* Navigation */
-            // this.toggleLogIn(mail)
+            this.toggleLogIn(mail)
 
             /* Keep Token */
             await StorageHelper._storeToken(r.token).then(r => console.log(r))

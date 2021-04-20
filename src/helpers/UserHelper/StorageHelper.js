@@ -1,8 +1,4 @@
-import API from '../../config/api';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const USER_HELPER_URL = API.BASE_URL + '/api/users';
 
 const StorageHelper = {
 

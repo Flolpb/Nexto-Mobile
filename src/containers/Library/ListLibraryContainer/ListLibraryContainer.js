@@ -21,12 +21,20 @@ class ListLibraryContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.getAllUserLibraries();
+    if (this.props.userID) {
+      this.getAllUserLibraries();
+    }
+  }
+
+  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    if (prevProps.userID !== this.props.userID) {
+      this.getAllUserLibraries();
+    }
   }
 
   getAllUserLibraries = async () => {
     const params = {
-      user: await API.USER_ID(),
+      user: this.props.userID,
     };
 
     LibraryHelper.getAllLibraries(params).then(r => {
@@ -121,7 +129,6 @@ class ListLibraryContainer extends React.Component {
 
   selectLibrary = (library) => {
     this.props.setChosenLibrary(library);
-    console.log(this.props.navigation.state)
     this.props.navigation.navigate('GlobalMessageContainer');
   }
 
@@ -236,6 +243,7 @@ const mapStateToProps = (state) => {
   return {
     lastAddedLibrary: state.manageLibraries.lastAddedLibrary,
     libraries: state.manageLibraries.libraries,
+    userID: state.toggleLogIn.userID,
   }
 };
 

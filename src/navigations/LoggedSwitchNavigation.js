@@ -24,9 +24,11 @@ class LoggedSwitchNavigation extends React.Component
         .then(async (data) => {
           if(data && data.type === "success")
           {
-            this.toggleLogIn(data.mail)
             /* Keep User Id */
-            StorageHelper._storeUserId(data.id)
+            await StorageHelper._storeUserId(data.id).then(res => {
+              let action = { type: "STORE_USER", userID: data.id.toString() }
+              this.props.dispatch(action);
+            });
           }
         })
       }
@@ -45,7 +47,6 @@ class LoggedSwitchNavigation extends React.Component
 
       AuthHelper.register(registerRequest)
       .then(async (res) => {
-
         if(res.registered)
           {
             /* Navigation */
@@ -55,7 +56,10 @@ class LoggedSwitchNavigation extends React.Component
             StorageHelper._storeToken(res.token)
 
             /* Keep User Id */
-            StorageHelper._storeUserId(res.id)
+            await StorageHelper._storeUserId(data.id).then(res => {
+              let action = { type: "STORE_USER", userID: data.id.toString() }
+              this.props.dispatch(action);
+            });
           }
         else{
           // Message d'erreur
@@ -65,13 +69,16 @@ class LoggedSwitchNavigation extends React.Component
     }
 
     toggleLogIn = (mail) => {
-      const action = { type: "TOGGLE_LOGIN", mail: mail }
+      let action = { type: "TOGGLE_LOGIN", mail: mail }
       this.props.dispatch(action)
     }
 
     toggleLogOut = () => {
       StorageHelper._clearToken();
-      const action = { type: "TOGGLE_LOGOUT" }
+      let action = { type: "TOGGLE_LOGOUT" }
+      this.props.dispatch(action);
+
+      action = { type: "RESET_ON_LOGOUT" }
       this.props.dispatch(action);
     }
 
@@ -93,7 +100,10 @@ class LoggedSwitchNavigation extends React.Component
             await StorageHelper._storeToken(r.token).then(r => console.log(r))
 
             /* Keep User Id */
-            await StorageHelper._storeUserId(r.id).then(r => console.log(r))
+            await StorageHelper._storeUserId(r.id).then(res => {
+              let action = { type: "STORE_USER", userID: r.id }
+              this.props.dispatch(action)
+            });
           }
 
         });

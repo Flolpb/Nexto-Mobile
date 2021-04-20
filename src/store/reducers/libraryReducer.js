@@ -1,5 +1,6 @@
 const initialState = {
-  libraries: []
+  libraries: [],
+  lastAddedLibrary: null,
 };
 
 function manageLibraries(state = initialState, action) {
@@ -18,6 +19,8 @@ function manageLibraries(state = initialState, action) {
         libraries: [...state.libraries, action.library]
       }
       return nextState || state;
+    case 'RESET_ON_LOGOUT':
+      return initialState;
     default:
       return state
   }

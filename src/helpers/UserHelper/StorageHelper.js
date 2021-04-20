@@ -27,7 +27,7 @@ const StorageHelper = {
       _storeUserId: async (id) => {
         try {
           await AsyncStorage.setItem('AUTH_USER_ID', id.toString()).then(async () => {
-            return true
+            return true;
           })
         } catch (error) {
           // Error saving data

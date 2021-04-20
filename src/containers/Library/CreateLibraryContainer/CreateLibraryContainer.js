@@ -103,10 +103,11 @@ class CreateLibraryContainer extends React.Component {
 
     let library = {
       "name": this.state.libraryName,
-      "user": "/api/users/" + await API.USER_ID(),
+      "user": "/api/users/" + this.props.userID,
       "isPublic": this.state.isPublic,
       "messages": this.state.messages
     }
+
     LibraryHelper.createLibrary(library).then(r => {
       if (!r) {
         this.showModal('Erreur lors de la création de la bibliothèque. Veuillez réessayer.');
@@ -210,5 +211,10 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = (state) => {
+  return {
+    userID: state.toggleLogIn.userID,
+  }
+};
 
-export default connect()(CreateLibraryContainer);
+export default connect(mapStateToProps)(CreateLibraryContainer);

@@ -1,6 +1,7 @@
 const initialState = {
     isLogged: false,
-    username: ''
+    mail: '',
+    userID: null,
   }
 function toggleLogIn(state = initialState, action) {
   let nextState;
@@ -13,11 +14,17 @@ function toggleLogIn(state = initialState, action) {
         }
         return nextState || state
       case 'TOGGLE_LOGOUT':
-        console.log("tesss")
         nextState = {
           ...state,
           isLogged: false,
           mail: '',
+          userID: '',
+        }
+        return nextState || state
+      case 'STORE_USER':
+        nextState = {
+          ...state,
+          userID: action.userID
         }
         return nextState || state
       default:

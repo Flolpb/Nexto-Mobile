@@ -9,6 +9,7 @@ import CustomLabel from '../components/CustomLabel/CustomLabel/CustomLabel';
 import colors from '../config/colors';
 import CustomLabelBackgroundButton
   from '../components/CustomLabel/CustomLabelBackgroundButton/CustomLabelBackgroundButton';
+import connect from 'react-redux/lib/connect/connect';
 
 
 const Drawer = createDrawerNavigator();
@@ -20,15 +21,27 @@ class DrawerContent extends React.Component {
   }
 
   getUser = async () => {
-    return await UserHelper.getUserById(await API.USER_ID());
+    return await UserHelper.getUserById(this.props.userID);
   }
 
   componentDidMount() {
-    this.getUser().then(r => {
-      this.setState({
-        user: r
-      })
-    });
+    if (this.props.userID) {
+      this.getUser().then(r => {
+        this.setState({
+          user: r
+        })
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    if (prevProps.userID !== this.props.userID) {
+      this.getUser().then(r => {
+        this.setState({
+          user: r
+        })
+      });
+    }
   }
 
   render(){
@@ -59,10 +72,10 @@ class DrawerContent extends React.Component {
   }
 }
 
-const DrawerNavigation = ({ onLogOut }) => {
+const DrawerNavigation = (mainProps) => {
   return(
     <NavigationContainer>
-      <Drawer.Navigator drawerContent={props => <DrawerContent {...props} onLogOut={onLogOut} />}>
+      <Drawer.Navigator drawerContent={props => <DrawerContent {...props} onLogOut={mainProps.onLogOut} userID={mainProps.userID} />}>
         <Drawer.Screen name="Navigation" component={Navigation} />
       </Drawer.Navigator>
     </NavigationContainer>
@@ -87,4 +100,10 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DrawerNavigation;
+const mapStateToProps = (state) => {
+  return {
+    userID: state.toggleLogIn.userID,
+  }
+}
+
+export default connect(mapStateToProps)(DrawerNavigation);

@@ -16,7 +16,7 @@ import colors from '../../../config/colors';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 import CustomTextInputWithButton
     from '../../../components/CustomTextInputs/CustomTextInputWithButton/CustomTextInputWithButton';
 import CustomGradientTextButton

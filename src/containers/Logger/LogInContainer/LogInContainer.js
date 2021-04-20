@@ -8,7 +8,7 @@ import {
 import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 
 class LogInContainer extends React.Component{
 

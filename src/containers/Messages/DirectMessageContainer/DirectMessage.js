@@ -14,7 +14,7 @@ import Contacts from 'react-native-contacts';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modalbox';
 import { Keyboard } from 'react-native';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 import fonts from '../../../config/fonts';
 import CustomTextInputWithButton
   from '../../../components/CustomTextInputs/CustomTextInputWithButton/CustomTextInputWithButton';
@@ -29,6 +29,7 @@ import VARS from '../../../config/vars';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 import CustomDropdownModal from '../../../components/CustomModals/CustomDropdownModal/CustomDropdownModal';
 import connect from 'react-redux/lib/connect/connect';
+import CustomMediumAvatar from '../../../components/CustomAvatars/CustomMediumAvatar/CustomMediumAvatar';
 
 class DirectMessage extends React.Component {
   componentDidMount() {
@@ -45,11 +46,18 @@ class DirectMessage extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.chosenLibrary !== this.props.chosenLibrary) {
-      if (this.props.chosenLibrary) {
-        this.whichVarToFill(this.props.chosenLibrary.messages);
-      } else {
-        this.resetChosenLibrary();
-      }
+      this.setKeyValue('varsList', []);
+      this.setKeyValue('vars', {});
+      this.setState({
+        varsList: [],
+        vars: {},
+      }, (() => {
+        if (this.props.chosenLibrary) {
+          this.whichVarToFill(this.props.chosenLibrary.messages);
+        } else {
+          this.resetChosenLibrary();
+        }
+      }));
     }
   }
 
@@ -60,7 +68,7 @@ class DirectMessage extends React.Component {
     message: '',
     modalVisible: false,
     modalTitle: '',
-    fromLibrary: true,
+    fromLibrary: false,
     varsList: [],
     vars: {},
     builtMessages: [],
@@ -146,6 +154,7 @@ class DirectMessage extends React.Component {
                 phoneNumber,
                 messages[Math.floor(Math.random() * messages.length)],
                 (fail) => {
+                  console.log(messages[Math.floor(Math.random() * messages.length)])
                   alert('failed with this error: ' + fail);
                 },
                 (success) => {
@@ -357,14 +366,21 @@ class DirectMessage extends React.Component {
     let { contactVisible } = this.state;
     return(
       <View style={styles.subContainer}>
-        <CustomLabel text="Saisir un ou plusieurs numéros de téléphone" spaceBetween={3} position="left" size={16}
-                     fontType="bold"/>
-        <CustomTextInputWithButton
-          value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
-          icon={{type: 'material', name: 'add'}} onPressButton={() => this.setTags(this.state.phoneNumber)}
-          placeholder="Numéro de téléphone ..."/>
-        <CustomGradientTextButton title="Ajouter un contact"
-                                  onPressButton={() => this.setKeyValue('contactVisible', true)}/>
+        <CustomLabel text={"Message instantané"} position="left" size={20} />
+        {
+          this.state.phoneNumber ? (
+            <CustomTextInputWithButton
+              value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
+              icon={{type: 'material', name: 'add'}} onPressButton={() => this.setTags(this.state.phoneNumber)}
+              placeholder="Numéro de téléphone ..."/>
+          ) : (
+            <CustomTextInputWithButton
+              value={this.state.phoneNumber} onChangeTextInput={(phoneNumber) => this.setKeyValue('phoneNumber', phoneNumber)}
+              icon={{type: 'material', name: 'search'}} onPressButton={() => this.setKeyValue('contactVisible', true)}
+              placeholder="Numéro de téléphone ..."/>
+          )
+        }
+
         <CustomDropdownModal
           visible={contactVisible}
           attributeModal={"contactVisible"}
@@ -389,14 +405,14 @@ class DirectMessage extends React.Component {
                 chosenLibrary ? (
                   <>
                     <View style={styles.subContainer}>
-                      <CustomLabel text="Bibliothèque sélectionnée" size={16} />
+                      <CustomLabel text={"Bibliothèque sélectionnée"} position="left" size={20} />
                       <CustomLabelBackgroundButton text={chosenLibrary.name} onPressLabel={() => navigation.navigate('ListLibraryContainerFromMessage')} onPressButton={() => this.resetChosenLibrary()} icon={{ name: 'close', type: 'material' }} />
                     </View>
                     <View style={styles.subContainer}>
                       {
                         varsList.length ? (
                           <>
-                            <CustomLabel text="Variables à compléter" size={16} />
+                            <CustomLabel text={"Variables à compléter"} position="left" size={20} />
                             { varsList.map((v, index) =>
                               <CustomTextInput
                                 key={index}
@@ -415,7 +431,7 @@ class DirectMessage extends React.Component {
                           </>
                         ) : (
                           <>
-                            <CustomLabel text="Variables à compléter" size={16} />
+                            <CustomLabel text={"Variables à compléter"} position="left" size={20} />
                             <CustomLabel text="Aucune variable à compléter" size={14} fontType="light" />
                           </>
                         )
@@ -435,7 +451,6 @@ class DirectMessage extends React.Component {
           ) : (
             <>
               <View style={styles.subContainer}>
-                <CustomLabel text="Saisir le message à envoyer" spaceBetween={3} position="left" size={16} fontType="bold" />
                 <CustomTextInput
                   value={message} onChangeTextInput={(message) => this.setKeyValue('message', message)} placeholder="Votre message ..." />
               </View>
@@ -456,17 +471,6 @@ class DirectMessage extends React.Component {
     const { modalVisible, modalTitle } = this.state;
     return(
       <>
-      <SafeAreaView>
-        <View style={styles.switch}>
-          <CustomLabel text="Depuis une bibliothèque" fontType="medium" size={18} />
-          <Switch
-            trackColor={{ false: colors.lightgrey, true: colors.lightpurple }}
-            thumbColor={colors.lightgrey}
-            onValueChange={(value) => this.setKeyValue('fromLibrary', value)}
-            value={this.state.fromLibrary}
-          />
-        </View>
-      </SafeAreaView>
       <SafeAreaView style={styles.container}>
         <CustomTextModal visible={modalVisible} setKeyValue={this.setKeyValue} title={modalTitle} icon={'error-outline'} />
         <FlatList
@@ -492,10 +496,26 @@ class DirectMessage extends React.Component {
           )}
         />
 
-        <View style={styles.createButton}>
+        <View style={styles.sendButton}>
           <CustomMediumGradientAvatar
             titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'send' }}}
             onPressAvatar={this.state.fromLibrary ? () => this.constructMessage() : () => this.sendSms()} />
+        </View>
+
+        <View style={styles.switchButton}>
+        {
+          this.state.fromLibrary ? (
+            <CustomMediumGradientAvatar
+              titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf' }}}
+              onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+          ) : (
+            <CustomMediumAvatar
+              background={{backgroundColor: colors.grey}}
+              color={{ color: colors.white }}
+              titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf', color: colors.backGrey }}}
+              onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+          )
+        }
         </View>
 
         <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>
@@ -570,20 +590,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent:'center',
   },
-  createButton: {
+  sendButton: {
     position: 'absolute',
     bottom: 30,
+    right: 20,
+  },
+  switchButton: {
+    position: 'absolute',
+    bottom: 100,
     right: 20,
   },
   insideButton: {
     marginLeft: 5,
     alignItems:'center',
     justifyContent:'center',
-  },
-  switch: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginVertical: 10,
   },
   messageField: {
     flexDirection:'row',

@@ -8,7 +8,7 @@ import getDate from '../../../utils/getDate';
 import ContactItem from '../../../components/ContactItem/ContactItem';
 import colors from '../../../config/colors';
 import {delayedMessageNotification} from '../../../notification.android';
-import CustomLabel from '../../../components/CustomLabel/CustomLabel';
+import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 import MessageItem from '../../../components/MessageItem/MessageItem';
 import CustomMediumGradientAvatar
     from '../../../components/CustomAvatars/CustomMediumGradientAvatar/CustomMediumGradientAvatar';

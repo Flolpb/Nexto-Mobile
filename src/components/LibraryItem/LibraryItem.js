@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import colors from '../../config/colors';
-import CustomLabel from '../CustomLabel/CustomLabel';
+import CustomLabel from '../CustomLabel/CustomLabel/CustomLabel';
 import VARS from '../../config/vars';
 import fonts from '../../config/fonts';
 

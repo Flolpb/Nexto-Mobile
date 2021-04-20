@@ -3,7 +3,7 @@ import {View, StyleSheet, Text} from 'react-native';
 import colors from '../../config/colors';
 import fonts from '../../config/fonts';
 import CustomGradientTextButton from '../CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
-import CustomLabel from '../CustomLabel/CustomLabel';
+import CustomLabel from '../CustomLabel/CustomLabel/CustomLabel';
 import {connect} from 'react-redux';
 
 import getDate from '../../utils/getDate';

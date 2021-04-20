@@ -14,6 +14,7 @@ import settings from '../../../config/settings';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
 import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
 import connect from 'react-redux/lib/connect/connect';
+import API from '../../../config/api';
 
 class CreateLibraryContainer extends React.Component {
 
@@ -77,7 +78,7 @@ class CreateLibraryContainer extends React.Component {
   //   return string;
   // }
 
-  createLibrary = () => {
+  createLibrary = async () => {
     // Vérification du nom de la librairie
     if (this.state.libraryName === '') {
       this.showModal('Le nom de la bibliothèque n\'est pas renseignée.');
@@ -102,7 +103,7 @@ class CreateLibraryContainer extends React.Component {
 
     let library = {
       "name": this.state.libraryName,
-      "user": "/api/users/1",
+      "user": "/api/users/" + await API.USER_ID(),
       "isPublic": this.state.isPublic,
       "messages": this.state.messages
     }

@@ -26,10 +26,8 @@ class ListLibraryContainer extends React.Component {
 
   getAllUserLibraries = async () => {
     const params = {
-      user: 1,
+      user: await API.USER_ID(),
     };
-    await API.VALID_TOKEN().then(r => console.log(r))
-    await API.USER_ID().then(r => console.log(r))
 
     LibraryHelper.getAllLibraries(params).then(r => {
       if (!r) {

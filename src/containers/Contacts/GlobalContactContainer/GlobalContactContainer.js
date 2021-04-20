@@ -19,22 +19,22 @@ const GlobalContactContainer = () => {
         {props => <ListeContact {...props} navigation={navigation} />}
       </Stack.Screen>
       {/*Écran de création de message depuis la liste des contacts*/}
-      <Stack.Screen
-        name="ListeContactMessageScreen"
-        component={GlobalMessageContainer}
-        options={{
-          title: 'Envoi d\'un message',
-          headerTintColor: colors.black,
-          headerTitleStyle: {
-            color: colors.black,
-            fontFamily: fonts.bold,
-            fontSize: 20,
-          },
-          headerStyle: {
-            backgroundColor: colors.backGrey,
-            elevation: 0,
-          },
-        }} />
+      {/*<Stack.Screen*/}
+      {/*  name="ListeContactMessageScreen"*/}
+      {/*  component={GlobalMessageContainer}*/}
+      {/*  options={{*/}
+      {/*    title: 'Envoi d\'un message',*/}
+      {/*    headerTintColor: colors.black,*/}
+      {/*    headerTitleStyle: {*/}
+      {/*      color: colors.black,*/}
+      {/*      fontFamily: fonts.bold,*/}
+      {/*      fontSize: 20,*/}
+      {/*    },*/}
+      {/*    headerStyle: {*/}
+      {/*      backgroundColor: colors.backGrey,*/}
+      {/*      elevation: 0,*/}
+      {/*    },*/}
+      {/*  }} />*/}
     </Stack.Navigator>
   )
 }

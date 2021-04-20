@@ -8,7 +8,7 @@ const LibraryHelper = {
     try {
       const headers = {
         "Content-Type": 'application/json',
-        "Authorization": API.VALID_TOKEN,
+        "Authorization": await API.VALID_TOKEN(),
       };
       return (await axios.get(LIBRARY_HELPER_URL, {
         params: {
@@ -25,7 +25,7 @@ const LibraryHelper = {
     try {
       const headers = {
         "Content-Type": 'application/json',
-        "Authorization": API.VALID_TOKEN,
+        "Authorization": await API.VALID_TOKEN(),
       };
       return (await axios.get(`${LIBRARY_HELPER_URL}/${id}`, { headers })).data;
     } catch (err) {
@@ -36,7 +36,7 @@ const LibraryHelper = {
     try {
       const headers = {
         "Content-Type": 'application/json',
-        "Authorization": API.VALID_TOKEN,
+        "Authorization": await API.VALID_TOKEN(),
       };
       return (await axios.post(LIBRARY_HELPER_URL, library,{ headers })).data;
     } catch (err) {

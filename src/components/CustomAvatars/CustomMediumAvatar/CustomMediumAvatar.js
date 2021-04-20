@@ -8,8 +8,8 @@ const CustomMediumAvatar = ({titleOrIcon, color = { color: colors.white }, backg
     size="medium"
     rounded
     onPress={onPressAvatar && (onPressAvatar)}
-    title={titleOrIcon.type === 'string' && (titleOrIcon.value)}
-    icon={titleOrIcon.type === 'icon' && (titleOrIcon.value)}
+    title={titleOrIcon.type === 'string' ? titleOrIcon.value : ''}
+    icon={titleOrIcon.type === 'icon' ? titleOrIcon.value : {}}
     containerStyle={color}
     overlayContainerStyle={ background ? background : styles.avatarBackground }
     titleStyle={styles.avatarTitle}

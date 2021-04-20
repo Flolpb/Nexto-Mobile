@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PROFILE = {
   local: 'http://localhost:8000',
-  dev: 'http://192.168.0.22:8000',
+  dev: 'http://192.168.1.22:8000',
   prod: 'https://api.app-nexto.com',
 };
 
@@ -11,7 +11,7 @@ const PROFILE = {
  */
 
 let API = {
-  BASE_URL: PROFILE['prod'],
+  BASE_URL: PROFILE['dev'],
   VALID_TOKEN: async () => {
     try {
       return (await AsyncStorage.getItem('AUTH_TOKEN').then(data => {
@@ -20,7 +20,7 @@ let API = {
           return data
         }
       }))
-      
+
     } catch (error) {
       // Error retrieving data
       console.log(error)
@@ -35,7 +35,7 @@ let API = {
           return data
         }
       }))
-      
+
     } catch (error) {
       // Error retrieving data
       console.log(error)

@@ -10,6 +10,7 @@ import LibraryHelper from '../../../helpers/LibraryHelper/LibraryHelper';
 import LibraryItem from '../../../components/LibraryItem/LibraryItem';
 import {connect} from 'react-redux';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
+import API from '../../../config/api';
 
 class ListLibraryContainer extends React.Component {
 
@@ -23,10 +24,13 @@ class ListLibraryContainer extends React.Component {
     this.getAllUserLibraries();
   }
 
-  getAllUserLibraries = () => {
+  getAllUserLibraries = async () => {
     const params = {
       user: 1,
     };
+    await API.VALID_TOKEN().then(r => console.log(r))
+    await API.USER_ID().then(r => console.log(r))
+
     LibraryHelper.getAllLibraries(params).then(r => {
       if (!r) {
         this.setKeyValue('emptyError', true);

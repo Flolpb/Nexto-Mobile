@@ -69,29 +69,10 @@ class ListeMessageContainer extends React.Component {
                     const hours = utcDate.getHours();
 
                     newDate.setHours(hours - offset);
-                    /*let separate = this.state.messages[i].date.split('T');
-                    separate[1] = separate[1].split('.');
-                    separate[1] = separate[1][0].split(':');
-                    separate[0] = separate[0].split('-');
-                    let year = parseInt(separate[0][0]);
-                    let month = parseInt(separate[0][1]) - 1;
-                    let day = parseInt(separate[0][2]);
-                    let hours = parseInt(separate[1][0]);
-                    let minutes = parseInt(separate[1][1]);
-                    let dateM = new Date();
-                    dateM.setFullYear(year);
-                    dateM.setMonth(month);
-                    dateM.setDate(day);
-                    dateM.setHours(hours + 2);
-                    dateM.setMinutes(minutes);
-                    dateM.setSeconds(0);
-                    dateM.setMilliseconds(0);*/
                     let dateNow = new Date();
                     let monthNow = dateNow.getMonth();
                     dateNow.setMonth(monthNow);
                     dateNow = this.convertUTCDateToLocalDate(dateNow);
-                    console.log(dateNow);
-                    console.log(newDate);
                     if(newDate.valueOf() < dateNow.valueOf()){
                         this.changeStatus(i);
                         SmsAndroid.autoSend(

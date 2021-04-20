@@ -25,16 +25,17 @@ class LoggedSwitchNavigation extends React.Component
       {
         AuthHelper.remember()
         .then(async (data) => {
+          console.log(data)
           if(data.type === "success")
           {
             this.toggleLogIn(data.mail)
             /* Keep User Id */
-            StorageHelper._storeUserId(r.id)
+            StorageHelper._storeUserId(data.id)
           }
         })
       }
     }
-    
+
 
     handleRegister = async (username, mail, firstname, name, phone_number, password) => {
       const registerRequest = {
@@ -61,7 +62,7 @@ class LoggedSwitchNavigation extends React.Component
             StorageHelper._storeUserId(res.id)
           }
         else{
-          // Message d'erreur 
+          // Message d'erreur
           console.log(res.message)
         }
       });
@@ -88,14 +89,14 @@ class LoggedSwitchNavigation extends React.Component
             this.toggleLogIn(mail)
 
             /* Keep Token */
-            StorageHelper._storeToken(r.token)
+            await StorageHelper._storeToken(r.token).then(r => console.log(r))
 
             /* Keep User Id */
-            StorageHelper._storeUserId(r.id)
+            await StorageHelper._storeUserId(r.id).then(r => console.log(r))
           }
-          
+
         });
-        
+
     }
 
     render(){

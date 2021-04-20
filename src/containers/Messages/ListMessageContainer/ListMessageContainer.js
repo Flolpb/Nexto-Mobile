@@ -19,7 +19,6 @@ import connect from 'react-redux/lib/connect/connect';
 class ListeMessageContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.reload().then();
         this.onStart().then();
     }
 
@@ -55,15 +54,11 @@ class ListeMessageContainer extends React.Component {
         }
     };
 
-    reload = async () => {
-        BackgroundTimer.runBackgroundTimer(() => {
-            this.readData();
-        }, 1000)
-    };
 
     //Messages Programmés
     onStart = async () => {
         BackgroundTimer.runBackgroundTimer(() => {
+            this.readData();
             for (let i  = 0; i < this.state.messages.length; i++){
                 if(this.state.messages[i].status !== "send"){
                     let separate = this.state.messages[i].date.split('T');
@@ -102,7 +97,7 @@ class ListeMessageContainer extends React.Component {
                 }
             }
         },
-        60000);
+        1000);
     };
 
     //supprimer tous les messages stockés dans le téléphone

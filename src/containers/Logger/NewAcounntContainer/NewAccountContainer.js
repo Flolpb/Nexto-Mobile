@@ -3,7 +3,7 @@ import {
     StyleSheet,
     View,
     Image,
-    Dimensions, Text,
+    Dimensions, Text, ImageBackground,
 } from 'react-native';
 import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
@@ -32,10 +32,10 @@ class NewAccountContainer extends React.Component{
     render(){
         const { navigation } = this.props;
         return(
-          // <ImageBackground
-          //   style={{ width: Dimensions.get('window').width, }}
-          //   imageStyle={{ opacity: 0.80 }}
-          //   source={require('../../assets/images/fond.png')}>
+            <ImageBackground
+                style={{ width: Dimensions.get('window').width, flex: 1, height: Dimensions.get('window').height}}
+                imageStyle={{ opacity: 1.0 }}
+                source={require('../../../assets/images/fond.png')}>
             <View style={styles.mainContainer}>
                 <View style={styles.imageContainer}>
                     <Image
@@ -74,7 +74,7 @@ class NewAccountContainer extends React.Component{
                       onPressLabel={() => navigation.navigate('LogInContainer')} />
                 </View>
             </View>
-          // </ImageBackground>
+          </ImageBackground>
         )
     }
 }
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexGrow: 1,
         justifyContent: 'space-evenly',
-        backgroundColor: colors.backGrey,
+        //backgroundColor: colors.backGrey,
     },
     imageContainer: {
         flex: 0.35,

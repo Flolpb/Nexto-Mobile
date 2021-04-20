@@ -3,7 +3,7 @@ import {
     StyleSheet,
     View,
     Image,
-    Dimensions, Text, PermissionsAndroid,
+    Dimensions, Text, PermissionsAndroid, ImageBackground,
 } from 'react-native';
 import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
@@ -50,12 +50,15 @@ class LogInContainer extends React.Component{
     };
 
     render(){
+
+        const image = {uri: '../../../assets/images/fond.png'};
+
         const { navigation } = this.props;
         return(
-          // <ImageBackground
-          //   style={{ width: Dimensions.get('window').width, }}
-          //   imageStyle={{ opacity: 0.80 }}
-          //   source={require('../../assets/images/fond.png')}>
+           <ImageBackground
+             style={{ width: Dimensions.get('window').width, flex: 1, height: Dimensions.get('window').height}}
+             imageStyle={{ opacity: 1.0 }}
+             source={require('../../../assets/images/fond.png')}>
             <View style={styles.mainContainer}>
                 <View style={styles.imageContainer}>
                     <Image
@@ -64,7 +67,7 @@ class LogInContainer extends React.Component{
                 </View>
 
                 <View style={styles.subContainer}>
-                    <CustomTextInput value={this.state.username} placeholder="Identifiant" isMultiline="false"
+                    <CustomTextInput style={styles.textInput} value={this.state.username} placeholder="Identifiant" isMultiline="false"
                                      onChangeTextInput={(text) => this.setKeyValue('username', text)} />
 
                     <CustomTextInput value={this.state.mail} placeholder="Adresse-mail" isMultiline="false"
@@ -86,7 +89,7 @@ class LogInContainer extends React.Component{
                       onPressLabel={() => navigation.navigate('NewAccountContainer')} />
                 </View>
             </View>
-          // </ImageBackground>
+           </ImageBackground>
         )
     }
 }
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexGrow: 1,
         justifyContent: 'space-evenly',
-        backgroundColor: colors.backGrey,
+        //backgroundColor: colors.backGrey,
     },
     imageContainer: {
         flex: 1,
@@ -112,6 +115,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         marginVertical: 20,
     },
+    textInput: {
+        opacity: 0.8,
+    }
 });
 
 export default LogInContainer

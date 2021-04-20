@@ -52,13 +52,30 @@ class ListeMessageContainer extends React.Component {
     };
 
 
+    convertUTCDateToLocalDate(date){
+        const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+
+        const offset = date.getTimezoneOffset() / 60;
+        const hours = date.getHours();
+
+        newDate.setHours(hours - offset);
+
+        return newDate;
+    }
+
     //Messages Programmés
     onStart = async () => {
         BackgroundTimer.runBackgroundTimer(() => {
             this.readData();
             for (let i  = 0; i < this.state.messages.length; i++){
                 if(this.state.messages[i].status !== "send"){
-                    let separate = this.state.messages[i].date.split('T');
+                    const utcDate = new Date(this.state.messages[i].date);
+                    const newDate = new Date(utcDate.getTime() + utcDate.getTimezoneOffset()*60*1000);
+                    const offset = utcDate.getTimezoneOffset() / 60;
+                    const hours = utcDate.getHours();
+
+                    newDate.setHours(hours - offset);
+                    /*let separate = this.state.messages[i].date.split('T');
                     separate[1] = separate[1].split('.');
                     separate[1] = separate[1][0].split(':');
                     separate[0] = separate[0].split('-');
@@ -71,14 +88,17 @@ class ListeMessageContainer extends React.Component {
                     dateM.setFullYear(year);
                     dateM.setMonth(month);
                     dateM.setDate(day);
-                    dateM.setHours(hours);
+                    dateM.setHours(hours + 2);
                     dateM.setMinutes(minutes);
                     dateM.setSeconds(0);
-                    dateM.setMilliseconds(0);
+                    dateM.setMilliseconds(0);*/
                     let dateNow = new Date();
                     let monthNow = dateNow.getMonth();
                     dateNow.setMonth(monthNow);
-                    if(dateM.valueOf() < dateNow.valueOf()){
+                    dateNow = this.convertUTCDateToLocalDate(dateNow);
+                    console.log(dateNow);
+                    console.log(newDate);
+                    if(newDate.valueOf() < dateNow.valueOf()){
                         this.changeStatus(i);
                         SmsAndroid.autoSend(
                             this.state.messages[i].contact,

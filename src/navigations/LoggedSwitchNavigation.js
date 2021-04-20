@@ -24,12 +24,15 @@ class LoggedSwitchNavigation extends React.Component
       if(await API.VALID_TOKEN() !== null)
       {
         AuthHelper.remember()
-        .then(async (data) => {
+        .then((data) => {
+          console.log(data)
           if(data.type === "success")
           {
             this.toggleLogIn(data.mail)
             /* Keep User Id */
-            StorageHelper._storeUserId(r.id)
+            StorageHelper._storeUserId(data.id)
+            console.log(API.USER_ID())
+            
           }
         })
       }

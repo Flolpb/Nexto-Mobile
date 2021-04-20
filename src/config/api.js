@@ -11,7 +11,7 @@ const PROFILE = {
  */
 
 let API = {
-  BASE_URL: PROFILE['dev'],
+  BASE_URL: PROFILE['prod'],
   VALID_TOKEN: async () => {
     try {
       return (await AsyncStorage.getItem('AUTH_TOKEN').then(data => {

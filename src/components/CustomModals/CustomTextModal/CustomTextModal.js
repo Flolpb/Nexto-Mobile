@@ -33,12 +33,14 @@ const styles = StyleSheet.create({
   container: {
     margin: 20,
     padding: 20,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderRadius: 20
   },
   title: {
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
+    marginTop: 15,
   },
 });
 

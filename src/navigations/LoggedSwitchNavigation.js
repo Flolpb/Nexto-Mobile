@@ -25,8 +25,7 @@ class LoggedSwitchNavigation extends React.Component
       {
         AuthHelper.remember()
         .then(async (data) => {
-          console.log(data)
-          if(data.type === "success")
+          if(data && data.type === "success")
           {
             this.toggleLogIn(data.mail)
             /* Keep User Id */
@@ -82,11 +81,10 @@ class LoggedSwitchNavigation extends React.Component
 
         AuthHelper.login(loginRequest)
         .then(async (r) => {
-
           if(r.logged)
           {
             /* Navigation */
-            this.toggleLogIn(mail)
+            // this.toggleLogIn(mail)
 
             /* Keep Token */
             await StorageHelper._storeToken(r.token).then(r => console.log(r))

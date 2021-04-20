@@ -3,12 +3,10 @@ import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import DelayedMessageContainer from '../DelayedMessageContainer/DelayedMessageContainer';
 import DirectMessage from '../DirectMessageContainer/DirectMessage';
-import { PermissionsAndroid } from 'react-native';
 import colors from '../../../config/colors';
 import fonts from '../../../config/fonts';
 import {createStackNavigator} from '@react-navigation/stack';
 import ListLibraryContainer from '../../Library/ListLibraryContainer/ListLibraryContainer';
-import {List} from 'react-native-paper';
 
 
 class GlobalMessageContainer extends React.Component {
@@ -18,7 +16,7 @@ class GlobalMessageContainer extends React.Component {
   }
 
   state = {
-    chosenLibrary: null
+    chosenLibrary: null,
   }
 
   setKeyValue = (key, value) => {

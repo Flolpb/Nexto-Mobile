@@ -46,8 +46,6 @@ class DirectMessage extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.chosenLibrary !== this.props.chosenLibrary) {
-      this.setKeyValue('varsList', []);
-      this.setKeyValue('vars', {});
       this.setState({
         varsList: [],
         vars: {},
@@ -165,7 +163,7 @@ class DirectMessage extends React.Component {
               );
             }
             else{
-              this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${lastCaractere}`)
+              this.showErrorModal(`Mauvais format pour le numéro de téléphone: ${phoneNumber}`)
             }
           }
           // Test si le numéro de téléphone est bien composé seulement de numéros
@@ -192,7 +190,7 @@ class DirectMessage extends React.Component {
           }
         });
       } else {
-        this.showErrorModal(`Informations incomplètes`)
+        this.showErrorModal(`Informations incomplètes`);
       }
     });
   }
@@ -496,26 +494,26 @@ class DirectMessage extends React.Component {
           )}
         />
 
+        <View style={styles.switchButton}>
+          {
+            this.state.fromLibrary ? (
+              <CustomMediumGradientAvatar
+                titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf' }}}
+                onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+            ) : (
+              <CustomMediumAvatar
+                background={{backgroundColor: colors.grey}}
+                color={{ color: colors.white }}
+                titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf', color: colors.backGrey }}}
+                onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+            )
+          }
+        </View>
+
         <View style={styles.sendButton}>
           <CustomMediumGradientAvatar
             titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'send' }}}
             onPressAvatar={this.state.fromLibrary ? () => this.constructMessage() : () => this.sendSms()} />
-        </View>
-
-        <View style={styles.switchButton}>
-        {
-          this.state.fromLibrary ? (
-            <CustomMediumGradientAvatar
-              titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf' }}}
-              onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
-          ) : (
-            <CustomMediumAvatar
-              background={{backgroundColor: colors.grey}}
-              color={{ color: colors.white }}
-              titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf', color: colors.backGrey }}}
-              onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
-          )
-        }
         </View>
 
         <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>

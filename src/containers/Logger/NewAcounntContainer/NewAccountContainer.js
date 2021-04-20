@@ -35,17 +35,17 @@ class NewAccountContainer extends React.Component{
     render(){
         const { navigation } = this.props;
         return(
+
             <ScrollView style={styles.mainContainer}>
-            <ImageBackground
-                style={{ width: Dimensions.get('window').width, flex: 1, height: Dimensions.get('window').height}}
-                imageStyle={{ opacity: 1.0 }}
-                source={require('../../../assets/images/fond.png')}>
+                <ImageBackground
+                  style={{ width: Dimensions.get('window').width, flex: 1, zIndex: 50}}
+                  imageStyle={{ opacity: 1.0 }}
+                  source={require('../../../assets/images/fond.png')}>
                 <View style={styles.imageContainer}>
                     <Image
                       source={require('../../../assets/images/logov2.png')}
                       style={[styles.image, { width: Dimensions.get('window').width - 50 }]} />
                 </View>
-
                 <View style={styles.subContainer}>
                     <CustomTextInput value={this.state.username} placeholder="Identifiant" isMultiline="false"
                                      onChangeTextInput={(text) => this.setKeyValue('username', text)} />

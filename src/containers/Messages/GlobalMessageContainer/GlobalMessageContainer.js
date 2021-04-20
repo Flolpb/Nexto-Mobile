@@ -17,9 +17,11 @@ class GlobalMessageContainer extends React.Component {
 
   state = {
     chosenLibrary: null,
+    fromLibrary: false,
   }
 
   setKeyValue = (key, value) => {
+    console.log(value)
     this.setState({
       [key]: value,
     });
@@ -55,11 +57,17 @@ class GlobalMessageContainer extends React.Component {
               sceneContainerStyle={styles.screen}>
               <Tab.Screen
                 name="Instantané">
-                {props => <DirectMessage {...props} {...this.props} contactID={route.params} setChosenLibrary={() => this.setKeyValue('chosenLibrary', null)} chosenLibrary={this.state.chosenLibrary} />}
+                {props => <DirectMessage {...props} {...this.props} contactID={route.params}
+                               setChosenLibrary={() => this.setKeyValue('chosenLibrary', null)} chosenLibrary={this.state.chosenLibrary}
+                               setFromLibrary={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} fromLibrary={this.state.fromLibrary}
+                />}
               </Tab.Screen>
               <Tab.Screen
                 name="Différé">
-                {props => <DelayedMessageContainer {...props} {...this.props} contactID={route.params} setChosenLibrary={() => this.setKeyValue('chosenLibrary', null)} chosenLibrary={this.state.chosenLibrary} />}
+                {props => <DelayedMessageContainer {...props} {...this.props} contactID={route.params}
+                               setChosenLibrary={() => this.setKeyValue('chosenLibrary', null)} chosenLibrary={this.state.chosenLibrary}
+                               setFromLibrary={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} fromLibrary={this.state.fromLibrary}
+                />}
               </Tab.Screen>
             </Tab.Navigator>
           }

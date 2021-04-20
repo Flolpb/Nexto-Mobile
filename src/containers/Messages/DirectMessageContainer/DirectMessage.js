@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   PermissionsAndroid,
-  SafeAreaView, FlatList, Switch, TextInput,
+  SafeAreaView, FlatList,
 } from 'react-native';
 import SmsAndroid from 'react-native-get-sms-android';
 import colors from '../../../config/colors';
@@ -56,6 +56,10 @@ class DirectMessage extends React.Component {
           this.resetChosenLibrary();
         }
       }));
+    } else if (prevProps.contactID !== this.props.contactID) {
+      this.setState({
+        phoneNumbers: [],
+      }, () => this.getContact())
     }
   }
 
@@ -66,7 +70,6 @@ class DirectMessage extends React.Component {
     message: '',
     modalVisible: false,
     modalTitle: '',
-    fromLibrary: false,
     varsList: [],
     vars: {},
     builtMessages: [],
@@ -392,8 +395,8 @@ class DirectMessage extends React.Component {
   }
 
   renderFooter = () => {
-    const { navigation, chosenLibrary } = this.props;
-    const { fromLibrary, message, varsList } = this.state;
+    const { navigation, chosenLibrary, fromLibrary } = this.props;
+    const { message, varsList } = this.state;
     return(
       <>
         {
@@ -404,7 +407,10 @@ class DirectMessage extends React.Component {
                   <>
                     <View style={styles.subContainer}>
                       <CustomLabel text={"Bibliothèque sélectionnée"} position="left" size={20} />
-                      <CustomLabelBackgroundButton text={chosenLibrary.name} onPressLabel={() => navigation.navigate('ListLibraryContainerFromMessage')} onPressButton={() => this.resetChosenLibrary()} icon={{ name: 'close', type: 'material' }} />
+                      <CustomLabelBackgroundButton
+                        text={chosenLibrary.name}
+                        onPressLabel={() => navigation.navigate('ListLibraryContainerFromMessage')}
+                        onPressButton={() => this.resetChosenLibrary()} icon={{ name: 'close', type: 'material' }} />
                     </View>
                     <View style={styles.subContainer}>
                       {
@@ -466,6 +472,7 @@ class DirectMessage extends React.Component {
   }
 
   render() {
+    const { fromLibrary, setFromLibrary } = this.props;
     const { modalVisible, modalTitle } = this.state;
     return(
       <>
@@ -496,16 +503,16 @@ class DirectMessage extends React.Component {
 
         <View style={styles.switchButton}>
           {
-            this.state.fromLibrary ? (
+            fromLibrary ? (
               <CustomMediumGradientAvatar
                 titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf' }}}
-                onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+                onPressAvatar={() => setFromLibrary()} />
             ) : (
               <CustomMediumAvatar
                 background={{backgroundColor: colors.grey}}
                 color={{ color: colors.white }}
                 titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf', color: colors.backGrey }}}
-                onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+                onPressAvatar={() => setFromLibrary()} />
             )
           }
         </View>
@@ -513,7 +520,7 @@ class DirectMessage extends React.Component {
         <View style={styles.sendButton}>
           <CustomMediumGradientAvatar
             titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'send' }}}
-            onPressAvatar={this.state.fromLibrary ? () => this.constructMessage() : () => this.sendSms()} />
+            onPressAvatar={fromLibrary ? () => this.constructMessage() : () => this.sendSms()} />
         </View>
 
         <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>

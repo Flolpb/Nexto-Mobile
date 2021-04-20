@@ -123,6 +123,7 @@ class ListLibraryContainer extends React.Component {
 
   selectLibrary = (library) => {
     this.props.setChosenLibrary(library);
+    console.log(this.props.navigation.state)
     this.props.navigation.navigate('GlobalMessageContainer');
   }
 

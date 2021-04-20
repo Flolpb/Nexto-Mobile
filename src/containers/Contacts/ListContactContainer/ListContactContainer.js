@@ -149,7 +149,7 @@ class ListContactContainer extends React.Component {
             key={fav[0].recordID}
             onPress={() => {
               // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
-              navigation.navigate("ListeContactMessageScreen", {
+              navigation.navigate("GlobalMessageContainer", {
                 contactID: fav[0].recordID,
               })
             }}

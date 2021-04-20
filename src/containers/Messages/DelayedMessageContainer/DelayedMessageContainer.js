@@ -61,6 +61,10 @@ class DelayedMessageContainer extends React.Component {
                     this.resetChosenLibrary();
                 }
             }));
+        } else if (prevProps.contactID !== this.props.contactID) {
+            this.setState({
+                phoneNumbers: [],
+            }, () => this.getContact())
         }
     }
 
@@ -76,7 +80,6 @@ class DelayedMessageContainer extends React.Component {
         modalVisible: false,
         modalTitle: '',
         contactVisible: false,
-        fromLibrary: true,
         varsList: [],
         vars: {},
     };
@@ -235,7 +238,10 @@ class DelayedMessageContainer extends React.Component {
         if(date != null){
             this.setState({date: date});
         }
-        this.setState({displayDate: false});
+        this.setState({
+            displayDate: false,
+            displayTime: true,
+        });
     };
 
     setTime = (event, date) => {
@@ -394,8 +400,8 @@ class DelayedMessageContainer extends React.Component {
     };
 
     renderFooter = () => {
-        const { navigation, chosenLibrary } = this.props;
-        const { fromLibrary, message, varsList, date, displayDate, displayTime } = this.state;
+        const { navigation, chosenLibrary, fromLibrary } = this.props;
+        const { message, varsList, date, displayDate, displayTime } = this.state;
         let dateString = date ? getDate(date) : 'Aucune';
 
         return (
@@ -403,17 +409,22 @@ class DelayedMessageContainer extends React.Component {
               <>
                   <View style={styles.subContainer}>
                       <CustomLabel text={"Date & heure"} position="left" size={20} />
-                      <CustomLabel text={`Envoi le ${dateString[0]} à ${dateString[1]}`} spaceBetween={3} position="center" size={16} fontType="light" />
+                      <CustomLabelBackgroundButton
+                        text={`Envoi le ${dateString[0]} à ${dateString[1]}`} spaceBetween={3} position="center" size={16} fontType="light"
+                        icon={{ type: 'material', name: 'schedule' }}
+                        onPressLabel={() => this.setKeyValue('displayDate', true)}
+                        onPressButton={() => this.setKeyValue('displayDate', true)}
+                      />
                   </View>
 
-                  <View style={[styles.subContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                      <View style={{width: '45%'}}>
-                          <CustomGradientTextButton title="Date" onPressButton={() => this.setKeyValue('displayDate', true)} />
-                      </View>
-                      <View style={{width: '45%'}}>
-                          <CustomGradientTextButton title="Heure" onPressButton={() => this.setKeyValue('displayTime', true)} />
-                      </View>
-                  </View>
+                  {/*<View style={[styles.subContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>*/}
+                  {/*    <View style={{width: '45%'}}>*/}
+                  {/*        <CustomGradientTextButton title="Date" onPressButton={() => this.setKeyValue('displayDate', true)} />*/}
+                  {/*    </View>*/}
+                  {/*    <View style={{width: '45%'}}>*/}
+                  {/*        <CustomGradientTextButton title="Heure" onPressButton={() => this.setKeyValue('displayTime', true)} />*/}
+                  {/*    </View>*/}
+                  {/*</View>*/}
 
                   {displayDate &&
                   <DateTimePicker
@@ -513,6 +524,7 @@ class DelayedMessageContainer extends React.Component {
     };
 
     render() {
+        const { fromLibrary, setFromLibrary } = this.props;
         const { modalVisible, modalTitle } = this.state;
         return(
           <SafeAreaView style={styles.container}>
@@ -542,16 +554,16 @@ class DelayedMessageContainer extends React.Component {
 
               <View style={styles.switchButton}>
                   {
-                      this.state.fromLibrary ? (
+                      fromLibrary ? (
                         <CustomMediumGradientAvatar
                           titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf' }}}
-                          onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+                          onPressAvatar={() => setFromLibrary()} />
                       ) : (
                         <CustomMediumAvatar
                           background={{backgroundColor: colors.grey}}
                           color={{ color: colors.white }}
                           titleOrIcon={{ type: 'icon', value: { type: 'material-community', name: 'bookshelf', color: colors.backGrey }}}
-                          onPressAvatar={() => this.setKeyValue('fromLibrary', !this.state.fromLibrary)} />
+                          onPressAvatar={() => setFromLibrary()} />
                       )
                   }
               </View>
@@ -559,7 +571,7 @@ class DelayedMessageContainer extends React.Component {
               <View style={styles.sendButton}>
                   <CustomMediumGradientAvatar
                     titleOrIcon={{ type: 'icon', value:{ type: 'material', name: 'send' }}}
-                    onPressAvatar={this.state.fromLibrary ? () => this.constructMessage() : () => this.verifyPhoneNumbers()} />
+                    onPressAvatar={fromLibrary ? () => this.constructMessage() : () => this.verifyPhoneNumbers()} />
               </View>
 
               <Modal ref={"modal1"} style={styles.modal1} position={"bottom"}>

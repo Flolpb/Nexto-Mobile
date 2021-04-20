@@ -143,7 +143,7 @@ class ContactItem extends React.Component {
           <TouchableOpacity
             onPress={() => {
               // On navigue vers la fenêtre de message du StackNavigator de la liste des contacts
-              navigation.navigate("ListeContactMessageScreen", {
+              navigation.navigate("GlobalMessageContainer", {
                 contactID: contactItem.recordID,
               })
             }}

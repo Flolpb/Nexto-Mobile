@@ -71,7 +71,8 @@ class LogInContainer extends React.Component{
                                      onChangeTextInput={(text) => this.setKeyValue('mail', text)} />
 
                     <CustomTextInput value={this.state.password} placeholder="Mot de passe" isMultiline="false"
-                                     onChangeTextInput={(text) => this.setKeyValue('password', text)} />
+                                     onChangeTextInput={(text) => this.setKeyValue('password', text)}
+                                     isPassword={this.state.password ? 'true' : 'false'} />
 
                     <View style={{marginTop: 20}}>
                         <CustomGradientTextButton title="Connexion"

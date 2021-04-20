@@ -1,13 +1,10 @@
 import React from 'react';
-import Navigation from './Navigation';
-import LogInContainer from '../containers/Logger/LogInContainer/LogInContainer';
 import { connect } from 'react-redux'
 import LoggerNavigation from './LoggerNavigation';
-import UserHelper from '../helpers/UserHelper/UserHelper';
 import AuthHelper from '../helpers/UserHelper/AuthHelper';
 import StorageHelper from '../helpers/UserHelper/StorageHelper';
 import API from '../config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import DrawerNavigation from './DrawerNavigation';
 
 
 class LoggedSwitchNavigation extends React.Component
@@ -101,7 +98,7 @@ class LoggedSwitchNavigation extends React.Component
         return (
           <>
               { this.props.isLogged
-                ? <Navigation onLogOut={this._clearToken} />
+                ? <DrawerNavigation onLogOut={StorageHelper._clearToken()} />
                 : <LoggerNavigation onLogIn={this.handleLogIn} onRegister={this.handleRegister} />
               }
           </>

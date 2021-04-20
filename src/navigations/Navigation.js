@@ -27,7 +27,7 @@ class Navigation extends React.Component{
     render(){
         return(
             <>
-                <NavigationContainer>
+
                     <Tab.Navigator
                       swipeEnabled={false}
                       initialRouteName="MainPage"
@@ -96,7 +96,7 @@ class Navigation extends React.Component{
                         {props => <GlobalMessageContainer {...props} setTabHeight={this.setTabHeight} /> }
                       </Tab.Screen>
                     </Tab.Navigator>
-                </NavigationContainer>
+
             </>
         )
     }

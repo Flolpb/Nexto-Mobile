@@ -3,9 +3,8 @@ import {
     StyleSheet,
     View,
     Image,
-    Dimensions, Text, PermissionsAndroid, ImageBackground,
+    Dimensions, PermissionsAndroid, ImageBackground,
 } from 'react-native';
-import colors from '../../../config/colors';
 import CustomGradientTextButton from '../../../components/CustomButtons/CustomGradientTextButton/CustomGradientTextButton';
 import CustomTextInput from '../../../components/CustomTextInputs/CustomTextInput/CustomTextInput';
 import CustomLabel from '../../../components/CustomLabel/CustomLabel/CustomLabel';
@@ -16,8 +15,8 @@ class LogInContainer extends React.Component{
     {
         super(props);
         this.state = {
-            mail: 'test2@test.fr',
-            password: '1234'
+            mail: '',
+            password: ''
         }
         this.askPermission();
     }
@@ -56,7 +55,7 @@ class LogInContainer extends React.Component{
         const { navigation } = this.props;
         return(
            <ImageBackground
-             style={{ width: Dimensions.get('window').width, flex: 1, height: Dimensions.get('window').height}}
+             style={{ width: Dimensions.get('window').width, flex: 1, height: Dimensions.get('window').height }}
              imageStyle={{ opacity: 1.0 }}
              source={require('../../../assets/images/fond.png')}>
             <View style={styles.mainContainer}>

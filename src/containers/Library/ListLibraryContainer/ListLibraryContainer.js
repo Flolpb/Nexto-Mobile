@@ -140,7 +140,7 @@ class ListLibraryContainer extends React.Component {
             ListHeaderComponent={this.createListHeader}
             ListEmptyComponent={this.createEmptyViewList}
             data={libraries}
-            keyExtractor={(item, index) => item.id}
+            keyExtractor={(item, index) => item.id.toString()}
             renderItem={({item, index}) => {
               return this.props.selectionFromMessage ? (
                 <LibraryItem key={index} item={item} onPressItem={() => this.selectLibrary(item)} />

@@ -16,13 +16,13 @@ class NewAccountContainer extends React.Component{
     {
         super(props)
         this.state = {
-            username: 'Yvon',
-            mail: 'test3@test.fr',
-            firstname: 'Yohan',
-            name: 'Pageot',
-            phone_number: '0658965632',
-            password: '1234',
-            passwordConfirm: '1234',
+            username: '',
+            mail: '',
+            firstname: '',
+            name: '',
+            phone_number: '',
+            password: '',
+            passwordConfirm: '',
         }
     }
 
@@ -35,17 +35,18 @@ class NewAccountContainer extends React.Component{
     render(){
         const { navigation } = this.props;
         return(
-
+          <>
+            <Image
+                style={{ width: Dimensions.get('window').width, flex: 1, height: Dimensions.get('window').height, position: 'absolute' }}
+                source={require('../../../assets/images/fond.png')} />
+              <View style={styles.imageContainer}>
+                  <Image
+                    source={require('../../../assets/images/logov2.png')}
+                    style={[styles.image, { width: Dimensions.get('window').width - 50 }]} />
+              </View>
             <ScrollView style={styles.mainContainer}>
-                <ImageBackground
-                  style={{ width: Dimensions.get('window').width, flex: 1, zIndex: 50}}
-                  imageStyle={{ opacity: 1.0 }}
-                  source={require('../../../assets/images/fond.png')}>
-                <View style={styles.imageContainer}>
-                    <Image
-                      source={require('../../../assets/images/logov2.png')}
-                      style={[styles.image, { width: Dimensions.get('window').width - 50 }]} />
-                </View>
+
+
                 <View style={styles.subContainer}>
                     <CustomTextInput value={this.state.username} placeholder="Identifiant" isMultiline="false"
                                      onChangeTextInput={(text) => this.setKeyValue('username', text)} />
@@ -85,8 +86,9 @@ class NewAccountContainer extends React.Component{
                       }}
                       onPressLabel={() => navigation.navigate('LogInContainer')} />
                 </View>
-                </ImageBackground>
+
             </ScrollView>
+          </>
         )
     }
 }
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexGrow: 1,
         /* justifyContent: 'space-evenly', */
-        backgroundColor: colors.backGrey,
+        backgroundColor: colors.transparent,
     },
     imageContainer: {
         flex: 0.35,

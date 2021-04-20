@@ -8,15 +8,13 @@ class MainPage extends React.Component {
         super(props);
     }
 
-
-
     render(){
         return (
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <Image
                         source={require('../../assets/images/logov2.png')}
-                        style={[styles.image, { width: Dimensions.get('window').width - 10 }]} />
+                        style={[styles.image, { width: Dimensions.get('window').width - 40 }]} />
                 </View>
             </View>
         );

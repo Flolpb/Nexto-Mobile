@@ -43,6 +43,18 @@ const LibraryHelper = {
       console.log(err);
       return false;
     }
+  },
+  deleteLibrary: async (id) => {
+    try {
+      const headers = {
+        "Content-Type": 'application/json',
+        "Authorization": await API.VALID_TOKEN(),
+      };
+      return (await axios.delete(`${LIBRARY_HELPER_URL}/${id}`, { headers })).data;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 }
 

@@ -142,9 +142,8 @@ class ListContactContainer extends React.Component {
         let fav = contacts.filter(item => item.recordID === favID);
         favoritesContacts.push(fav);
       });
-
       favoritesContacts.map((fav) => {
-        content.push(
+        typeof fav !== Array && fav && fav[0] && content.push(
           <TouchableOpacity
             key={fav[0].recordID}
             onPress={() => {

@@ -48,6 +48,14 @@ class ListLibraryContainer extends React.Component {
     });
   }
 
+  deleteLibrary = async (id) => {
+    LibraryHelper.deleteLibrary(id).then(r => {
+      const action = { type: "REMOVE_LIBRARY", id: id};
+      this.props.dispatch(action);
+      console.log(this.props.libraries)
+    });
+  }
+
   setKeyValue = (key, value) => {
     this.setState({
       [key]: value,
@@ -151,7 +159,7 @@ class ListLibraryContainer extends React.Component {
               return this.props.selectionFromMessage ? (
                 <LibraryItem key={index} item={item} onPressItem={() => this.selectLibrary(item)} />
               ) : (
-                <LibraryItem key={index} item={item} />
+                <LibraryItem key={index} item={item} onPressIconButton={() => this.deleteLibrary(item.id)} />
               )
             }
             }/>

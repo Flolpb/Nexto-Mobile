@@ -4,6 +4,7 @@ import colors from '../../config/colors';
 import CustomLabel from '../CustomLabel/CustomLabel/CustomLabel';
 import VARS from '../../config/vars';
 import fonts from '../../config/fonts';
+import CustomIconButton from '../CustomButtons/CustomIconButton/CustomIconButton';
 
 class LibraryItem extends React.Component {
 
@@ -30,15 +31,16 @@ class LibraryItem extends React.Component {
   }
 
   render() {
-    const { item, onPressItem } = this.props;
+    const { item, onPressItem, onPressIconButton } = this.props;
     return(
         <TouchableOpacity
           style={[styles.container, styles.textContainer]}
           onPress={onPressItem}
           >
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <CustomLabel text={`${item.name.slice(0,30)}${item.name.length>30 ? (' ...') : ''}`} position="left" fontType="medium" size={18} />
+            <CustomLabel text={`${item.name.slice(0,15)}${item.name.length>15 ? (' ...') : ''}`} position="left" fontType="medium" size={18} />
             <CustomLabel text={`${item.messages.length} messages`} position="left" fontType="light" size={16} />
+            <CustomIconButton icon={{type: 'material', name: 'close'}} onPressButton={onPressIconButton} />
           </View>
         </TouchableOpacity>
     )

@@ -19,6 +19,13 @@ function manageLibraries(state = initialState, action) {
         libraries: [...state.libraries, action.library]
       }
       return nextState || state;
+    case 'REMOVE_LIBRARY':
+      nextState = {
+        ...state,
+        lastAddedLibrary: state.lastAddedLibrary !== action.id ? state.lastAddedLibrary : null,
+        libraries: [...state.libraries].filter(el => el.id !== action.id),
+      }
+      return nextState || state;
     case 'RESET_ON_LOGOUT':
       return initialState;
     default:

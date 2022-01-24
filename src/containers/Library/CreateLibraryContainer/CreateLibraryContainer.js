@@ -53,10 +53,7 @@ class CreateLibraryContainer extends React.Component {
         messages: [...this.state.messages, '']
       });
     } else {
-      this.setState({
-        modalVisible: true,
-        modalTitle: 'Nombre maximal de messages par bibliothèque atteint.',
-      });
+      this.showModal('Nombre maximal de messages par bibliothèque atteint.')
     }
   }
 

@@ -44,6 +44,18 @@ const LibraryHelper = {
       return false;
     }
   },
+  updateLibrary: async (id, library) => {
+    try {
+      const headers = {
+        "Content-Type": 'application/json',
+        "Authorization": await API.VALID_TOKEN(),
+      };
+      return (await axios.put(`${LIBRARY_HELPER_URL}/${id}`, library,{ headers })).data;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  },
   deleteLibrary: async (id) => {
     try {
       const headers = {

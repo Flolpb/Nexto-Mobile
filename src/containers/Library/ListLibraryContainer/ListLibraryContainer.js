@@ -93,7 +93,7 @@ class ListLibraryContainer extends React.Component {
                 this.props.selectionFromMessage ? (
                   <LibraryItem item={lastAddedLibrary} onPressItem={() => this.selectLibrary(lastAddedLibrary)} />
                 ) : (
-                  <LibraryItem item={lastAddedLibrary} />
+                  <LibraryItem item={lastAddedLibrary} onPressItem={() => this.editLibrary(lastAddedLibrary)} onPressIconButton={() => this.deleteLibrary(lastAddedLibrary.id)}/>
                 )
               }
             </>
@@ -140,6 +140,10 @@ class ListLibraryContainer extends React.Component {
     this.props.navigation.navigate('GlobalMessageContainer');
   }
 
+  editLibrary = (library) => {
+    this.props.navigation.navigate("CreateBibliotheque", {library: library});
+  }
+
   render() {
     let { navigation } = this.props;
     const libraries = this.state.filteredLibraries ? this.state.filteredLibraries : this.props.libraries;
@@ -159,7 +163,7 @@ class ListLibraryContainer extends React.Component {
               return this.props.selectionFromMessage ? (
                 <LibraryItem key={index} item={item} onPressItem={() => this.selectLibrary(item)} />
               ) : (
-                <LibraryItem key={index} item={item} onPressIconButton={() => this.deleteLibrary(item.id)} />
+                <LibraryItem key={index} item={item} onPressItem={() => this.editLibrary(item)} onPressIconButton={() => this.deleteLibrary(item.id)} />
               )
             }
             }/>

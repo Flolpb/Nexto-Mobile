@@ -25,6 +25,13 @@ class CreateLibraryContainer extends React.Component {
     messages: [],
     modalVisible: false,
     modalTitle: '',
+    editMode: false,
+    libraryId: null,
+  }
+
+  componentDidMount() {
+    const { route } = this.props;
+    route.params && route.params.library && (this.switchEditLibrary(route.params.library))
   }
 
   setKeyValue = (key, value) => {
@@ -119,8 +126,61 @@ class CreateLibraryContainer extends React.Component {
     });
   }
 
+  updateLibrary = async () => {
+    // Vérification du nom de la librairie
+    if (this.state.libraryName === '') {
+      this.showModal('Le nom de la bibliothèque n\'est pas renseignée.');
+      return false;
+    }
+
+    // Vérification d'une bibliothèque vide
+    if (!this.state.messages.length) {
+      this.showModal('La bibliothèque ne contient pas de message.');
+      return false;
+    }
+
+    // Vérification des messages vides
+    if (this.state.messages.some((message) => message === '')) {
+      this.showModal('La liste de messages contient des messages vides.');
+      return false;
+    }
+
+    this.setState({
+      loading: true,
+    });
+
+    let library = {
+      "name": this.state.libraryName,
+      "user": "/api/users/" + this.props.userID,
+      "isPublic": this.state.isPublic,
+      "messages": this.state.messages
+    }
+
+    LibraryHelper.updateLibrary(this.state.libraryId, library).then(r => {
+      if (!r) {
+        this.showModal('Erreur lors de la mise à jour de la bibliothèque. Veuillez réessayer.');
+      } else {
+        const action = { type: 'UPDATE_LIBRARY', library: r }
+        this.props.dispatch(action);
+        this.props.navigation.navigate('ListeBibliotheque');
+      }
+    });
+  }
+
+  switchEditLibrary = (library) => {
+    let fieldsToRetrieve = [["libraryId", "id"], "isPublic", "messages", ["libraryName", "name"]];
+    fieldsToRetrieve.map(el => {
+      if (Array.isArray(el)) {
+        this.setKeyValue(el[0], library[el[1]]);
+      } else {
+        this.setKeyValue(el, library[el]);
+      }
+    });
+    this.setKeyValue('editMode', true);
+  }
+
   render() {
-    const { modalVisible, modalTitle } = this.state;
+    const { modalVisible, modalTitle, editMode } = this.state;
     return(
       <>
         <CustomTextModal visible={modalVisible} setKeyValue={this.setKeyValue} title={modalTitle} icon={'error-outline'} />
@@ -142,7 +202,7 @@ class CreateLibraryContainer extends React.Component {
                 <CustomLabel text="Publique" fontType="light" size={16} />
               </View>
 
-              <CustomGradientTextButton title="Créer la bibliothèque" onPressButton={this.createLibrary} />
+              <CustomGradientTextButton title={editMode ? 'Éditer la bibliothèque' : 'Créer la bibliothèque'} onPressButton={editMode ? this.updateLibrary : this.createLibrary} />
             </View>
           }
           data={this.state.messages}

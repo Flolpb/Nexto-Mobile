@@ -19,6 +19,15 @@ function manageLibraries(state = initialState, action) {
         libraries: [...state.libraries, action.library]
       }
       return nextState || state;
+    case 'UPDATE_LIBRARY':
+      let newArray = [...state.libraries].filter(el => el.id !== action.library.id);
+      newArray.push(action.library);
+      nextState = {
+        ...state,
+        lastAddedLibrary: action.library,
+        libraries: newArray
+      }
+      return nextState || state;
     case 'REMOVE_LIBRARY':
       nextState = {
         ...state,

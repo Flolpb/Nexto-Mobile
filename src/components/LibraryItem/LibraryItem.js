@@ -40,7 +40,10 @@ class LibraryItem extends React.Component {
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <CustomLabel text={`${item.name.slice(0,15)}${item.name.length>15 ? (' ...') : ''}`} position="left" fontType="medium" size={18} />
             <CustomLabel text={`${item.messages.length} messages`} position="left" fontType="light" size={16} />
-            <CustomIconButton icon={{type: 'material', name: 'close'}} onPressButton={onPressIconButton} />
+            <View style={{justifyContent: 'flex-end'}}>
+              <CustomIconButton icon={{type: 'material', name: 'close'}} onPressButton={onPressIconButton} />
+            </View>
+
           </View>
         </TouchableOpacity>
     )

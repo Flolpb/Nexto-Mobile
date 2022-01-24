@@ -205,13 +205,12 @@ class DelayedMessageContainer extends React.Component {
             let value = {};
             value.date = this.state.date;
             value.message = message;
+            value.contact = phoneNumber;
             const theNowValue = await AsyncStorage.getItem('message');
             let joined = JSON.parse(theNowValue);
-            value.contact = phoneNumber;
             !joined && (joined = []);
             joined.push(value);
-            const jsonValue = JSON.stringify(joined);
-            await AsyncStorage.setItem('message', jsonValue);
+            await AsyncStorage.setItem('message', JSON.stringify(joined));
             this.setState({
                 message: '',
                 messages: [],

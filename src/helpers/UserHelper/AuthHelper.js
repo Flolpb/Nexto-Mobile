@@ -4,7 +4,7 @@ import axios from 'axios';
 const USER_HELPER_URL = API.BASE_URL + '/api/users';
 
 const AuthHelper = {
-    
+
     login: async (formData) => {
         try {
           const headers = {

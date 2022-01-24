@@ -7,6 +7,7 @@ import CustomLabel from '../CustomLabel/CustomLabel/CustomLabel';
 import {connect} from 'react-redux';
 
 import getDate from '../../utils/getDate';
+import moment from 'moment';
 class MessageItem extends React.Component {
 
   // Cherche si un contact existe selon le numéro de téléphone de la props item
@@ -14,28 +15,15 @@ class MessageItem extends React.Component {
     return this.props.contacts.find((item) => item.phoneNumbers[0].number === this.props.item.contact);
   };
 
+  computeDateTime = (dateString) => {
+    let date = moment(dateString);
+    return [date.format('DD/MM/YYYY'), date.format('HH:mm')]
+  }
+
   render() {
     const { item, index, last, deleteData } = this.props;
     let contact = this.searchContact();
-
-    let separate = item.date.split('T');
-    separate[1] = separate[1].split('.');
-    separate[1] = separate[1][0].split(':');
-    separate[0] = separate[0].split('-');
-    let year = parseInt(separate[0][0]);
-    let month = parseInt(separate[0][1]) - 1;
-    let day = parseInt(separate[0][2]);
-    let hours = parseInt(separate[1][0]);
-    let minutes = parseInt(separate[1][1]);
-    let dateM = new Date();
-    dateM.setFullYear(year);
-    dateM.setMonth(month);
-    dateM.setDate(day);
-    dateM.setHours(hours+2);
-    dateM.setMinutes(minutes);
-    dateM.setSeconds(0);
-    dateM.setMilliseconds(0);
-
+    let [date, time] = this.computeDateTime(item.date)
 
     return(
       <>
@@ -61,7 +49,7 @@ class MessageItem extends React.Component {
             </View>
             <View style={styles.messageContainer}>
               <Text style={styles.message}>{item.message}</Text>
-              <Text style={styles.insideText}>{getDate(dateM)[1]} {"\n"} {getDate(dateM)[0]}</Text>
+              <Text style={styles.insideText}>{time} {"\n"} {date}</Text>
             </View>
 
           </View>

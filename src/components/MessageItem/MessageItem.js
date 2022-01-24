@@ -49,7 +49,7 @@ class MessageItem extends React.Component {
             </View>
             <View style={styles.messageContainer}>
               <Text style={styles.message}>{item.message}</Text>
-              <Text style={styles.insideText}>{time} {"\n"} {date}</Text>
+              <Text style={styles.insideText}>{time}{"\n"}{date}</Text>
             </View>
 
           </View>
